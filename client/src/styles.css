@@ -1,0 +1,94 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 30px;
+}
+
+fieldset {
+    margin-bottom: 0.85em;
+}
+
+form .ng-invalid {
+    background-color: #FFDAB9;
+}
+
+form .ng-valid {
+    background-color: #E5FFCC;
+}
+
+.content-header {
+    margin-bottom: 0.85em;
+}
+
+.content-footer {
+    margin-top: 0.85em;
+}
+
+.warning {
+    color: #d08d2e;
+}
+
+.error {
+    color: #d9534f;
+}
+
+.modal-body {
+    white-space: pre-line;
+}
+
+.main .page-header {
+    margin-top: 0;
+}
+
+.btn {
+    margin-right: 5px;
+}
+
+
+/*
+ * Bootstrap Dashboard Template
+ */
+
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+
+body {
+    padding-top: 50px;
+}
+
+
+/*
+ * Global add-ons
+ */
+
+.sub-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+
+/*
+ * Placeholder dashboard ideas
+ */
+
+.placeholders {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.placeholders h4 {
+    margin-bottom: 0;
+}
+
+.placeholder {
+    margin-bottom: 20px;
+}
+
+.placeholder img {
+    display: inline-block;
+    border-radius: 50%;
+}

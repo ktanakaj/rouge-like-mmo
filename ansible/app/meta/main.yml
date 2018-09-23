@@ -1,0 +1,9 @@
+dependencies:
+  - { role: git }
+  - { role: nginx }
+  - { role: nodejs }
+  - { role: pm2 }
+  - { role: mariadb }
+  - { role: redis }
+  - { role: yarn }
+  - { role: chromium }

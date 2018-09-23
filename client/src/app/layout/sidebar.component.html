@@ -1,0 +1,5 @@
+<nav class="sidebar">
+    <ul *ngFor="let subnavi of navi" class="nav nav-sidebar">
+        <li *ngFor="let n of subnavi" class="{{ n.active ? 'active' : '' }}"><a routerLink="{{ n.path }}">{{ n.title | translate }}</a></li>
+    </ul>
+</nav>

@@ -1,0 +1,71 @@
+<h1 class="page-header">{{ "MASTER_VERSION_PAGE.TITLE" | translate }}</h1>
+
+<form #f="ngForm" (ngSubmit)="load(currentPage)" novalidate>
+    <button type="submit" class="btn btn-primary btn-sm">{{ "UPDATE" | translate }}</button>
+</form>
+
+<pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" (pageChanged)="load($event.page)" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>{{ "MASTER_VERSION.ID" | translate }}</th>
+                <th>{{ "MASTER_VERSION.STATUS" | translate }}</th>
+                <th>{{ "MASTER_VERSION.NOTE" | translate }}</th>
+                <th>{{ "MASTER_VERSION.CREATED_AT" | translate }}</th>
+                <th>{{ "MASTER_VERSION.UPDATED_AT" | translate }}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of rows">
+                <td>{{ row.id }}</td>
+                <td>
+                    <app-master-status [status]="row.status"></app-master-status>
+                </td>
+                <td class="multiline">{{ row.note }}</td>
+                <td>{{ row.createdAt | date:'short' }}</td>
+                <td>{{ row.updatedAt | date:'short' }}</td>
+                <td>
+                    <button *ngIf="row.status ==='readied'" type="button" class="btn btn-danger btn-sm" (click)="changeStatus(row.id, 'published')" [disabled]="isButtonClicked">{{ "MASTER_VERSION_PAGE.CHANGE_PUBLISHED" | translate }}</button>
+                    <button *ngIf="row.status ==='published'" type="button" class="btn btn-warning btn-sm" (click)="changeStatus(row.id, 'readied')" [disabled]="isButtonClicked">{{ "MASTER_VERSION_PAGE.CHANGE_READIED" | translate }}</button>
+                    <button type="button" class="btn btn-secondary btn-sm" (click)="openNote(row)">{{ "MASTER_VERSION_PAGE.ADD_NOTE" | translate }}</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" (pageChanged)="load($event.page)" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+
+<footer class="content-footer">{{ "MASTER_VERSION_PAGE.ATTENTION" | translate }}</footer>
+
+<div bsModal #noteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="masterVersionNoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">{{ "MASTER_VERSION_PAGE.ADD_NOTE" | translate }}</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="closeNote()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="version">
+                <form #f="ngForm" (ngSubmit)="addNote()" novalidate class="form-horizontal">
+                    <fieldset class="form-group">
+                        <label for="version.note" class="control-label col-xs-2">{{ "MASTER_VERSION.NOTE" | translate }}:</label><br>
+                        <div class="col-xs-5">
+                            <textarea id="version.note" name="note" [(ngModel)]="version.note" #note="ngModel" class="form-control"></textarea>
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        <div class="col-xs-offset-2 col-xs-10">
+                            <button type="submit" class="btn btn-primary btn-sm" [disabled]="!f.form.valid || isButtonClicked">{{ "SUBMIT" | translate }}</button>
+                            <button type="button" class="btn btn-secondary btn-sm" (click)="closeNote()">{{ "CANCEL" | translate }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="panel panel-default">
+    <div class="panel-heading">{{ "TOP_PAGE.LATEST_ADMIN_LOGS" | translate }} ※未実装です</div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>{{ "ADMINISTRATOR.ID" | translate }}</th>
+                <th>{{ "ADMINISTRATOR.NAME" | translate }}</th>
+                <th>操作日時</th>
+                <th>詳細</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<div class="panel panel-default" *ngIf="isDebug">
+    <div class="panel-heading">{{ "TOP_PAGE.DOCUMENTS" | translate }}</div>
+    <div class="panel-body">
+        <ul>
+            <li><a href="/swagger/" target="_blank">{{ "TOP_PAGE.DOCUMENTS_SWAGGER" | translate }}</a></li>
+        </ul>
+    </div>
+</div>

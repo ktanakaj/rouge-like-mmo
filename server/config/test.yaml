@@ -1,0 +1,54 @@
+---
+  databases:
+    master:
+      dialect: "sqlite"
+      storage: '/tmp/test_masters.sqlite'
+      benchmark: true
+    admin:
+      dialect: "sqlite"
+      storage: '/tmp/test_admin.sqlite'
+      benchmark: true
+    global:
+      dialect: "sqlite"
+      storage: '/tmp/test_global.sqlite'
+      benchmark: true
+  redis:
+    # ※ sessionだけ使用法が別でフォーマットが異なるので注意
+    session:
+      host: "127.0.0.1"
+      port: 6379
+      db: 5
+    redis:
+      host: "127.0.0.1"
+      port: 6379
+      options:
+        db: 6
+    cache:
+      host: "127.0.0.1"
+      port: 6379
+      options:
+        db: 7
+  log4js:
+    pm2: false
+    appenders:
+      stdout: # 標準出力
+        type: "console"
+      stderr: # 標準エラー出力
+        type: "stderr"
+    categories:
+      default:
+        appenders:
+          - "stdout"
+        level: "info"
+      access:
+        appenders:
+          - "stdout"
+        level: "info"
+      batch:
+        appenders:
+          - "stdout"
+        level: "info"
+      error:
+        appenders:
+          - "stderr"
+        level: "debug"

@@ -1,0 +1,95 @@
+{
+	"APP_NAME": "無を掴め",
+	"COPYRIGHT": "Copyright (C) 2018 Koichi Tanaka All Rights Reserved.",
+	"NEW": "新規",
+	"EDIT": "編集",
+	"UPDATE": "更新",
+	"DELETE": "削除",
+	"SUBMIT": "登録",
+	"CANCEL": "キャンセル",
+	"BACK": "戻る",
+	"BACK_TO_TOP": "TOPに戻る",
+	"BACK_TO_LIST": "一覧に戻る",
+	"BACK_TO_DETAIL": "詳細に戻る",
+	"ERROR": {
+		"BAD_REQUEST": "指定されたパラメータは無効です。",
+		"UNAUTHORIZED": "認証されていません。ブラウザを再読み込みしてください。",
+		"FORBIDDEN": "権限がありません。",
+		"NOT_FOUND": "ページの読込に失敗しました。ブラウザを再読み込みしてください。",
+		"CONFLICT": "データは既に存在します。ブラウザを再読み込みしてください。",
+		"FATAL": "エラーが発生しました。ブラウザを再読み込みして再度実行してください。"
+	},
+	"VALIDATE": {
+		"REQUIRED": "値を入力してください。",
+		"MAXLENGTH": "{{max}}文字までで入力してください。",
+		"DUPLICATED": "値は既に使用されています。"
+	},
+	"DELETE_CONFIRMING": {
+		"TITLE": "削除確認",
+		"BODY": "削除すると元に戻すことはできません。\n本当に削除しますか？"
+	},
+	"MASTER_VERSION": {
+		"ID": "ID",
+		"STATUS": "状態",
+		"STATUS_IMPORTING": "インポート中",
+		"STATUS_READIED": "準備OK",
+		"STATUS_FAILED": "失敗",
+		"STATUS_PUBLISHED": "公開中",
+		"NOTE": "注記",
+		"CREATED_AT": "登録日時",
+		"UPDATED_AT": "更新日時"
+	},
+	"ADMINISTRATOR": {
+		"ID": "ID",
+		"NAME": "管理者名",
+		"PASSWORD": "パスワード",
+		"ROLE": "ロール",
+		"ROLE_ADMIN": "管理者",
+		"ROLE_WRITABLE": "書き込み可",
+		"ROLE_READONLY": "読み取り専用",
+		"NOTE": "備考",
+		"CREATED_AT": "登録日時",
+		"UPDATED_AT": "更新日時",
+		"DELETED_AT": "削除日時"
+	},
+	"TOP_PAGE": {
+		"LATEST_ADMIN_LOGS": "最近のデータ操作履歴",
+		"DOCUMENTS": "各種ドキュメント",
+		"DOCUMENTS_SWAGGER": "REST APIドキュメント (Swagger UI)"
+	},
+	"MASTER_VERSION_PAGE": {
+		"TITLE": "マスタバージョン一覧",
+		"LINK": "マスタバージョン情報",
+		"CHANGE_PUBLISHED": "公開する",
+		"CHANGE_PUBLISHED_BODY": "id={{id}} のマスタを公開します。よろしいですか？",
+		"CHANGE_READIED": "非公開にする",
+		"CHANGE_READIED_BODY": "id={{id}} のマスタを非公開にします。よろしいですか？",
+		"ATTENTION": "※ 公開中のマスタバージョンのうち最新のものが使用されます。マスタのバージョン間で互換性が無い場合はメンテナンスが必要です。",
+		"ADD_NOTE": "コメント付加"
+	},
+	"MASTER_VIEWER_PAGE": {
+		"TITLE": "マスタ一覧",
+		"LINK": "マスタ閲覧",
+		"NAME": "マスタ名"
+	},
+	"ADMINISTRATOR_PAGE": {
+		"TITLE": "管理者一覧",
+		"LINK": "管理者情報",
+		"EDIT_TITLE": "管理者登録／変更",
+		"REGISTERED": "アカウントを作成しました。初期パスワードは {{password}} です。",
+		"PASSWORD_RESET": "パスワードリセット",
+		"PASSWORD_RESET_BODY": "古いパスワードは使用できなくなります。\nパスワードをリセットしますか？",
+		"PASSWORD_RESETED": "パスワードをリセットしました。新パスワードは {{password}} です。"
+	},
+	"PASSWORD_CHANGE_PAGE": {
+		"TITLE": "パスワード変更",
+		"LINK": "パスワード変更",
+		"PASSWORD": "新しいパスワード",
+		"REPEAT_PASSWORD": "新しいパスワード（再入力）",
+		"NOT_SAME": "パスワード入力欄と再入力欄が一致しません。もう一度入力してください。"
+	},
+	"CONTEST_PAGE": {
+		"TITLE": "コンテスト一覧",
+		"LINK": "コンテスト情報"
+	}
+}

@@ -1,0 +1,105 @@
+<h1 class="page-header">{{ "ADMINISTRATOR_PAGE.TITLE" | translate }}</h1>
+
+<form #f="ngForm" (ngSubmit)="load(currentPage)" novalidate>
+    <button type="submit" class="btn btn-primary btn-sm">{{ "UPDATE" | translate }}</button>
+    <button type="button" class="btn btn-warning btn-sm" (click)="openEdit()">{{ "NEW" | translate }}</button>
+</form>
+
+<pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" (pageChanged)="load($event.page)" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>{{ "ADMINISTRATOR.ID" | translate }}</th>
+                <th>{{ "ADMINISTRATOR.NAME" | translate }}</th>
+                <th>{{ "ADMINISTRATOR.ROLE" | translate }}</th>
+                <th>{{ "ADMINISTRATOR.NOTE" | translate }}</th>
+                <th>{{ "ADMINISTRATOR.CREATED_AT" | translate }}</th>
+                <th>{{ "ADMINISTRATOR.DELETED_AT" | translate }}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of rows" [class]="row.deletedAt ? 'disabled' : ''">
+                <td>{{ row.id }}</td>
+                <td>{{ row.name }}</td>
+                <td>
+                    <app-admin-role [role]="row.role"></app-admin-role>
+                </td>
+                <td class="multiline">{{ row.note }}</td>
+                <td>{{ row.createdAt | date:'short' }}</td>
+                <td>{{ row.deletedAt | date:'short' }}</td>
+                <td>
+                    <button type="button" class="btn btn-warning btn-sm" (click)="openEdit(row)" [disabled]="!!row.deletedAt">{{ "EDIT" | translate }}</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" (pageChanged)="load($event.page)" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="administratorEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">{{ "ADMINISTRATOR_PAGE.EDIT_TITLE" | translate }}</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="closeEdit()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="admin">
+                <form #f="ngForm" (ngSubmit)="submit()" novalidate class="form-horizontal">
+                    <fieldset class="form-group">
+                        <label for="admin.name" class="control-label col-xs-2">{{ "ADMINISTRATOR.NAME" | translate }}:</label>
+                        <div class="col-xs-5">
+                            <input type="text" id="admin.name" name="name" [(ngModel)]="admin.name" #name="ngModel" required>
+                            <div class="warning" *ngIf="name.errors">
+                                <div [hidden]="!name.errors.required">{{ "VALIDATE.REQUIRED" | translate }}</div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <label class="control-label col-xs-2">{{ "ADMINISTRATOR.ROLE" | translate }}:</label>
+                        <div class="col-xs-5">
+                            <label class="radio-inline"><input type="radio" name="status" [(ngModel)]="admin.role" value="admin">{{ "ADMINISTRATOR.ROLE_ADMIN" | translate }}</label>
+                            <label class="radio-inline"><input type="radio" name="status" [(ngModel)]="admin.role" value="writable">{{ "ADMINISTRATOR.ROLE_WRITABLE" | translate }}</label>
+                            <label class="radio-inline"><input type="radio" name="status" [(ngModel)]="admin.role" value="readonly">{{ "ADMINISTRATOR.ROLE_READONLY" | translate }}</label>
+                        </div>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <label for="admin.note" class="control-label col-xs-2">{{ "ADMINISTRATOR.NOTE" | translate }}:</label><br>
+                        <div class="col-xs-5">
+                            <textarea id="admin.note" name="note" [(ngModel)]="admin.note" #note="ngModel" class="form-control"></textarea>
+                        </div>
+                    </fieldset>
+                    <div class="form-group" *ngIf="admin.createdAt">
+                        <div class="col-xs-offset-2 col-xs-10">
+                            <small>{{ "ADMINISTRATOR.CREATED_AT" | translate }}: {{ admin.createdAt | date:'short' }}</small>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="admin.updatedAt">
+                        <div class="col-xs-offset-2 col-xs-10">
+                            <small>{{ "ADMINISTRATOR.UPDATED_AT" | translate }}: {{ admin.updatedAt | date:'short' }}</small>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="admin.deletedAt">
+                        <div class="col-xs-offset-2 col-xs-10">
+                            <small>{{ "ADMINISTRATOR.DELETED_AT" | translate }}: {{ admin.deletedAt | date:'short' }}</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-offset-2 col-xs-10">
+                            <button type="submit" class="btn btn-primary btn-sm" [disabled]="!f.form.valid || isButtonClicked">{{ "SUBMIT" | translate }}</button>
+                            <button *ngIf="admin.id" type="button" class="btn btn-warning btn-sm" (click)="resetPassword()" [disabled]="isButtonClicked">{{ "ADMINISTRATOR_PAGE.PASSWORD_RESET" | translate }}</button>
+                            <button *ngIf="admin.id" type="button" class="btn btn-danger btn-sm" (click)="delete()" [disabled]="isButtonClicked">{{ "DELETE" | translate }}</button>
+                            <button type="button" class="btn btn-secondary btn-sm" (click)="closeEdit()">{{ "CANCEL" | translate }}</button>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning" role="alert" *ngIf="error">{{ error | translate }}</div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

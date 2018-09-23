@@ -1,0 +1,21 @@
+<h1 class="page-header">{{ "LOGIN_PAGE.TITLE" | translate }}</h1>
+<form #f="ngForm" (ngSubmit)="submit()" novalidate class="form-horizontal">
+    <fieldset class="form-group">
+        <label for="name" class="control-label col-xs-2">{{ "ADMINISTRATOR.NAME" | translate }}:</label>
+        <div class="col-xs-5">
+            <input type="text" id="name" name="name" [(ngModel)]="user.name" #name="ngModel" required>
+        </div>
+    </fieldset>
+    <fieldset class="form-group">
+        <label for="password" class="control-label col-xs-2">{{ "ADMINISTRATOR.PASSWORD" | translate }}:</label>
+        <div class="col-xs-5">
+            <input type="password" id="password" name="password" [(ngModel)]="user.password" #password="ngModel" required>
+        </div>
+    </fieldset>
+    <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10">
+            <button type="submit" class="btn btn-primary btn-sm" [disabled]="!f.form.valid || isButtonClicked">{{ "LOGIN" | translate }}</button>
+        </div>
+    </div>
+</form>
+<div class="alert alert-warning" role="alert" *ngIf="error">{{ error | translate }}</div>
