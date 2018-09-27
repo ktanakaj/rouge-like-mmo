@@ -61,6 +61,7 @@ export const databaseProviders = [
 				operatorsAliases: false,
 			}, config['databases']['admin']));
 			sequelize.addModels(ADMIN_MODELS);
+			// TODO: syncは止める
 			await sequelize.sync();
 			return sequelize;
 		},
@@ -73,6 +74,7 @@ export const databaseProviders = [
 				operatorsAliases: false,
 			}, config['databases']['global']));
 			sequelize.addModels(GLOBAL_MODELS);
+			// TODO: syncは止める
 			await sequelize.sync();
 			return sequelize;
 		},

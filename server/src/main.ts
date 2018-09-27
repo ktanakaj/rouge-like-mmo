@@ -7,7 +7,7 @@ import * as os from 'os';
 import * as config from 'config';
 import * as log4js from 'log4js';
 
-// log4jsの初期化。Nest.js周りなどインポートにも時間がかかるので、先に開始ログを出力
+// log4jsの初期化。Nest.js周りなどインポートにも時間がかかるようなので、先に開始ログを出力
 log4js.configure(config['log4js']);
 const hostName = process.env.HOSTNAME || os.hostname() || '';
 log4js.getLogger('debug').info(`${hostName}: Worker: pid=${process.pid} initializing...`);
@@ -17,8 +17,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, SwaggerDocument } from '@nestjs/swagger';
 import * as session from 'express-session';
 import * as connectRedis from 'connect-redis';
-import { AllExceptionsFilter } from './core/all-exceptions.filter';
 import { startMonitoring } from './core/models/redis-helper';
+import { AllExceptionsFilter } from './shared/all-exceptions.filter';
 import { DebugLoggerService } from './shared/debug-logger.service';
 import { AppModule } from './app.module';
 const RedisStore = connectRedis(session);
@@ -48,12 +48,12 @@ async function bootstrap(): Promise<void> {
 		SwaggerModule.setup('swagger', app, swaggerdoc);
 	}
 
+	// 全APIで共通の例外処理を有効化
+	app.useGlobalFilters(new AllExceptionsFilter());
+
 	// 全APIでバリデーションを有効化、DTOがあるものは未定義のパラメータを受け付けない
 	// （forbidNonWhitelistedは要らない気もするが、付けないと原因不明になりがちなので）
 	app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true, forbidNonWhitelisted: true }));
-
-	// 全APIで共通の例外処理を有効化
-	app.useGlobalFilters(new AllExceptionsFilter());
 
 	// サーバー待ち受け開始
 	await app.listen(process.env.PORT || 3000);

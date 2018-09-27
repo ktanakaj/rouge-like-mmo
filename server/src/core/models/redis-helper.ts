@@ -111,6 +111,7 @@ export async function startMonitoring(config: { host: string, port: number }): P
 	// 作成したクライアントは一応プールに入れておく
 	const client = createClient(config);
 	await client.monitorAsync();
+	// ※ monitorコマンドを使用しているため、アプリ外のRedisコマンドログも出力されます
 	client.on('monitor', (time, args) => {
 		debugLogger.trace('Executing (redis): ' + args.join(' '));
 	});

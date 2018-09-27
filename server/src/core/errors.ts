@@ -4,6 +4,9 @@
  * 汎用的な例外クラスと、頻出する例外用のクラスを定義。
  * @module ./core/errors
  */
+import { HttpException } from '@nestjs/common';
+import { ValidationError } from 'class-validator';
+import { ValidationError as SequelizeValidationError, UniqueConstraintError } from 'sequelize';
 
 /**
  * 汎用の業務エラー例外クラス。
@@ -40,34 +43,93 @@ export class AppError extends Error {
 			err = err.cause;
 		}
 
-		// 変換が不要な場合はそのまま返す
+		// 例外クラスまたは例外名を元に各エラーの内容に合わせて変換
 		if (err instanceof AppError) {
 			return err;
-		}
-
-		if (err) {
+		} else if (err instanceof HttpException) {
+			return this.fromHttpException(err);
+		} else if (err) {
 			switch (err.name) {
+				// ※ 以下のSequelizeの例外はinterfaceなのでnameで判別
 				case 'SequelizeUniqueConstraintError':
-					// Sequelizeが一意制約違反時に投げるエラー
-					return new BadRequestError(err.message, err);
+					return this.fromUniqueConstraintError(err);
 				case 'SequelizeValidationError':
-					// SequelizeがバリデーションNG時に投げるエラー
-					return new BadRequestError(Array.isArray(err.errors) ? err.errors.map((e) => e.message || "").join(", ") : '', err);
-				case 'Error':
-					// Nest.jsのバリデーションNGやルート未存在などが何故か標準のエラーで飛んでくるのでstatusで判別
-					if (err.status !== undefined) {
-						switch (err.status) {
-							case 400:
-								return new BadRequestError(JSON.stringify(err.message.message), err);
-							case 404:
-								return new BadRequestError(err.message.message, err);
-						}
-					}
+					return this.fromValidationError(err);
 			}
 		}
 
 		// その他のエラーは、サーバーエラーに変換
 		return new InternalServerError(err.message || err, err);
+	}
+
+	/**
+	 * NestのHttpExceptionを変換する。
+	 * @param err 変換元の例外。
+	 * @returns 変換後の例外。
+	 */
+	private static fromHttpException(err: HttpException): AppError {
+		const msg = this.formatHttpExceptionMsg(err.message);
+		switch (err.getStatus()) {
+			case 400:
+				return new BadRequestError(msg, err);
+			case 401:
+				const newErr1 = new UnauthorizedError(msg);
+				newErr1.cause = err;
+				return newErr1;
+			case 403:
+				const newErr2 = new ForbiddenError(msg);
+				newErr2.cause = err;
+				return newErr2;
+			case 404:
+				return new BadRequestError(msg, err);
+			default:
+				return new InternalServerError(msg, err);
+		}
+	}
+
+	/**
+	 * NestのHttpExceptionのメッセージを整形する。
+	 * @param err 変換元の例外。
+	 * @returns 変換後の例外。
+	 */
+	private static formatHttpExceptionMsg(message: any): string {
+		// 基本的にどのケースでも { statusCode, error, message } のobjectで来るようなのでそれを処理
+		if (message === null || typeof message !== 'object') {
+			return message;
+		}
+		const msg = message.message
+		if (!msg) {
+			// 不明なフォーマットなのでとりあえずJSONで返す
+			return JSON.stringify(message);
+		}
+		if (msg === null || typeof msg !== 'object') {
+			// 文字列が入っているだけならそのまま
+			return msg;
+		}
+		if (Array.isArray(msg) && msg[0] instanceof ValidationError) {
+			// バリデーションNG配列の場合はエラー情報を文字列につなげる
+			return msg.map((e) => String(e)).join(', ');
+		}
+		// 不明なフォーマットなのでとりあえずJSONで返す
+		return JSON.stringify(msg);
+	}
+
+	/**
+	 * Sequelizeの一意制約違反エラーを変換する。
+	 * @param err 変換元の例外。
+	 * @returns 変換後の例外。
+	 */
+	private static fromUniqueConstraintError(err: UniqueConstraintError): AppError {
+		return new BadRequestError(err.message, err);
+	}
+
+	/**
+	 * Sequelizeのバリデーションエラーを変換する。
+	 * @param err 変換元の例外。
+	 * @returns 変換後の例外。
+	 */
+	private static fromValidationError(err: SequelizeValidationError): AppError {
+		return new BadRequestError(Array.isArray(err.errors) ? err.errors.map((e) => e.message || '').join(', ') : '', err);
 	}
 }
 
