@@ -2,11 +2,11 @@
  * 管理者コントローラモジュール。
  * @module ./admin/administrators/administrators.controller
  */
-import { Controller, Get, Post, Put, Delete, Query, Param, Body, Session, UseGuards } from '@nestjs/common';
-import { ApiUseTags, ApiOperation, ApiModelProperty, ApiModelPropertyOptional, ApiOkResponse } from '@nestjs/swagger';
+import { Controller, Get, Post, Put, Delete, Query, Param, Body, Session, UseGuards, HttpCode } from '@nestjs/common';
+import { ApiUseTags, ApiOperation, ApiModelProperty, ApiModelPropertyOptional, ApiOkResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiConflictResponse } from '@nestjs/swagger';
 import { IsOptional, MinLength, IsIn } from 'class-validator';
 import { BadRequestError } from '../../core/errors';
-import { IdParam, PagingQuery } from '../../shared/common.dto';
+import { IdParam, PagingQuery, ErrorResult } from '../../shared/common.dto';
 import { User } from '../../shared/user.decorator';
 import { AuthGuard } from '../auth.guard';
 import Administrator from '../shared/administrator.model';
@@ -67,6 +67,7 @@ class UpdateMeBody {
 export class AdministratorsController {
 	@ApiOperation({ title: '管理者一覧', description: '管理者の一覧を取得する。' })
 	@ApiOkResponse({ description: '管理者一覧', type: FindAndCountAdministratorsResult })
+	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
 	@UseGuards(AuthGuard)
 	@Get()
 	async findAndCountAdministrators(@Query() query: PagingQuery): Promise<FindAndCountAdministratorsResult> {
@@ -75,7 +76,10 @@ export class AdministratorsController {
 	}
 
 	@ApiOperation({ title: '管理者登録', description: '管理者を新規登録する。' })
-	@ApiOkResponse({ description: '登録成功', type: Administrator })
+	@ApiCreatedResponse({ description: '登録成功', type: Administrator })
+	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
+	@ApiForbiddenResponse({ description: '権限無し', type: ErrorResult })
+	@ApiConflictResponse({ description: 'name重複', type: ErrorResult })
 	@UseGuards(AuthGuard)
 	@Post()
 	async createAdministrator(@Body() body: CreateAdministratorBody): Promise<Administrator> {
@@ -89,6 +93,10 @@ export class AdministratorsController {
 
 	@ApiOperation({ title: '管理者更新', description: '管理者を変更する。' })
 	@ApiOkResponse({ description: '更新成功', type: Administrator })
+	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
+	@ApiForbiddenResponse({ description: '権限無し', type: ErrorResult })
+	@ApiNotFoundResponse({ description: 'データ無し', type: ErrorResult })
+	@ApiConflictResponse({ description: 'name重複', type: ErrorResult })
 	@UseGuards(AuthGuard)
 	@Put('/:id(\\d+)')
 	async updateAdministrator(@Param() param: IdParam, @Body() body: UpdateAdministratorBody): Promise<Administrator> {
@@ -100,6 +108,8 @@ export class AdministratorsController {
 
 	@ApiOperation({ title: '管理者削除', description: '管理者を削除する。' })
 	@ApiOkResponse({ description: '削除成功', type: Administrator })
+	@ApiForbiddenResponse({ description: '権限無し', type: ErrorResult })
+	@ApiNotFoundResponse({ description: 'データ無し', type: ErrorResult })
 	@UseGuards(AuthGuard)
 	@Delete('/:id(\\d+)')
 	async deleteAdministrator(@Param() param: IdParam): Promise<Administrator> {
@@ -111,8 +121,11 @@ export class AdministratorsController {
 
 	@ApiOperation({ title: '管理者パスワードリセット', description: '管理者のパスワードをリセットする。' })
 	@ApiOkResponse({ description: 'リセット成功', type: Administrator })
+	@ApiForbiddenResponse({ description: '権限無し', type: ErrorResult })
+	@ApiNotFoundResponse({ description: 'データ無し', type: ErrorResult })
 	@UseGuards(AuthGuard)
 	@Post('/:id(\\d+)/reset')
+	@HttpCode(200)
 	async resetPassword(@Param() param: IdParam): Promise<Administrator> {
 		// FIXME: role=admin の管理者のみ実行可
 		let admin = await Administrator.findOrFail(param.id);
@@ -126,7 +139,9 @@ export class AdministratorsController {
 
 	@ApiOperation({ title: '管理者ログイン', description: '管理者名とパスワードで認証を行う。' })
 	@ApiOkResponse({ description: 'ログイン成功', type: Administrator })
+	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
 	@Post('/login')
+	@HttpCode(200)
 	async login(@Body() body: LoginBody, @Session() session): Promise<Administrator> {
 		// アカウント名の存在とパスワードの一致をチェック
 		const admin = await Administrator.scope('login').findOne({ where: { name: body.username } });
@@ -143,6 +158,7 @@ export class AdministratorsController {
 	@ApiOkResponse({ description: 'ログアウト成功' })
 	@UseGuards(AuthGuard)
 	@Post('/logout')
+	@HttpCode(200)
 	logout(@Session() session): void {
 		delete session['admin'];
 	}
@@ -157,6 +173,7 @@ export class AdministratorsController {
 
 	@ApiOperation({ title: '自分の情報更新', description: 'ログインユーザー自身の情報を変更する。' })
 	@ApiOkResponse({ description: '更新成功', type: Administrator })
+	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
 	@UseGuards(AuthGuard)
 	@Put('/me')
 	async updateMe(@Body() body: UpdateMeBody, @User() user): Promise<Administrator> {

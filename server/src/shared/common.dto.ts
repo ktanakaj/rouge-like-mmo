@@ -39,3 +39,19 @@ export class PagingQuery {
 	@ApiModelPropertyOptional({ description: '1ページ辺りの最大件数', type: 'integer', format: 'int32' })
 	max?: number = 100;
 }
+
+/** エラー時の戻り値のエラー情報。 */
+export class ErrorResultError {
+	@ApiModelProperty({ description: 'エラーID', type: 'integer' })
+	code: number;
+	@ApiModelProperty({ description: 'エラーメッセージ' })
+	message: string;
+	@ApiModelPropertyOptional({ description: '追加情報' })
+	data?: any;
+}
+
+/** エラー時の戻り値フォーマット。 */
+export class ErrorResult {
+	@ApiModelProperty({ description: 'エラー情報', type: ErrorResultError })
+	error: ErrorResultError;
+}
