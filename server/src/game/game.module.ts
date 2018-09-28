@@ -3,12 +3,12 @@
  * @module ./game/game.module
  */
 import { Module } from '@nestjs/common';
+import { GachasController } from './gachas/gachas.controller';
 
 /**
  * ゲーム用APIルートモジュールクラス。
  */
 @Module({
-	controllers: [],
+	controllers: [GachasController],
 })
-export class GameModule {
-}
+export class GameModule { }

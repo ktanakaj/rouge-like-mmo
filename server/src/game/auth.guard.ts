@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
 		const req = context.switchToHttp().getRequest();
 		if (!req.session['user']) {
 			// TODO: ユーザーIDはランダムに採番するようにする？
-			const user = await User.create();
+			const user = await User.create({ lastLogin: new Date() });
 			req.session['user'] = user.toJSON();
 		}
 
