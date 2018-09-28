@@ -95,14 +95,11 @@ describe('AdministratorsController', () => {
 
 	describe('#logout()', () => {
 		it('成功', async () => {
-			let called = false;
-			await controller.logout({
-				destroy: (callback) => {
-					called = true;
-					callback();
-				}
-			});
-			assert(called);
+			const session = {
+				admin: { id: 1 },
+			};
+			await controller.logout(session);
+			assert.strictEqual(session.admin, undefined);
 		});
 	});
 });

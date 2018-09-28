@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
 		// Nest.jsとpassportの組み合わせがいまいち上手くいかないため、sessionで独自に認証管理。
 		// req.userにuser情報をコピーして、コントローラからはpassportのように見えるようにする。
 		const req = context.switchToHttp().getRequest();
-		req.user = req.session.user;
+		req.user = req.session['admin'];
 
 		// TODO: Roleも見れるようにする
 		if (!req.user) {

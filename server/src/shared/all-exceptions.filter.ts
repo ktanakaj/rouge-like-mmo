@@ -3,6 +3,7 @@
  * @module ./shared/all-exceptions.filter.ts
  */
 import { Catch, ArgumentsHost, ExceptionFilter, HttpException } from '@nestjs/common';
+import * as http from 'http';
 import * as express from 'express';
 import * as config from 'config';
 import * as log4js from 'log4js';
@@ -44,7 +45,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 		try {
 			errorCode = await ErrorCode.findByErrorCode(code);
 		} catch (e) {
-			errorLogger.error(e);
+			errorLogger.warn(e);
 		}
 		return errorCode || ErrorCode.build({ id: 0, responseCode: 500, logLevel: 'error' });
 	}
@@ -79,9 +80,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
 		res.status(errorCode.responseCode);
 		res.json({
 			error: {
-				code: errorCode.id,
+				code: err.code,
 				// 本番環境等ではエラーの詳細は返さない
-				message: config['debug']['errorMessage'] ? err.message : err.code,
+				message: config['debug']['errorMessage'] ? err.message : http.STATUS_CODES[errorCode.responseCode],
 				data: err.data,
 			}
 		});

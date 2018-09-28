@@ -2,7 +2,6 @@
  * 管理者コントローラモジュール。
  * @module ./admin/administrators/administrators.controller
  */
-import * as util from 'util';
 import { Controller, Get, Post, Put, Delete, Query, Param, Body, Session, UseGuards } from '@nestjs/common';
 import { ApiUseTags, ApiOperation, ApiModelProperty, ApiModelPropertyOptional, ApiOkResponse } from '@nestjs/swagger';
 import { IsOptional, MinLength, IsIn } from 'class-validator';
@@ -136,7 +135,7 @@ export class AdministratorsController {
 		}
 		// パスワードは返さない
 		admin.password = undefined;
-		session.user = admin;
+		session['admin'] = admin;
 		return admin;
 	}
 
@@ -144,8 +143,8 @@ export class AdministratorsController {
 	@ApiOkResponse({ description: 'ログアウト成功' })
 	@UseGuards(AuthGuard)
 	@Post('/logout')
-	async logout(@Session() session): Promise<void> {
-		await util.promisify(session.destroy).bind(session)();
+	logout(@Session() session): void {
+		delete session['admin'];
 	}
 
 	@ApiOperation({ title: '自分の情報取得', description: 'ログインユーザー自身の情報を取得する。' })
