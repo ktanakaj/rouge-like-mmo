@@ -1,5 +1,5 @@
 /**
- * 「無を掴め」ルートモジュール。
+ * 「ローグライクなMMOブラウザゲーム」ルートモジュール。
  * @module ./app/app.module
  */
 import { BrowserModule } from '@angular/platform-browser';
@@ -82,7 +82,7 @@ class DefaultErrorHandler implements ErrorHandler {
 }
 
 /**
- * 「無を掴め」ルートモジュールクラス。
+ * 「ローグライクなMMOブラウザゲーム」ルートモジュールクラス。
  */
 @NgModule({
 	declarations: [

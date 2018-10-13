@@ -1,5 +1,5 @@
 /**
- * 「無を掴め」サーバーバッチ共通モジュール。
+ * 「ローグライクなMMOブラウザゲーム」サーバーバッチ共通モジュール。
  * @module ./batch/core
  */
 import * as config from 'config';

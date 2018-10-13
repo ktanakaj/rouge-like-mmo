@@ -1,5 +1,5 @@
 /**
- * 「無を掴め」サーバールートモジュール。
+ * 「ローグライクなMMOブラウザゲーム」サーバールートモジュール。
  * @module ./app.module
  */
 import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
@@ -10,7 +10,7 @@ import { GameModule } from './game/game.module';
 import { AdminModule } from './admin/admin.module';
 
 /**
- * 「無を掴め」サーバールートモジュールクラス。
+ * 「ローグライクなMMOブラウザゲーム」サーバールートモジュールクラス。
  */
 @Module({
 	imports: [GameModule, AdminModule],

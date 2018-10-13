@@ -9,25 +9,25 @@
       dialect: "mysql"
       host: "localhost"
       port: 3306
-      username: "nothingness_usr"
-      password: "nothingness01"
-      name: "nothingness_master_db"
+      username: "rougelikemmo_usr"
+      password: "rougelikemmo01"
+      name: "rougelikemmo_master_db"
       benchmark: true
     admin:
       dialect: "mysql"
       host: "localhost"
       port: 3306
-      username: "nothingness_usr"
-      password: "nothingness01"
-      name: "nothingness_admin_db"
+      username: "rougelikemmo_usr"
+      password: "rougelikemmo01"
+      name: "rougelikemmo_admin_db"
       benchmark: true
     global:
       dialect: "mysql"
       host: "localhost"
       port: 3306
-      username: "nothingness_usr"
-      password: "nothingness01"
-      name: "nothingness_global_db"
+      username: "rougelikemmo_usr"
+      password: "rougelikemmo01"
+      name: "rougelikemmo_global_db"
       benchmark: true
   redis:
     # ※ sessionだけ使用法が別でフォーマットが異なるので注意
@@ -56,22 +56,22 @@
         type: "stderr"
       access: # アクセスログ
         type: "dateFile"
-        filename: "/var/log/local/nothingness-app/access.log"
+        filename: "/var/log/local/rouge-like-mmo/access.log"
         pattern: "-yyyy-MM-dd"
         backups: 10
       batch: # バッチログ
         type: "dateFile"
-        filename: "/var/log/local/nothingness-app/batch.log"
+        filename: "/var/log/local/rouge-like-mmo/batch.log"
         pattern: "-yyyy-MM-dd"
         maxLogSize: 107374182400 # 100MB
       error: # エラーログ
         type: "dateFile"
-        filename: "/var/log/local/nothingness-app/error.log"
+        filename: "/var/log/local/rouge-like-mmo/error.log"
         pattern: "-yyyy-MM-dd"
         maxLogSize: 107374182400 # 100MB
       debug: # デバッグログ
         type: "file"
-        filename: "/var/log/local/nothingness-app/debug.log"
+        filename: "/var/log/local/rouge-like-mmo/debug.log"
         backups: 10
         maxLogSize: 10737418240 # 10MB
     categories:
@@ -105,9 +105,9 @@
   swagger:
     swagger: "2.0"
     info:
-      title: "nothingness app server"
+      title: "Rouge-like MMO server"
       version: 0.0.1
-      description: "「無を掴め」サーバーAPI。"
+      description: "ローグライクなMMOブラウザゲームサーバーAPI。"
     consumes:
       - "application/json"
     produces:

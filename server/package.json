@@ -1,7 +1,7 @@
 {
-  "name": "nothingness-svr",
+  "name": "rouge-like-mmo-svr",
   "version": "0.0.1",
-  "description": "nothingness app server",
+  "description": "Rouge-like MMO server",
   "private": true,
   "scripts": {
     "start": "pm2 start process.json",

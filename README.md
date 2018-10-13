@@ -1,12 +1,9 @@
-# ゲーム「無を掴め」
-ゲーム「無を掴め」はガチャとネズミ講に特化したクソゲーです。  
-友達をたくさん招待して、ガチャをひたすら回して無の境地に至りましょう（酷
+# ローグライクなMMOブラウザゲーム
+WebSocketを使ったMMOの練習用に作成したローグライクゲーム（予定）。
 
 ## 機能
-* ガチャ（1連/10連/100連）
-* フレンド招待
-
-※ ゲーム的な機能は無いよ！
+* ローグ風のリアルタイムRPG
+* 複数人が同一マップにアクセス可
 
 ## 環境
 * CentOS 7
@@ -30,6 +27,7 @@
     * vagrant-vbguest - Vagrantプラグイン
 * Visual Studio Code - アプリ開発用エディター
 * MySQL Workbench 6.x - DB管理・EL図作成用ツール
+* Unity - インゲーム部分開発用（予定）
 
 ## フォルダ構成
 * VMルートフォルダ
@@ -73,7 +71,7 @@ Webアプリの操作用に、以下のようなサーバーコマンドを用�
 いずれのソースもビルドが必要です。またサーバーアプリのソース変更を反映するためには、Webアプリの再起動が必要です。
 
 ## その他
-各種ログは `/var/log/local/nothingness-app` 下に出力されます。
+各種ログは `/var/log/local/rouge-like-mmo` 下に出力されます。
 アクセスログ、デバッグログ、エラーログを出力します。
 
 VMのDBを参照する場合は、MySQL Workbench等でMySQLの標準ポートに接続してください（接続情報は `default.yaml` 参照）。
@@ -81,4 +79,4 @@ VMのDBを参照する場合は、MySQL Workbench等でMySQLの標準ポート�
 また開発環境ではSwaggerのAPIデバッグページがあります。 http://localhost/swagger/ でアクセス可能です。
 
 ## ライセンス
-[MIT](https://github.com/ktanakaj/nothingness-app/blob/master/LICENSE)
+[MIT](https://github.com/ktanakaj/rouge-like-mmo/blob/master/LICENSE)

@@ -1,5 +1,5 @@
 /**
- * 「無を掴め」マスタインポートスクリプト。
+ * 「ローグライクなMMOブラウザゲーム」マスタインポートスクリプト。
  * @module ./batch/master-import
  */
 import './core';

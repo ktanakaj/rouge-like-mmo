@@ -1,11 +1,11 @@
 /**
- * 「無を掴め」ページオブジェクト。
+ * 「ローグライクなMMOブラウザゲーム」ページオブジェクト。
  * @module ./app.po
  */
 import { browser, by, element } from 'protractor';
 
 /**
- * 「無を掴め」ページクラス。
+ * 「ローグライクなMMOブラウザゲーム」ページクラス。
  */
 export class AppPage {
 	navigateTo() {

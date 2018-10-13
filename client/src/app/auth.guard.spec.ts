@@ -1,5 +1,5 @@
 /**
- * 「無を掴め」認証アクセス制御のテスト。
+ * 「ローグライクなMMOブラウザゲーム」認証アクセス制御のテスト。
  * @module ./app/auth.guard.spec
  */
 import { async, inject } from '@angular/core/testing';

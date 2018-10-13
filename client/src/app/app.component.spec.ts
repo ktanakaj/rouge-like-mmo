@@ -1,5 +1,5 @@
 /**
- * 「無を掴め」ルートコンポーネントのテスト。
+ * 「ローグライクなMMOブラウザゲーム」ルートコンポーネントのテスト。
  * @module ./app/app.component.spec
  */
 import { TestBed, async } from '@angular/core/testing';

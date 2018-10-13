@@ -1,5 +1,5 @@
 /**
- * 「無を掴め」ルートコンポーネント。
+ * 「ローグライクなMMOブラウザゲーム」ルートコンポーネント。
  * @module ./app/app.component
  */
 import { Component, OnInit } from '@angular/core';
@@ -8,7 +8,7 @@ import localeHelper from './core/locale-helper';
 import { AuthService } from './auth/auth.service';
 
 /**
- * 「無を掴め」ルートコンポーネントクラス。
+ * 「ローグライクなMMOブラウザゲーム」ルートコンポーネントクラス。
  */
 @Component({
 	selector: 'app-root',

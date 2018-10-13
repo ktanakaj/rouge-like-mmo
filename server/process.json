@@ -1,6 +1,6 @@
 {
   "apps": [{
-    "name": "nothingness-svr",
+    "name": "rouge-like-mmo-svr",
     "script": "./dist/main.js",
     "watch": true,
     "ignore_watch": ["node_modules", "src", "test", "doc"],

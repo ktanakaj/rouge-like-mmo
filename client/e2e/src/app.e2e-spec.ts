@@ -1,10 +1,10 @@
 /**
- * 「無を掴め」e2eテスト。
+ * 「ローグライクなMMOブラウザゲーム」e2eテスト。
  * @module ./app.e2e-spec
  */
 import { AppPage } from './app.po';
 
-describe('無を掴め', () => {
+describe('ローグライクなMMOブラウザゲーム', () => {
 	let page: AppPage;
 
 	beforeEach(() => {
@@ -13,6 +13,6 @@ describe('無を掴め', () => {
 
 	it('should display top page', () => {
 		page.navigateTo();
-		expect(page.getHeaderTitle()).toEqual('無を掴め');
+		expect(page.getHeaderTitle()).toEqual('ローグライクなMMOブラウザゲーム');
 	});
 });
