@@ -2,14 +2,16 @@
  * ユーザーモデルモジュール。
  * @module ./game/shared/user.model
  */
-import { Table, Column, DataType, AllowNull, Comment, Default, IsDate } from 'sequelize-typescript';
+import { Column, DataType, AllowNull, Comment, Default, IsDate } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
+import { Table } from '../../core/models/decorators';
 import DataModel from '../../core/models/data-model';
 
 /**
  * ユーザーモデルクラス。
  */
 @Table({
+	db: 'global',
 	tableName: 'users',
 	comment: 'ユーザー情報',
 	timestamps: true,

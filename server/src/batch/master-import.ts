@@ -45,11 +45,15 @@ if (files.length === 0) {
 }
 
 // インポート実施
-import afterInit from './core/init';
+import run from './core/runner';
+import invokeContext from '../shared/invoke-context';
 import MasterVersion from '../shared/master-version.model';
-import { MASTER_MODELS } from '../shared/database.providers';
+import { MODELS } from '../shared/database.providers';
 
-afterInit.then(() => importMasters(files, argv['publish'])).then(() => process.exit(0));
+run(async () => {
+	await importMasters(files, argv['publish']);
+	process.exit(0);
+});
 
 /**
  * 指定されたCSVマスタファイル一式をインポートする。
@@ -65,7 +69,7 @@ async function importMasters(csvpaths: string[], publish: boolean): Promise<void
 	logger.info(`Master version v${masterVersion.id} : importing...`);
 
 	// 作成したバージョンでマスタテーブルを作成し、インポート実行
-	await MasterVersion.zoneMasterVersion(masterVersion.id);
+	invokeContext.forceSetMasterVersion(masterVersion.id);
 	try {
 		await MasterVersion.sequelize.sync();
 		for (let csvpath of csvpaths) {
@@ -91,7 +95,7 @@ async function importMaster(csvpath: string): Promise<void> {
 
 	// CSVファイルのファイル名をマスタ名とみなしてモデルクラス取得
 	const name = _.upperFirst(_.camelCase(path.basename(csvpath, '.csv')));
-	const model = MASTER_MODELS.find((m) => m.name === name);
+	const model = MODELS.master.find((m) => m.name === name);
 	if (model === undefined) {
 		logger.warn(name + ' is not found. skipped.');
 		return;

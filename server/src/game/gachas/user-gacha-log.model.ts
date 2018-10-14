@@ -2,8 +2,9 @@
  * ユーザーガチャ履歴モデルモジュール。
  * @module ./game/shared/user-card.model
  */
-import { Table, Column, DataType, AllowNull, Comment, Default, ForeignKey } from 'sequelize-typescript';
+import { Column, DataType, AllowNull, Comment, Default, ForeignKey } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
+import { Table } from '../../core/models/decorators';
 import DataModel from '../../core/models/data-model';
 import User from '../shared/user.model';
 import Gacha from './gacha.model';
@@ -12,6 +13,7 @@ import Gacha from './gacha.model';
  * ユーザーガチャ履歴モデルクラス。
  */
 @Table({
+	db: 'global',
 	tableName: 'userGachaLogs',
 	comment: 'ユーザーガチャ履歴情報',
 	createdAt: true,
@@ -38,6 +40,6 @@ export default class UserGachaLog extends DataModel<UserGachaLog> {
 	@ApiModelProperty({ description: 'ガチャ結果' })
 	@AllowNull(false)
 	@Comment('ガチャ結果')
-	@Column(DataType.JSON)
+	@Column(DataType.TEXT)
 	result: { gachaItemIds: number[], payment: { gameCoins?: number, specialCoins?: number, freeSpecialCoins: number } };
 }

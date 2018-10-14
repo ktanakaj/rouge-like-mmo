@@ -2,13 +2,15 @@
  * ガチャマスタモデルモジュール。
  * @module ./game/gachas/gacha.model
  */
-import { Table, Column, AllowNull, Comment, IsDate } from 'sequelize-typescript';
+import { Column, AllowNull, Comment, IsDate } from 'sequelize-typescript';
+import { Table } from '../../core/models/decorators';
 import MasterModel from '../../core/models/master-model';
 
 /**
  * ガチャマスタモデルクラス。
  */
 @Table({
+	db: 'master',
 	tableName: 'gachas',
 	comment: 'ガチャマスタ',
 })

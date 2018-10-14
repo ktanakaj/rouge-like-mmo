@@ -44,6 +44,10 @@
         appenders:
           - "stdout"
         level: "info"
+      ws:
+        appenders:
+          - "stdout"
+        level: "info"
       batch:
         appenders:
           - "stdout"

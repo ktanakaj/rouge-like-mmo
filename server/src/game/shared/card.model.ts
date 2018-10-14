@@ -2,13 +2,15 @@
  * カードマスタモデルモジュール。
  * @module ./game/shared/card.model
  */
-import { Table, Column, DataType, AllowNull, Comment } from 'sequelize-typescript';
+import { Column, DataType, AllowNull, Comment } from 'sequelize-typescript';
+import { Table } from '../../core/models/decorators';
 import MasterModel from '../../core/models/master-model';
 
 /**
  * カードマスタモデルクラス。
  */
 @Table({
+	db: 'master',
 	tableName: 'cards',
 	comment: 'カードマスタ',
 })

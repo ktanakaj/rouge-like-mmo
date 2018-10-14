@@ -4,24 +4,24 @@
  */
 import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { databaseProviders } from './shared/database.providers';
-import MasterVersionMiddleware from './shared/master-version.middleware';
+import { invokeContextHandler } from './shared/invoke-context.middleware';
 import { AccessLoggerMiddleware } from './shared/access-logger.middleware';
 import { GameModule } from './game/game.module';
+import { WsModule } from './ws/ws.module';
 import { AdminModule } from './admin/admin.module';
 
 /**
  * 「ローグライクなMMOブラウザゲーム」サーバールートモジュールクラス。
  */
 @Module({
-	imports: [GameModule, AdminModule],
+	imports: [GameModule, WsModule, AdminModule],
 	providers: [...databaseProviders],
 	exports: [...databaseProviders],
 })
 export class AppModule {
 	configure(consumer: MiddlewareConsumer) {
 		consumer
-			.apply(MasterVersionMiddleware, AccessLoggerMiddleware)
+			.apply(invokeContextHandler, AccessLoggerMiddleware)
 			.forRoutes({ path: '*', method: RequestMethod.ALL });
 	}
 }
-

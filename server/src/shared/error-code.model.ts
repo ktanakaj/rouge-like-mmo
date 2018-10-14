@@ -1,14 +1,16 @@
 /**
- * エラーコードマスタモデルクラスモジュール。
+ * エラーコードマスタモデルモジュール。
  * @module ./shared/error-code.model
  */
-import { Table, Column, DataType, Unique, AllowNull, Default, Comment } from 'sequelize-typescript';
+import { Column, DataType, Unique, AllowNull, Default, Comment } from 'sequelize-typescript';
+import { Table } from '../core/models/decorators';
 import MasterModel from '../core/models/master-model';
 
 /**
  * エラーコードマスタモデルクラス。
  */
 @Table({
+	db: 'master',
 	tableName: 'errorCodes',
 	comment: 'エラーコードマスタ',
 })

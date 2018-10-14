@@ -2,11 +2,12 @@
  * 管理者モデルクラスモジュール。
  * @module ./admin/shared/administrator.model
  */
-import { Table, Column, DataType, Unique, AllowNull, Comment, Default, DefaultScope, BeforeCreate, BeforeUpdate } from 'sequelize-typescript';
+import { Column, DataType, Unique, AllowNull, Comment, Default, DefaultScope, BeforeCreate, BeforeUpdate } from 'sequelize-typescript';
 import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
 import * as crypto from 'crypto';
 import * as config from 'config';
 import * as Random from 'random-js';
+import { Table } from '../../core/models/decorators';
 import DataModel from '../../core/models/data-model';
 const random = new Random();
 
@@ -23,6 +24,7 @@ const random = new Random();
 	],
 })
 @Table({
+	db: 'admin',
 	tableName: 'administrators',
 	comment: '管理者',
 	timestamps: true,

@@ -2,14 +2,15 @@
  * マスタコントローラモジュール。
  * @module ./admin/masters/masters.controller
  */
-import { Controller, Get, Put, Query, Param, Body } from '@nestjs/common';
+import { Controller, Get, Put, Query, Param, Body, UseGuards } from '@nestjs/common';
 import { ApiUseTags, ApiOperation, ApiImplicitParam, ApiModelProperty, ApiModelPropertyOptional, ApiOkResponse, ApiBadRequestResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 import * as _ from 'lodash';
 import { IsOptional, IsIn } from 'class-validator';
 import { BadRequestError } from '../../core/errors';
 import { IdParam, PagingQuery, ErrorResult } from '../../shared/common.dto';
-import { MASTER_MODELS } from '../../shared/database.providers';
+import { MODELS } from '../../shared/database.providers';
 import MasterVersion from '../../shared/master-version.model';
+import { AuthGuard } from '../auth.guard';
 
 class FindAndCountVersionsResult {
 	@ApiModelProperty({ description: '総件数' })
@@ -32,6 +33,7 @@ class UpdateVersionBody {
  * マスタコントローラクラス。
  */
 @ApiUseTags('admin/masters')
+@UseGuards(AuthGuard)
 @Controller('api/admin/masters')
 export class MastersController {
 	@ApiOperation({ title: 'マスタバージョン一覧', description: 'マスタバージョンの一覧を取得する。' })
@@ -72,7 +74,7 @@ export class MastersController {
 		// 最新のマスタを取得する
 		// （本当はバージョン指定もできるようにしたかったが、現状グローバルなstaticプロパティで最新しか取れないので断念）
 		const modelname = _.upperFirst(_.camelCase(name));
-		const model = MASTER_MODELS.find((m) => m.name === modelname);
+		const model = MODELS.master.find((m) => m.name === modelname);
 		if (model === undefined) {
 			throw new BadRequestError(`${modelname} is not found.`);
 		}

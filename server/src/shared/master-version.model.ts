@@ -1,12 +1,12 @@
 /**
- * マスタバージョンモデルクラスモジュール。
+ * マスタバージョンモデルモジュール。
  * @module ./shared/master-version.model
  */
-import { Model, Table, Column, DataType, AllowNull, Default, Comment, DefaultScope, IFindOptions } from 'sequelize-typescript';
+import { Model, Column, DataType, AllowNull, Default, Comment, DefaultScope, IFindOptions } from 'sequelize-typescript';
 import { DefineIndexesOptions } from 'sequelize';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { NotFoundError } from '../core/errors';
-import MasterModel from '../core/models/master-model';
+import { Table } from '../core/models/decorators';
 
 /**
  * マスタバージョンマスタモデルクラス。
@@ -22,6 +22,7 @@ import MasterModel from '../core/models/master-model';
 	],
 })
 @Table({
+	db: 'master',
 	tableName: 'masterVersions',
 	comment: 'マスタバージョンマスタ',
 	timestamps: true,
@@ -85,20 +86,5 @@ export default class MasterVersion extends Model<MasterVersion> {
 	 */
 	static async findLatest(): Promise<MasterVersion> {
 		return await this.findOne({ where: { status: 'published' }, order: [['id', 'DESC']] });
-	}
-
-	/**
-	 * マスタバージョンを設定したゾーンを開始する。
-	 * @param id マスタバージョンを指定する場合そのID。未指定時は最新の公開マスタ。
-	 */
-	static async zoneMasterVersion(id: number = null): Promise<void> {
-		// 本当はZone.js等でゾーンを作ってそこにリクエストごとの情報として持ちたいが、
-		// bluebirdと衝突して（？）意図通り動かなかったため、staicプロパティで代用。
-		// この実装だと、運用中にマスタが更新された場合、処理の途中に突然バージョンが変わる可能性有。
-		if (id === null) {
-			const m = await MasterVersion.findLatest();
-			id = m ? m.id : 0;
-		}
-		MasterModel.MASTER_VERSION = id;
 	}
 }

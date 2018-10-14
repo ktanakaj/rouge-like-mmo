@@ -7,7 +7,7 @@ import * as os from 'os';
 import * as config from 'config';
 import * as log4js from 'log4js';
 
-// log4jsの初期化。Nest.js周りなどインポートにも時間がかかるようなので、先に開始ログを出力
+// log4jsの初期化。インポートに時間がかかる事があったので、先に開始ログを出力
 log4js.configure(config['log4js']);
 const hostName = process.env.HOSTNAME || os.hostname() || '';
 log4js.getLogger('debug').info(`${hostName}: Worker: pid=${process.pid} initializing...`);
@@ -20,8 +20,12 @@ import * as connectRedis from 'connect-redis';
 import { startMonitoring } from './core/models/redis-helper';
 import { AllExceptionsFilter } from './shared/all-exceptions.filter';
 import { DebugLoggerService } from './shared/debug-logger.service';
+import { WebSocketRpcServer } from './core/ws/ws-rpc-server';
+import { invokeContextRpcHandler } from './shared/invoke-context.middleware';
 import { AppModule } from './app.module';
 const RedisStore = connectRedis(session);
+const errorLogger = log4js.getLogger('error');
+const wsLogger = log4js.getLogger('ws');
 
 /**
  * サーバーの起動。
@@ -48,18 +52,29 @@ async function bootstrap(): Promise<void> {
 		SwaggerModule.setup('swagger', app, swaggerdoc);
 	}
 
-	// 全APIで共通の例外処理を有効化
+	// 全REST APIで共通の例外処理を有効化
 	app.useGlobalFilters(new AllExceptionsFilter());
 
-	// 全APIでバリデーションを有効化、DTOがあるものは未定義のパラメータを受け付けない
+	// 全REST APIでバリデーションを有効化、DTOがあるものは未定義のパラメータを受け付けない
 	// （forbidNonWhitelistedは要らない気もするが、付けないと原因不明になりがちなので）
 	app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true, forbidNonWhitelisted: true }));
 
+	// WebSocketサーバーの初期化
+	const wsrpc = new WebSocketRpcServer(
+		{ server: app.getHttpServer(), path: '/ws/' },
+		{ prefix: '/ws/', wslogger: (level, message) => wsLogger[level](message) });
+	wsrpc.on('error', (err) => errorLogger.error(err));
+	// ※ コネクションのエラーは、wsLoggerの方でもログが出るのでここは無視
+	wsrpc.on('connection', (conn) => conn.on('error', () => { }));
+	wsrpc.use(invokeContextRpcHandler);
+	app.connectMicroservice({ strategy: wsrpc });
+
 	// サーバー待ち受け開始
+	await app.startAllMicroservicesAsync();
 	await app.listen(process.env.PORT || 3000);
 	log4js.getLogger('debug').info(`${hostName}: Worker: pid=${process.pid} up`);
 }
-bootstrap().catch((e) => log4js.getLogger('error').fatal(e));
+bootstrap().catch((e) => errorLogger.fatal(e));
 
 /**
  * Swaggerドキュメントにセキュリティ情報を付加する。

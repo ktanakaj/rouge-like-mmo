@@ -6,6 +6,7 @@ import { Column, Model, PrimaryKey, Comment, DefaultScope, BeforeValidate, IFind
 import { getAttributes } from 'sequelize-typescript/lib/services/models';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { NotFoundError } from '../../core/errors';
+import invokeContext from '../../shared/invoke-context';
 
 /**
  * マスタモデル抽象クラス。
@@ -22,9 +23,6 @@ import { NotFoundError } from '../../core/errors';
 	],
 })
 export default abstract class MasterModel<T extends MasterModel<T>> extends Model<T> {
-	/** マスタバージョン */
-	public static MASTER_VERSION = 0;
-
 	/** マスタID。デフォルトだと自動採番のID列が作られてしまうため上書き。 */
 	@ApiModelProperty({ description: 'マスタID', type: 'integer' })
 	@PrimaryKey
@@ -55,7 +53,7 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 	 */
 	static getTableName(): string | object {
 		// マスタバージョンに応じて動的にテーブル名を変えるためにsequelizeのModelのメソッドをオーバーライド
-		const version = this.MASTER_VERSION;
+		const version = invokeContext.getMasterVersion();
 		if (!version) {
 			throw new NotFoundError('There are no available master version');
 		}

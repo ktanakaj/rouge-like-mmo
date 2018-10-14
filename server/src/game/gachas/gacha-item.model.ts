@@ -2,7 +2,8 @@
  * ガチャアイテムマスタモデルモジュール。
  * @module ./game/gachas/gacha-item.model
  */
-import { Table, Column, DataType, AllowNull, Comment, IsDate, ForeignKey } from 'sequelize-typescript';
+import { Column, DataType, AllowNull, Comment, IsDate, ForeignKey } from 'sequelize-typescript';
+import { Table } from '../../core/models/decorators';
 import MasterModel from '../../core/models/master-model';
 import Gacha from './gacha.model';
 
@@ -10,6 +11,7 @@ import Gacha from './gacha.model';
  * ガチャアイテムマスタモデルクラス。
  */
 @Table({
+	db: 'master',
 	tableName: 'gachaItems',
 	comment: 'ガチャアイテムマスタ',
 })

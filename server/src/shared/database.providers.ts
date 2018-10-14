@@ -2,36 +2,37 @@
  * DB接続定義モジュール。
  * @module ./shared/databases.providers
  */
+import 'reflect-metadata';
 import * as config from 'config';
 import * as log4js from 'log4js';
 import * as _ from 'lodash';
 import { Sequelize, Model } from 'sequelize-typescript';
+import fileUtils from '../core/utils/file-utils';
+import { DB_KEY } from '../core/models/decorators';
 
-import MasterVersion from './master-version.model';
-import ErrorCode from './error-code.model';
-import Gacha from '../game/gachas/gacha.model';
-import GachaItem from '../game/gachas/gacha-item.model';
-import Administrator from '../admin/shared/administrator.model';
-import User from '../game/shared/user.model';
+/** モデル一覧 */
+export const MODELS: { master: typeof Model[] } = { master: [] };
 
-// TODO: モデル追加するたびにリストに追加するの何とかしたい
-//       （ファイル名で区別して自動的にリストアップするとか）
+// モデルは、拡張子が .model.ts のファイルを検索して付加されているデコレーターの情報を見て判別する
+// ※ .model.ts にはRedisなどの非DBモデルもあるので、DB情報があるもののみ処理
+fileUtils.directoryWalkRecursiveSync(__dirname + '/../', (p) => {
+	if (/\.model\.[jt]s$/.test(p)) {
+		const m = require(p);
+		const model = m['default'] || m;
+		if (typeof model === 'function') {
+			const db = Reflect.getMetadata(DB_KEY, model);
+			if (db) {
+				if (!MODELS[db]) {
+					MODELS[db] = [];
+				}
+				MODELS[db].push(model);
+			}
+		}
+	}
+});
 
-/** マスタモデルクラス一覧 */
-export const MASTER_MODELS: typeof Model[] = [
-	ErrorCode,
-	MasterVersion,
-	Gacha,
-	GachaItem,
-];
-/** GMツールモデルクラス一覧 */
-export const ADMIN_MODELS: typeof Model[] = [
-	Administrator,
-];
-/** グローバルDBモデルクラス一覧 */
-export const GLOBAL_MODELS: typeof Model[] = [
-	User,
-];
+/** 各DB接続用のプロバイダー */
+export const databaseProviders = [];
 
 const debugLog = (log, time) => {
 	if (typeof time === 'number') {
@@ -40,49 +41,32 @@ const debugLog = (log, time) => {
 	log4js.getLogger('debug').debug(log);
 };
 
-/** 各DB接続用のプロバイダー */
-export const databaseProviders = [
-	{
-		provide: 'MasterSequelizeToken',
+for (const dbname of Object.keys(MODELS)) {
+	if (!config['databases'][dbname]) {
+		throw new Error(`db='${dbname}' is not found`);
+	}
+
+	const options = Object.assign({
+		logging: debugLog,
+		operatorsAliases: false,
+	}, config['databases'][dbname]);
+
+	databaseProviders.push({
+		provide: _.upperFirst(_.camelCase(dbname)) + 'SequelizeToken',
 		useFactory: async () => {
-			const sequelize = new Sequelize(Object.assign({
-				logging: debugLog,
-				operatorsAliases: false,
-			}, config['databases']['master']));
-			sequelize.addModels(MASTER_MODELS);
+			const sequelize = new Sequelize(options);
+			sequelize.addModels(MODELS[dbname]);
+			if (dbname !== 'master') {
+				// TODO: syncは止める
+				await sequelize.sync();
+			}
 			return sequelize;
 		},
-	},
-	{
-		provide: 'AdminSequelizeToken',
-		useFactory: async () => {
-			const sequelize = new Sequelize(Object.assign({
-				logging: debugLog,
-				operatorsAliases: false,
-			}, config['databases']['admin']));
-			sequelize.addModels(ADMIN_MODELS);
-			// TODO: syncは止める
-			await sequelize.sync();
-			return sequelize;
-		},
-	},
-	{
-		provide: 'GlobalSequelizeToken',
-		useFactory: async () => {
-			const sequelize = new Sequelize(Object.assign({
-				logging: debugLog,
-				operatorsAliases: false,
-			}, config['databases']['global']));
-			sequelize.addModels(GLOBAL_MODELS);
-			// TODO: syncは止める
-			await sequelize.sync();
-			return sequelize;
-		},
-	},
-];
+	});
+}
 
 /** 各モデルをリポジトリーとして扱うためのプロバイダー */
-export const modelProviders = _.flatMap([MASTER_MODELS, ADMIN_MODELS, GLOBAL_MODELS], (models) => {
+export const modelProviders = _.flatMap(Object.values(MODELS), (models: typeof Model[]) => {
 	return models.map((model) => {
 		return {
 			provide: `${model.name}Repository`,

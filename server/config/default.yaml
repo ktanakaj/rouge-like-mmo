@@ -59,6 +59,11 @@
         filename: "/var/log/local/rouge-like-mmo/access.log"
         pattern: "-yyyy-MM-dd"
         backups: 10
+      ws: # WebSocket通信ログ
+        type: "dateFile"
+        filename: "/var/log/local/rouge-like-mmo/ws.log"
+        pattern: "-yyyy-MM-dd"
+        backups: 10
       batch: # バッチログ
         type: "dateFile"
         filename: "/var/log/local/rouge-like-mmo/batch.log"
@@ -85,6 +90,11 @@
           - "stdout"
           - "access"
         level: "info"
+      ws:
+        appenders:
+          - "stdout"
+          - "ws"
+        level: "info"
       batch:
         appenders:
           - "stdout"
@@ -102,6 +112,9 @@
     - \.jpg
     - \.gif
     - \.ico
+    - \.jsgz
+    - \.datagz
+    - \.memgz
   swagger:
     swagger: "2.0"
     info:

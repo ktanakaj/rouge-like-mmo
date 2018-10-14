@@ -2,8 +2,9 @@
  * ユーザーカードモデルモジュール。
  * @module ./game/shared/user-card.model
  */
-import { Table, Column, DataType, AllowNull, Comment, Default, ForeignKey } from 'sequelize-typescript';
+import { Column, DataType, AllowNull, Comment, Default, ForeignKey } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
+import { Table } from '../../core/models/decorators';
 import DataModel from '../../core/models/data-model';
 import User from './user.model';
 import Card from './card.model';
@@ -12,6 +13,7 @@ import Card from './card.model';
  * ユーザーカードモデルクラス。
  */
 @Table({
+	db: 'global',
 	tableName: 'userCards',
 	comment: 'ユーザー所有カード情報',
 	timestamps: true,
