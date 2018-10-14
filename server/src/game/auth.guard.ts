@@ -3,7 +3,7 @@
  * @module ./game/auth.guard
  */
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import User from './shared/user.model';
+import Player from './shared/player.model';
 
 /**
  * ゲームAPI用アクセス制限クラス。
@@ -20,8 +20,8 @@ export class AuthGuard implements CanActivate {
 		// 内部的には自動的にユーザーを登録する
 		const req = context.switchToHttp().getRequest();
 		if (!req.session['user']) {
-			// TODO: ユーザーIDはランダムに採番するようにする？
-			const user = await User.create({ lastLogin: new Date() });
+			// TODO: プレイヤーIDはランダムに採番するようにする？
+			const user = await Player.create({ lastLogin: new Date() });
 			req.session['user'] = user.toJSON();
 		}
 

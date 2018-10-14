@@ -46,7 +46,7 @@ export default class Administrator extends DataModel<Administrator> {
 	name: string;
 
 	/** パスワード */
-	@ApiModelPropertyOptional({ description: '管理者名' })
+	@ApiModelPropertyOptional({ description: 'パスワード' })
 	@AllowNull(false)
 	@Comment('パスワード')
 	@Column
