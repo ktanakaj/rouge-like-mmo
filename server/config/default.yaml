@@ -11,7 +11,7 @@
       port: 3306
       username: "rougelikemmo_usr"
       password: "rougelikemmo01"
-      name: "rougelikemmo_master_db"
+      database: "rougelikemmo_master_db"
       benchmark: true
     admin:
       dialect: "mysql"
@@ -19,7 +19,7 @@
       port: 3306
       username: "rougelikemmo_usr"
       password: "rougelikemmo01"
-      name: "rougelikemmo_admin_db"
+      database: "rougelikemmo_admin_db"
       benchmark: true
     global:
       dialect: "mysql"
@@ -27,7 +27,7 @@
       port: 3306
       username: "rougelikemmo_usr"
       password: "rougelikemmo01"
-      name: "rougelikemmo_global_db"
+      database: "rougelikemmo_global_db"
       benchmark: true
   redis:
     # ※ sessionだけ使用法が別でフォーマットが異なるので注意

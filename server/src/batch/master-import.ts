@@ -63,8 +63,6 @@ run(async () => {
  */
 async function importMasters(csvpaths: string[], publish: boolean): Promise<void> {
 	// 新しいマスタバージョンを作成
-	// ※ マスタバージョンテーブルが無い場合はテーブルも作る
-	await MasterVersion.sync();
 	const masterVersion = await MasterVersion.create();
 	logger.info(`Master version v${masterVersion.id} : importing...`);
 

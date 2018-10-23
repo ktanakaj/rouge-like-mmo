@@ -31,8 +31,10 @@ fileUtils.directoryWalkRecursiveSync(__dirname + '/../', (p) => {
 	}
 });
 
+export interface IDatabaseProvider { provide: string, useFactory: () => Promise<Sequelize> };
+
 /** 各DB接続用のプロバイダー */
-export const databaseProviders = [];
+export const databaseProviders: IDatabaseProvider[] = [];
 
 const debugLog = (log, time) => {
 	if (typeof time === 'number') {
@@ -56,10 +58,6 @@ for (const dbname of Object.keys(MODELS)) {
 		useFactory: async () => {
 			const sequelize = new Sequelize(options);
 			sequelize.addModels(MODELS[dbname]);
-			if (dbname !== 'master') {
-				// TODO: syncは止める
-				await sequelize.sync();
-			}
 			return sequelize;
 		},
 	});

@@ -19,8 +19,7 @@ export default function (callback: (app?: INestApplicationContext) => any): void
 	NestFactory.createApplicationContext(AppModule, {
 		logger: new DebugLoggerService(),
 	}).then((app) => {
-		return MasterVersion.sync() //TODO: syncは止める
-			.then(() => MasterVersion.findLatest())
+		return MasterVersion.findLatest()
 			.then((version) => {
 				invokeContext.run(() => {
 					invokeContext.setDate();
