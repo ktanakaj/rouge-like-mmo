@@ -21,6 +21,8 @@ export interface IRedisClientAsync extends redis.RedisClient {
 	keysAsync(pattern: string): Promise<string[]>;
 	expireAsync(key: string, seconds: number): Promise<number>;
 	flushdbAsync(): Promise<string>;
+	getAsync(key: string): Promise<string>;
+	setAsync(key: string, value: string): Promise<void>;
 	zaddAsync(key: string, score: number, member: string): Promise<number>;
 	zremAsync(key: string, member: string): Promise<number>;
 	zcardAsync(key: string): Promise<number>;
@@ -43,6 +45,12 @@ export interface IRedisMultiAsync extends redis.Multi {
 	execAsync(): Promise<any[]>;
 }
 
+export interface IRedisConfig {
+	host: string;
+	port: number;
+	options?: object;
+}
+
 /**
  * Redisクライアントを作成する。
  *
@@ -52,7 +60,7 @@ export interface IRedisMultiAsync extends redis.Multi {
  * @param config Redis設定。
  * @returns Redisクライアント。
  */
-export function createClient(config: { host: string, port: number, options?: object }): IRedisClientAsync {
+export function createClient(config: IRedisConfig): IRedisClientAsync {
 	const client = redisAsync.createClient(
 		config.port,
 		config.host,
@@ -70,7 +78,7 @@ const pool = new Map();
  * @param config Redis設定。
  * @returns Redisクライアント。
  */
-export function getClient(config: { host: string, port: number, options?: object }): IRedisClientAsync {
+export function getClient(config: IRedisConfig): IRedisClientAsync {
 	// 取得済みのインスタンスがある場合は取得する
 	// ※ 現状、接続先ごとに1クライアント保持しているのみで、複数のクライアントを保持するコネクションプール的な事はしていない
 	const key = JSON.stringify(config);
@@ -102,7 +110,7 @@ const monitorPool = new Map();
  * @param config Redis設定。
  * @returns 処理状態。
  */
-export async function startMonitoring(config: { host: string, port: number }): Promise<void> {
+export async function startMonitoring(config: IRedisConfig): Promise<void> {
 	// ※ 1サーバーに1つで十分なので、ホスト名:ポート番号だけで重複チェック
 	const key = `${config.host}:${config.port}`;
 	if (monitorPool.has(key)) {

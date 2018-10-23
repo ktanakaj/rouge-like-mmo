@@ -4,9 +4,16 @@
  */
 import { Column, Model, PrimaryKey, Comment, DefaultScope, BeforeValidate, IFindOptions } from 'sequelize-typescript';
 import { getAttributes } from 'sequelize-typescript/lib/services/models';
+import { NonAbstract } from 'sequelize-typescript/lib/utils/types';
 import { ApiModelProperty } from '@nestjs/swagger';
+import * as Bluebird from 'bluebird';
+import * as config from 'config';
 import { NotFoundError } from '../../core/errors';
 import invokeContext from '../../shared/invoke-context';
+import { getCacheStore } from './cache-store';
+
+/** モデル型定義。typeof T がコンパイルエラーになるのでその代替。 */
+type NonAbstractTypeOfMasterModel<T> = (new () => T) & NonAbstract<typeof MasterModel>;
 
 /**
  * マスタモデル抽象クラス。
@@ -23,6 +30,9 @@ import invokeContext from '../../shared/invoke-context';
 	],
 })
 export default abstract class MasterModel<T extends MasterModel<T>> extends Model<T> {
+	/** デフォルトのキャッシュ保持期間（秒） */
+	private static readonly DEFAULT_TTL = 86400;
+
 	/** マスタID。デフォルトだと自動採番のID列が作られてしまうため上書き。 */
 	@ApiModelProperty({ description: 'マスタID', type: 'integer' })
 	@PrimaryKey
@@ -34,7 +44,7 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 	 * マスタが有効期間内か？
 	 * @returns 有効期間内の場合true。
 	 */
-	isActive(): boolean {
+	public isActive(): boolean {
 		// 有効期間的なプロパティがある場合のみチェック
 		// （有効期間的なプロパティの種類が増えたら追加してください）
 		const now = Date.now();
@@ -72,14 +82,36 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 	}
 
 	/**
+	 * 全てのレコードを取得する。
+	 * @param options 検索オプション。
+	 * @returns レコード配列。※キャッシュ有
+	 */
+	public static findAll<T>(this: NonAbstractTypeOfMasterModel<T>, options?: IFindOptions<T>): Bluebird<T[]> {
+		// ※ findById, findOne 等も最終的に findAll を呼んでいるため、全てキャッシュされます
+		// ※ マスタモデルは単純な使い方しか想定していないため、複雑なoptionsを指定した場合、
+		//    キャッシュが正常に機能しない可能性があります。
+		const self: any = this;
+		let factory;
+		if (!options || !options.raw) {
+			factory = (json) => {
+				if (json === undefined || json === null) {
+					return json;
+				}
+				return Array.isArray(json) ? json.map((m) => self.build(m)) : self.build(json)
+			};
+		}
+		return this.cachewarp('findAll', factory).apply(this, arguments);
+	}
+
+	/**
 	 * マスタを主キーで取得する。
 	 * @param identifier マスタの主キー。
 	 * @param options 検索オプション。
 	 * @returns マスタ。
 	 * @throws NotFoundError マスタが存在しない場合。
 	 */
-	static async findOrFail<T extends MasterModel<T>>(this: (new () => T), identifier: number | string, options?: IFindOptions<T>): Promise<T> {
-		const instance = await (this as any).findById(identifier, options);
+	public static async findOrFail<T extends MasterModel<T>>(this: NonAbstractTypeOfMasterModel<T>, identifier: number | string, options?: IFindOptions<T>): Promise<T> {
+		const instance = await this.findById(identifier, options);
 		if (!instance) {
 			throw new NotFoundError(this.name, identifier);
 		}
@@ -93,10 +125,10 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 	 * @returns マスタ。
 	 * @throws NotFoundError マスタが存在しないまたは期間外の場合。
 	 */
-	static async findOrFailWithIsActive<T extends MasterModel<T>>(
-		this: (new () => T), identifier: number | string, options?: IFindOptions<T>): Promise<T> {
+	public static async findOrFailWithIsActive<T extends MasterModel<T>>(
+		this: NonAbstractTypeOfMasterModel<T>, identifier: number | string, options?: IFindOptions<T>): Promise<T> {
 
-		const instance = await (this as any).findOrFail(identifier, options);
+		const instance = await this.findOrFail(identifier, options);
 		if (!instance.isActive()) {
 			throw new NotFoundError(this.name, identifier);
 		}
@@ -118,5 +150,22 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 				}
 			}
 		}
+	}
+
+	/**
+	 * マスタモデルのメソッドをキャッシュ処理でラップする。
+	 * @param name ラップするメソッド名。
+	 * @param factory キャッシュをモデルに復元するための処理。
+	 * @returns ラップされたメソッド。
+	 */
+	static cachewarp<T>(this: NonAbstractTypeOfMasterModel<T>, name: string, factory: (json) => any): Function {
+		return getCacheStore(config['redis']['cache']).wrap(
+			super[name],
+			{
+				ttl: MasterModel.DEFAULT_TTL,
+				factory,
+				prefix: 'v' + invokeContext.getMasterVersion() + ':' + this.name + ':' + name,
+			}
+		);
 	}
 }
