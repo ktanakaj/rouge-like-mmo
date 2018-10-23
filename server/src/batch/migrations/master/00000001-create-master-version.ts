@@ -38,9 +38,9 @@ module.exports = {
 				comment: '更新日時',
 			},
 		});
-		await queryInterface.addIndex('masterVersions', ['status', <any>{ attribute: 'id', order: 'DESC' }]);
+		await queryInterface.addIndex('masterVersions', ['status', { attribute: 'id', order: 'DESC' } as any]);
 	},
 	down: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
 		await queryInterface.dropTable('masterVersions');
-	}
+	},
 };

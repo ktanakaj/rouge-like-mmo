@@ -38,7 +38,7 @@ export class AllExceptionsFilter implements ExceptionFilter, RpcExceptionFilter 
 	protected async asyncCatch(err: any, host: ArgumentsHost): Promise<void> {
 		// エラーは一旦AppErrorへと変換して、かつマスタからログレベル等を取得して処理する。
 		const apperr = AppError.convert(err);
-		const errorCode = await this.findByErrorCode(apperr.code)
+		const errorCode = await this.findByErrorCode(apperr.code);
 
 		// ※ ログにはオリジナルのエラーを出す
 		this.log(err, apperr, errorCode.logLevel);
@@ -101,7 +101,7 @@ export class AllExceptionsFilter implements ExceptionFilter, RpcExceptionFilter 
 				// 本番環境等ではエラーの詳細は返さない
 				message: config['debug']['errorMessage'] ? err.message : err.code,
 				data: err.data,
-			}
+			},
 		});
 	}
 }

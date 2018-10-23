@@ -1,6 +1,6 @@
 /**
-* @file games.controller.tsのテスト。
-*/
+ * @file games.controller.tsのテスト。
+ */
 import * as assert from 'power-assert';
 import { TestingModule } from '@nestjs/testing';
 import testHelper from '../../test-helper';

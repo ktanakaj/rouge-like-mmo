@@ -28,7 +28,13 @@ export function invokeContextHandler(req: express.Request, res: express.Response
  * @param next 次の処理呼び出し用のコールバック。
  * @returns コールバックの戻り値。
  */
-export function invokeContextRpcHandler(method: string, params: any, id: string | number, connection: WebSocketRpcConnection, next: (method: string, params: any, id: string | number, connection: WebSocketRpcConnection) => any): any {
+export function invokeContextRpcHandler(
+	method: string,
+	params: any,
+	id: string | number,
+	connection: WebSocketRpcConnection,
+	next: (method: string, params: any, id: string | number, connection: WebSocketRpcConnection) => any,
+): any {
 	return new Promise((resolve, reject) => {
 		invoketContext.run(() => {
 			invoketContext.setDate();

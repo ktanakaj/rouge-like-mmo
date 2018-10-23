@@ -184,7 +184,7 @@ export class WebSocketConnection extends EventEmitter {
 				delete target[name];
 				self.emit('sessionUpdated', name, old, null);
 				return true;
-			}
+			},
 		});
 	}
 

@@ -17,5 +17,5 @@ module.exports = {
 	},
 	down: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
 		await queryInterface.bulkDelete('administrators', { name: 'admin' });
-	}
+	},
 };

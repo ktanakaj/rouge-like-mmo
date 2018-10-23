@@ -3,7 +3,10 @@
  * @module ./admin/administrators/administrators.controller
  */
 import { Controller, Get, Post, Put, Delete, Query, Param, Body, Session, UseGuards, HttpCode } from '@nestjs/common';
-import { ApiUseTags, ApiOperation, ApiModelProperty, ApiModelPropertyOptional, ApiOkResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiConflictResponse } from '@nestjs/swagger';
+import {
+	ApiUseTags, ApiOperation, ApiModelProperty, ApiModelPropertyOptional, ApiOkResponse, ApiCreatedResponse,
+	ApiBadRequestResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiConflictResponse,
+} from '@nestjs/swagger';
 import { IsOptional, MinLength, IsIn } from 'class-validator';
 import { BadRequestError } from '../../core/errors';
 import { IdParam, PagingQuery, ErrorResult } from '../../shared/common.dto';
@@ -21,7 +24,7 @@ class FindAndCountAdministratorsResult {
 class CreateAdministratorBody {
 	@MinLength(1)
 	@ApiModelProperty({ description: '管理者名' })
-	name: string
+	name: string;
 	@IsIn(Administrator.ROLES)
 	@ApiModelProperty({ description: 'ロール', enum: Administrator.ROLES })
 	role: string;
@@ -34,7 +37,7 @@ class UpdateAdministratorBody {
 	@IsOptional()
 	@MinLength(1)
 	@ApiModelPropertyOptional({ description: '管理者名' })
-	name?: string
+	name?: string;
 	@IsOptional()
 	@IsIn(Administrator.ROLES)
 	@ApiModelPropertyOptional({ description: 'ロール', enum: Administrator.ROLES })
@@ -47,7 +50,7 @@ class UpdateAdministratorBody {
 class LoginBody {
 	@MinLength(1)
 	@ApiModelProperty({ description: '管理者名' })
-	username: string
+	username: string;
 	@MinLength(1)
 	@ApiModelProperty({ description: 'パスワード' })
 	password: string;
@@ -114,7 +117,7 @@ export class AdministratorsController {
 	@Delete('/:id(\\d+)')
 	async deleteAdministrator(@Param() param: IdParam): Promise<Administrator> {
 		// FIXME: role=admin の管理者のみ実行可
-		let admin = await Administrator.findOrFail(param.id);
+		const admin = await Administrator.findOrFail(param.id);
 		await admin.destroy();
 		return admin;
 	}
@@ -150,7 +153,7 @@ export class AdministratorsController {
 		}
 		// パスワードは返さない
 		admin.password = undefined;
-		session['admin'] = admin;
+		session['admin'] = admin.toJSON();
 		return admin;
 	}
 

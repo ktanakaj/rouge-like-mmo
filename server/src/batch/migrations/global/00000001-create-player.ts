@@ -55,5 +55,5 @@ module.exports = {
 	},
 	down: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
 		await queryInterface.dropTable('players');
-	}
+	},
 };

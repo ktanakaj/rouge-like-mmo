@@ -3,7 +3,10 @@
  * @module ./admin/masters/masters.controller
  */
 import { Controller, Get, Put, Query, Param, Body, UseGuards } from '@nestjs/common';
-import { ApiUseTags, ApiOperation, ApiImplicitParam, ApiModelProperty, ApiModelPropertyOptional, ApiOkResponse, ApiBadRequestResponse, ApiNotFoundResponse } from '@nestjs/swagger';
+import {
+	ApiUseTags, ApiOperation, ApiImplicitParam, ApiModelProperty, ApiModelPropertyOptional,
+	ApiOkResponse, ApiBadRequestResponse, ApiNotFoundResponse,
+} from '@nestjs/swagger';
 import * as _ from 'lodash';
 import { IsOptional, IsIn } from 'class-validator';
 import { BadRequestError } from '../../core/errors';
@@ -50,7 +53,7 @@ export class MastersController {
 	@ApiNotFoundResponse({ description: 'マスタバージョン無し', type: ErrorResult })
 	@Put('/:id(\\d+)')
 	async updateVersion(@Param() param: IdParam, @Body() body: UpdateVersionBody): Promise<MasterVersion> {
-		let version = await MasterVersion.findOrFail(param.id);
+		const version = await MasterVersion.findOrFail(param.id);
 		version.set(body);
 		return await version.save();
 	}

@@ -120,4 +120,4 @@ export default {
 	setLatestMasterVersion,
 	forceSetMasterVersion,
 	useMock,
-}
+};

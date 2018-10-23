@@ -31,7 +31,7 @@ fileUtils.directoryWalkRecursiveSync(__dirname + '/../', (p) => {
 	}
 });
 
-export interface IDatabaseProvider { provide: string, useFactory: () => Promise<Sequelize> };
+export interface IDatabaseProvider { provide: string; useFactory: () => Promise<Sequelize>; }
 
 /** 各DB接続用のプロバイダー */
 export const databaseProviders: IDatabaseProvider[] = [];

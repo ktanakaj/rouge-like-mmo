@@ -66,9 +66,9 @@ module.exports = {
 				comment: '更新日時',
 			},
 		});
-		await queryInterface.addIndex('playerCharacters', ['playerId', <any>{ attribute: 'lastSelected', order: 'DESC' }]);
+		await queryInterface.addIndex('playerCharacters', ['playerId', { attribute: 'lastSelected', order: 'DESC' } as any]);
 	},
 	down: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
 		await queryInterface.dropTable('playerCharacters');
-	}
+	},
 };

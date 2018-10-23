@@ -42,9 +42,9 @@ function directoryWalkSync(root: string, func: (path: string) => void): void {
  */
 function requireDirectoriesRecursiveSync(root: string): Object {
 	const map = {};
-	directoryWalkRecursiveSync(root, (path) => {
-		if (/\.[jt]s$/.test(path) && !/\.d.ts$/.test(path)) {
-			map[path] = require(path);
+	directoryWalkRecursiveSync(root, (p) => {
+		if (/\.[jt]s$/.test(p) && !/\.d.ts$/.test(p)) {
+			map[p] = require(p);
 		}
 	});
 	return map;
@@ -57,9 +57,9 @@ function requireDirectoriesRecursiveSync(root: string): Object {
  */
 function requireDirectoriesSync(root: string): Object {
 	const map = {};
-	directoryWalkSync(root, (path) => {
-		if (/\.[jt]s$/.test(path) && !/\.d.ts$/.test(path)) {
-			map[path] = require(path);
+	directoryWalkSync(root, (p) => {
+		if (/\.[jt]s$/.test(p) && !/\.d.ts$/.test(p)) {
+			map[p] = require(p);
 		}
 	});
 	return map;

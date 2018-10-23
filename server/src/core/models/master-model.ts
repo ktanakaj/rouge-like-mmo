@@ -97,7 +97,7 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 				if (json === undefined || json === null) {
 					return json;
 				}
-				return Array.isArray(json) ? json.map((m) => self.build(m)) : self.build(json)
+				return Array.isArray(json) ? json.map((m) => self.build(m)) : self.build(json);
 			};
 		}
 		return this.cachewarp('findAll', factory).apply(this, arguments);
@@ -110,7 +110,9 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 	 * @returns マスタ。
 	 * @throws NotFoundError マスタが存在しない場合。
 	 */
-	public static async findOrFail<T extends MasterModel<T>>(this: NonAbstractTypeOfMasterModel<T>, identifier: number | string, options?: IFindOptions<T>): Promise<T> {
+	public static async findOrFail<T extends MasterModel<T>>(
+		this: NonAbstractTypeOfMasterModel<T>, identifier: number | string, options?: IFindOptions<T>): Promise<T> {
+
 		const instance = await this.findById(identifier, options);
 		if (!instance) {
 			throw new NotFoundError(this.name, identifier);
@@ -165,7 +167,6 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 				ttl: MasterModel.DEFAULT_TTL,
 				factory,
 				prefix: 'v' + invokeContext.getMasterVersion() + ':' + this.name + ':' + name,
-			}
-		);
+			});
 	}
 }

@@ -11,7 +11,7 @@ const logger = log4js.getLogger('batch');
 
 // バッチ開始ログの出力
 const name = process.argv.join(' ');
-logger.info(name + " : started");
+logger.info(name + ' : started');
 
 // バッチ終了ログの出力
 // ※ イベントでバッチ終了に割り込む

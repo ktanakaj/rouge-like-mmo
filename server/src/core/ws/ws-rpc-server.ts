@@ -22,7 +22,7 @@ export type WebSocketRpcServerMiddleware = (
 	params: any,
 	id: string | number,
 	connection: WebSocketRpcConnection,
-	next: (method: string, params: any, id: string | number, connection: WebSocketRpcConnection) => any
+	next: (method: string, params: any, id: string | number, connection: WebSocketRpcConnection) => any,
 ) => any;
 
 /**
@@ -62,7 +62,7 @@ export class WebSocketRpcServer extends Server implements CustomTransportStrateg
 			}
 
 			const conn = new WebSocketRpcConnection(ws, Object.assign({
-				methodHandler: (method, params, id) => this.handleMessageWithMiddlewares(method, params, id, conn)
+				methodHandler: (method, params, id) => this.handleMessageWithMiddlewares(method, params, id, conn),
 			}, options));
 
 			this.emit('connection', conn);
@@ -90,8 +90,8 @@ export class WebSocketRpcServer extends Server implements CustomTransportStrateg
 	 */
 	private handleMessageWithMiddlewares(method: string, params?: any, id?: string | number, connection?: WebSocketRpcConnection): any {
 		const func = this.middlewares.reduceRight(
-			(next, middleware) => (method, params, id, connection) => middleware(method, params, id, connection, next),
-			this.handleMessage.bind(this))
+			(next, middleware) => (m, p, i, c) => middleware(m, p, i, c, next),
+			this.handleMessage.bind(this));
 		return func(method, params, id, connection);
 	}
 

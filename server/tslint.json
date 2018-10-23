@@ -36,6 +36,7 @@
         "no-empty-interface": false,
         "no-empty": false,
         "arrow-parens": false,
+        "only-arrow-functions": false,
         "object-literal-sort-keys": false,
         "no-unused-expression": false,
         "max-classes-per-file": [
@@ -52,6 +53,10 @@
         ],
         "no-string-literal": false,
         "ban-types": [],
+        "space-before-function-paren": false,
+        "no-var-requires": false,
+        "forin": false,
+        "no-console": false
     },
     "rulesDirectory": []
 }

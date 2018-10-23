@@ -97,7 +97,7 @@ export class AppError extends Error {
 		if (message === null || typeof message !== 'object') {
 			return message;
 		}
-		const msg = message.message
+		const msg = message.message;
 		if (!msg) {
 			// 不明なフォーマットなのでとりあえずJSONで返す
 			return JSON.stringify(message);

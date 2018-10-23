@@ -61,4 +61,3 @@ export class WebSocketRpcConnection extends WebSocketConnection {
 		return this.rpc.notice(method, params);
 	}
 }
-

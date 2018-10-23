@@ -1,9 +1,10 @@
 /**
-* @file masters.controller.tsのテスト。
-*/
+ * @file masters.controller.tsのテスト。
+ */
 import * as assert from 'power-assert';
 import { TestingModule } from '@nestjs/testing';
 import testHelper from '../../test-helper';
+import invokeContext from '../../shared/invoke-context';
 import { MastersController } from './masters.controller';
 
 describe('MastersController', () => {
@@ -26,6 +27,15 @@ describe('MastersController', () => {
 			const version = result.rows[0];
 			assert(version.id > 0);
 			assert.notStrictEqual(version.status, null);
+		});
+	});
+
+	describe('#updateVersion()', () => {
+		it('成功', async () => {
+			const id = invokeContext.getMasterVersion();
+			const version = await controller.updateVersion({ id }, { note: 'Updated by unittest' });
+			assert.strictEqual(version.id, id);
+			assert.strictEqual(version.note, 'Updated by unittest');
 		});
 	});
 

@@ -22,7 +22,7 @@ const toscript = argv['to'];
 
 if ((dbname !== undefined && dbname === '')
 	|| (toscript !== undefined && toscript === '')) {
-	logger.warn("Usage: npm run db-migrate -- [--undo] [--all] [--db=dbname] [--to=scriptname]");
+	logger.warn('Usage: npm run db-migrate -- [--undo] [--all] [--db=dbname] [--to=scriptname]');
 	process.exit(64);
 }
 if (dbname && !config['databases'][dbname]) {

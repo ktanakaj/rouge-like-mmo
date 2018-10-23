@@ -22,7 +22,7 @@ export function Table(options: IDefineOptions & { db: string }): Function {
 		Reflect.defineMetadata(DB_KEY, options.db, target);
 		(SequelizeTable(options) as any)(target);
 	};
-};
+}
 
 /**
  * キャッシュ用デコレーター。
@@ -49,16 +49,16 @@ export function Cache(targetOrOptions: any, propertyKey?: string, descriptor?: P
 	if (propertyKey) {
 		return Cache({})(targetOrOptions, propertyKey, descriptor);
 	} else {
-		return (target: any, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
-			if (typeof descriptor.value !== 'function') {
-				throw new Error(`${propertyKey} is not function`);
+		return (target: any, propKey: string, desc: PropertyDescriptor): PropertyDescriptor => {
+			if (typeof desc.value !== 'function') {
+				throw new Error(`${propKey} is not function`);
 			}
 			// キャッシュ処理でラップしたメソッドを返す
 			const name = typeof target === 'function' ? target.name : target.constructor.name;
-			const cachedfunc = getCacheStore(config['redis']['cache']).wrap(descriptor.value, Object.assign({
-				prefix: name + ':' + propertyKey,
+			const cachedfunc = getCacheStore(config['redis']['cache']).wrap(desc.value, Object.assign({
+				prefix: name + ':' + propKey,
 			}, targetOrOptions));
-			return Object.assign(descriptor, {
+			return Object.assign(desc, {
 				value: cachedfunc,
 			});
 		};

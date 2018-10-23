@@ -17,7 +17,7 @@ const logger = log4js.getLogger('batch');
 const argv = minimist(process.argv.slice(2), { boolean: true });
 let dir = argv._.shift();
 if (!dir) {
-	logger.warn("Usage: npm run master-import -- directory [--publish]");
+	logger.warn('Usage: npm run master-import -- directory [--publish]');
 	process.exit(64);
 }
 if (!path.isAbsolute(dir)) {
@@ -70,7 +70,7 @@ async function importMasters(csvpaths: string[], publish: boolean): Promise<void
 	invokeContext.forceSetMasterVersion(masterVersion.id);
 	try {
 		await MasterVersion.sequelize.sync();
-		for (let csvpath of csvpaths) {
+		for (const csvpath of csvpaths) {
 			await importMaster(csvpath);
 		}
 		masterVersion.status = publish ? 'published' : 'readied';
@@ -107,7 +107,7 @@ async function importMaster(csvpath: string): Promise<void> {
 	await csvtojson().fromFile(csvpath)
 		.subscribe(async (json) => {
 			const params = {};
-			for (let key in json) {
+			for (const key in json) {
 				params[_.camelCase(_.snakeCase(key))] = json[key];
 			}
 			try {
@@ -115,7 +115,7 @@ async function importMaster(csvpath: string): Promise<void> {
 				++imported;
 			} catch (e) {
 				// 例外になるのは主にバリデーションエラー
-				logger.error((e.message ? e.message.replace("\n", " ") : e) + " (" + JSON.stringify(json) + ")");
+				logger.error((e.message ? e.message.replace('\n', ' ') : e) + ' (' + JSON.stringify(json) + ')');
 				++rejected;
 			}
 		});

@@ -28,4 +28,4 @@ export default function (callback: (app?: INestApplicationContext) => any): void
 				});
 			});
 	});
-};
+}
