@@ -11,7 +11,7 @@ import * as minimist from 'minimist';
 import { Options } from 'sequelize';
 const logger = log4js.getLogger('batch');
 
-const BIN = 'node_modules/.bin/sequelize';
+const BIN = 'node_modules/sequelize-cli/lib/sequelize';
 
 // 引数チェック
 const argv = minimist(process.argv.slice(2), { string: ['db', 'to'] });
