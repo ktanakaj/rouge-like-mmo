@@ -2,7 +2,7 @@
  * プレイヤーモデルモジュール。
  * @module ./game/shared/player.model
  */
-import { Column, DataType, AllowNull, Comment, Default, IsDate } from 'sequelize-typescript';
+import { Column, DataType, AllowNull, Default, IsDate } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
 import * as Random from 'random-js';
 import { Table } from '../../core/models/decorators';
@@ -23,7 +23,6 @@ export default class Player extends DataModel<Player> {
 	@ApiModelProperty({ description: 'プレイヤーレベル' })
 	@AllowNull(false)
 	@Default(1)
-	@Comment('プレイヤーレベル')
 	@Column(DataType.INTEGER.UNSIGNED)
 	level: number;
 
@@ -31,7 +30,6 @@ export default class Player extends DataModel<Player> {
 	@ApiModelProperty({ description: 'プレイヤー累計経験値' })
 	@AllowNull(false)
 	@Default(0)
-	@Comment('プレイヤー累計経験値')
 	@Column(DataType.BIGINT.UNSIGNED)
 	exp: number;
 
@@ -39,14 +37,11 @@ export default class Player extends DataModel<Player> {
 	@ApiModelProperty({ description: 'プレイヤー所持金' })
 	@AllowNull(false)
 	@Default(0)
-	@Comment('プレイヤー所持金')
 	@Column(DataType.BIGINT.UNSIGNED)
 	gameCoins: number;
 
 	/** 認証用トークン */
 	@ApiModelProperty({ description: '認証用トークン' })
-	@AllowNull(false)
-	@Comment('認証用トークン')
 	@Column
 	authToken: string;
 
@@ -54,7 +49,6 @@ export default class Player extends DataModel<Player> {
 	@ApiModelProperty({ description: '最終ログイン日時' })
 	@AllowNull(false)
 	@IsDate
-	@Comment('最終ログイン日時')
 	@Column
 	lastLogin: Date;
 

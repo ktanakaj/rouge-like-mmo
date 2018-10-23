@@ -2,8 +2,7 @@
  * マスタバージョンモデルモジュール。
  * @module ./shared/master-version.model
  */
-import { Model, Column, DataType, AllowNull, Default, Comment, DefaultScope, IFindOptions } from 'sequelize-typescript';
-import { DefineIndexesOptions } from 'sequelize';
+import { Model, Column, DataType, AllowNull, Default, DefaultScope, IFindOptions } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { NotFoundError } from '../core/errors';
 import { Table } from '../core/models/decorators';
@@ -26,9 +25,6 @@ import { Table } from '../core/models/decorators';
 	tableName: 'masterVersions',
 	comment: 'マスタバージョンマスタ',
 	timestamps: true,
-	indexes: [{
-		fields: ['status', { attribute: 'id', order: 'DESC' }],
-	}] as DefineIndexesOptions[],
 })
 export default class MasterVersion extends Model<MasterVersion> {
 	// 複数バージョンのマスタを保持し、かつそのバージョンの有効無効を切り替えられるようにする。
@@ -40,7 +36,6 @@ export default class MasterVersion extends Model<MasterVersion> {
 	@ApiModelProperty({ description: '状態' })
 	@AllowNull(false)
 	@Default('importing')
-	@Comment('状態')
 	@Column({
 		type: DataType.ENUM,
 		values: MasterVersion.STATUSES,
@@ -51,7 +46,6 @@ export default class MasterVersion extends Model<MasterVersion> {
 	@ApiModelProperty({ description: '注記' })
 	@AllowNull(false)
 	@Default('')
-	@Comment('注記')
 	@Column
 	note: string;
 

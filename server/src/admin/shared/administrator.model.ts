@@ -2,7 +2,7 @@
  * 管理者モデルクラスモジュール。
  * @module ./admin/shared/administrator.model
  */
-import { Column, DataType, Unique, AllowNull, Comment, Default, DefaultScope, BeforeCreate, BeforeUpdate } from 'sequelize-typescript';
+import { Column, DataType, Unique, AllowNull, Default, DefaultScope, BeforeCreate, BeforeUpdate } from 'sequelize-typescript';
 import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
 import * as crypto from 'crypto';
 import * as config from 'config';
@@ -41,21 +41,18 @@ export default class Administrator extends DataModel<Administrator> {
 	@ApiModelProperty({ description: '管理者名' })
 	@Unique
 	@AllowNull(false)
-	@Comment('管理者名')
 	@Column
 	name: string;
 
 	/** パスワード */
 	@ApiModelPropertyOptional({ description: 'パスワード' })
 	@AllowNull(false)
-	@Comment('パスワード')
 	@Column
 	password: string;
 
 	/** ロール */
 	@ApiModelProperty({ description: 'ロール' })
 	@AllowNull(false)
-	@Comment('ロール')
 	@Column({
 		type: DataType.ENUM,
 		values: Administrator.ROLES,
@@ -66,7 +63,6 @@ export default class Administrator extends DataModel<Administrator> {
 	@ApiModelProperty({ description: '備考' })
 	@AllowNull(false)
 	@Default('')
-	@Comment('備考')
 	@Column
 	note: string;
 

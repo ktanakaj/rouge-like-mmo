@@ -2,7 +2,7 @@
  * プレイヤー所有アイテムモデルモジュール。
  * @module ./game/shared/player-item.model
  */
-import { Column, DataType, AllowNull, Comment, Default, ForeignKey } from 'sequelize-typescript';
+import { Column, DataType, AllowNull, Default, ForeignKey } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Table } from '../../core/models/decorators';
 import DataModel from '../../core/models/data-model';
@@ -25,7 +25,6 @@ export default class PlayerItem extends DataModel<PlayerItem> {
 	@ApiModelProperty({ description: 'プレイヤーID' })
 	@AllowNull(false)
 	@ForeignKey(() => Player)
-	@Comment('プレイヤーID')
 	@Column
 	playerId: number;
 
@@ -33,7 +32,6 @@ export default class PlayerItem extends DataModel<PlayerItem> {
 	@ApiModelProperty({ description: 'アイテムID' })
 	@AllowNull(false)
 	@ForeignKey(() => Item)
-	@Comment('アイテムID')
 	@Column
 	itemId: number;
 
@@ -41,7 +39,6 @@ export default class PlayerItem extends DataModel<PlayerItem> {
 	@ApiModelProperty({ description: '所持数' })
 	@AllowNull(false)
 	@Default(1)
-	@Comment('所持数')
-	@Column(DataType.BIGINT.UNSIGNED)
+	@Column(DataType.INTEGER.UNSIGNED)
 	count: number;
 }

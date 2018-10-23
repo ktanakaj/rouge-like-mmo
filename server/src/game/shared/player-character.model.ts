@@ -2,10 +2,11 @@
  * プレイヤーキャラクターモデルモジュール。
  * @module ./game/shared/player-character.model
  */
-import { Column, DataType, AllowNull, Comment, Default, IsDate } from 'sequelize-typescript';
+import { Column, DataType, AllowNull, Comment, Default, IsDate, ForeignKey } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Table } from '../../core/models/decorators';
 import DataModel from '../../core/models/data-model';
+import Player from './player.model';
 
 /**
  * プレイヤーキャラクターモデルクラス。
@@ -18,12 +19,17 @@ import DataModel from '../../core/models/data-model';
 })
 export default class PlayerCharacter extends DataModel<PlayerCharacter> {
 	// TODO: 最大HPや攻撃力をどう算出する？レベルから？それとも個別に持たせる？
+	/** プレイヤーID */
+	@ApiModelProperty({ description: 'プレイヤーID' })
+	@AllowNull(false)
+	@ForeignKey(() => Player)
+	@Column
+	playerId: number;
 
 	/** レベル */
 	@ApiModelProperty({ description: 'キャラクターレベル' })
 	@AllowNull(false)
 	@Default(1)
-	@Comment('キャラクターレベル')
 	@Column(DataType.INTEGER.UNSIGNED)
 	level: number;
 
@@ -31,14 +37,12 @@ export default class PlayerCharacter extends DataModel<PlayerCharacter> {
 	@ApiModelProperty({ description: 'キャラクター累計経験値' })
 	@AllowNull(false)
 	@Default(0)
-	@Comment('キャラクター累計経験値')
 	@Column(DataType.BIGINT.UNSIGNED)
 	exp: number;
 
 	/** HP */
 	@ApiModelProperty({ description: 'HP' })
 	@AllowNull(false)
-	@Comment('HP')
 	@Column(DataType.INTEGER.UNSIGNED)
 	hp: number;
 
@@ -46,7 +50,6 @@ export default class PlayerCharacter extends DataModel<PlayerCharacter> {
 	@ApiModelProperty({ description: '所持金' })
 	@AllowNull(false)
 	@Default(0)
-	@Comment('所持金')
 	@Column(DataType.BIGINT.UNSIGNED)
 	money: number;
 
@@ -54,7 +57,6 @@ export default class PlayerCharacter extends DataModel<PlayerCharacter> {
 	/** 所持品 */
 	@ApiModelProperty({ description: '所持品' })
 	@AllowNull(false)
-	@Comment('所持品')
 	@Column(DataType.TEXT)
 	items: {};
 
@@ -64,15 +66,12 @@ export default class PlayerCharacter extends DataModel<PlayerCharacter> {
 	@ApiModelProperty({ description: 'カルマ' })
 	@AllowNull(false)
 	@Default(0)
-	@Comment('カルマ')
 	@Column(DataType.INTEGER.UNSIGNED)
 	karma: number;
 
 	/** 最終選択日時 */
 	@ApiModelProperty({ description: '最終選択日時' })
-	@AllowNull(false)
 	@IsDate
-	@Comment('最終選択日時')
 	@Column
 	lastSelected: Date;
 }
