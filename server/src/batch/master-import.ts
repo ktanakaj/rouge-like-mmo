@@ -67,7 +67,7 @@ async function importMasters(csvpaths: string[], publish: boolean): Promise<void
 	logger.info(`Master version v${masterVersion.id} : importing...`);
 
 	// 作成したバージョンでマスタテーブルを作成し、インポート実行
-	invokeContext.forceSetMasterVersion(masterVersion.id);
+	invokeContext.setMasterVersion(masterVersion.id);
 	try {
 		await MasterVersion.sequelize.sync();
 		for (const csvpath of csvpaths) {

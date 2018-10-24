@@ -13,10 +13,7 @@ import invoketContext from './invoke-context';
  * @param next 次の処理呼び出し用のコールバック。
  */
 export function invokeContextHandler(req: express.Request, res: express.Response, next: express.NextFunction): void {
-	invoketContext.run(() => {
-		invoketContext.setDate();
-		invoketContext.setLatestMasterVersion().then(next).catch(next);
-	});
+	invoketContext.setLatestMasterVersion().then(next).catch(next);
 }
 
 /**
@@ -35,13 +32,6 @@ export function invokeContextRpcHandler(
 	connection: WebSocketRpcConnection,
 	next: (method: string, params: any, id: string | number, connection: WebSocketRpcConnection) => any,
 ): any {
-	return new Promise((resolve, reject) => {
-		invoketContext.run(() => {
-			invoketContext.setDate();
-			invoketContext.setLatestMasterVersion()
-				.then(() => {
-					resolve(next(method, params, id, connection));
-				}).catch(reject);
-		});
-	});
+	return invoketContext.setLatestMasterVersion()
+		.then(() => next(method, params, id, connection));
 }

@@ -9,7 +9,6 @@ import { INestApplicationContext } from '@nestjs/common';
 import { DebugLoggerService } from '../../shared/debug-logger.service';
 import { AppModule } from '../../app.module';
 import invokeContext from '../../shared/invoke-context';
-import MasterVersion from '../../shared/master-version.model';
 
 /**
  * 「ローグライクなMMOブラウザゲーム」ゲームサーバーのアプリケーションを生成する。
@@ -19,13 +18,7 @@ export default function (callback: (app?: INestApplicationContext) => any): void
 	NestFactory.createApplicationContext(AppModule, {
 		logger: new DebugLoggerService(),
 	}).then((app) => {
-		return MasterVersion.findLatest()
-			.then((version) => {
-				invokeContext.run(() => {
-					invokeContext.setDate();
-					invokeContext.forceSetMasterVersion(version ? version.id : null);
-					callback(app);
-				});
-			});
+		return invokeContext.setLatestMasterVersion()
+			.then(() => callback(app));
 	});
 }

@@ -17,12 +17,10 @@ import invokeContext from './shared/invoke-context';
 
 // const execAsync = util.promisify(child_process.exec);
 
-let versionId = null;
-
 // ここにフックを書くと全テストの前に自動実行される
 before('global initialization for all tests', async function () {
 	// ※ 初期化に時間がかかる場合は伸ばす
-	this.timeout(10000);
+	this.timeout(15000);
 
 	// 全テストの実行前に一度だけ必要な処理を実施
 	log4js.configure(config['log4js']);
@@ -44,15 +42,7 @@ before('global initialization for all tests', async function () {
 	// 最新マスタの探索
 	const version = await MasterVersion.findLatest();
 	assert(version, 'Master data is not imported. Please try to "npm run fulltest".');
-	versionId = version.id;
-});
-
-beforeEach('global initialization for each test', async () => {
-	// 実行コンテキストのモック化
-	// ※ runにdoneを渡してもダメだったので、モックにしてとりあえず動くようにする
-	invokeContext.useMock();
-	invokeContext.setDate();
-	invokeContext.setMasterVersion(versionId);
+	invokeContext.setMasterVersion(version.id);
 });
 
 /**
