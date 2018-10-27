@@ -27,13 +27,14 @@ WebSocketを使ったMMOの練習用に作成したローグライクゲーム�
     * vagrant-vbguest - Vagrantプラグイン
 * Visual Studio Code - アプリ開発用エディター
 * MySQL Workbench 6.x - DB管理・EL図作成用ツール
-* Unity - インゲーム部分開発用（予定）
+* Unity 2018.2.13f1 - インゲーム部分開発用
 
 ## フォルダ構成
 * VMルートフォルダ
     * server - Node.js Webアプリサーバーソース
         * config - アプリ設定
     * client - Angular Webアプリクライアントソース
+    * game - Unity インゲームアプリソース
     * ansible - Ansible関連ファイル
 
 ## VM環境構築手順
