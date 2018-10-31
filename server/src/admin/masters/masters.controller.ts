@@ -13,6 +13,7 @@ import { BadRequestError } from '../../core/errors';
 import { IdParam, PagingQuery, ErrorResult } from '../../shared/common.dto';
 import { MODELS } from '../../shared/database.providers';
 import MasterVersion from '../../shared/master-version.model';
+import { Roles } from '../shared/roles.decorator';
 import { AuthGuard } from '../auth.guard';
 
 class FindAndCountVersionsResult {
@@ -47,6 +48,7 @@ export class MastersController {
 		return await MasterVersion.findAndCount({ limit: query.max, offset: (query.page - 1) * query.max });
 	}
 
+	@Roles('admin', 'writable')
 	@ApiOperation({ title: 'マスタバージョン更新', description: 'マスタバージョンを変更する。' })
 	@ApiOkResponse({ description: '更新成功', type: MasterVersion })
 	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })

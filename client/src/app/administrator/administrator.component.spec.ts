@@ -5,7 +5,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import testHelper from '../../test-helper';
 
-import { AdminRoleComponent } from '../shared/admin-role.component';
 import { AdministratorComponent } from './administrator.component';
 
 describe('AdministratorComponent', () => {
@@ -14,10 +13,7 @@ describe('AdministratorComponent', () => {
 
 	beforeEach(async(() => {
 		testHelper.configureTestingModule({
-			declarations: [
-				AdminRoleComponent,
-				AdministratorComponent
-			],
+			declarations: [AdministratorComponent],
 		}).compileComponents();
 	}));
 

@@ -2,7 +2,7 @@
 
 <form #f="ngForm" (ngSubmit)="load(currentPage)" novalidate>
     <button type="submit" class="btn btn-primary btn-sm">{{ "UPDATE" | translate }}</button>
-    <button type="button" class="btn btn-warning btn-sm" (click)="openEdit()">{{ "NEW" | translate }}</button>
+    <button *appIfRole="'admin'" type="button" class="btn btn-warning btn-sm" (click)="openEdit()">{{ "NEW" | translate }}</button>
 </form>
 
 <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" (pageChanged)="load($event.page)" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
@@ -31,7 +31,7 @@
                 <td>{{ row.createdAt | date:'short' }}</td>
                 <td>{{ row.deletedAt | date:'short' }}</td>
                 <td>
-                    <button type="button" class="btn btn-warning btn-sm" (click)="openEdit(row)" [disabled]="!!row.deletedAt">{{ "EDIT" | translate }}</button>
+                    <button *appIfRole="'admin'" type="button" class="btn btn-warning btn-sm" (click)="openEdit(row)" [disabled]="!!row.deletedAt">{{ "EDIT" | translate }}</button>
                 </td>
             </tr>
         </tbody>

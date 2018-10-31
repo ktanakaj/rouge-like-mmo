@@ -14,6 +14,7 @@ import { BsDropdownModule, CollapseModule, ModalModule, PaginationModule } from 
 import localeHelper from './core/locale-helper';
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth.guard';
+import { IfRoleDirective } from './shared/if-role.directive';
 import { AppComponent } from './app.component';
 import { TopComponent } from './top/top.component';
 import { HeaderComponent } from './layout/header.component';
@@ -87,6 +88,7 @@ class DefaultErrorHandler implements ErrorHandler {
 @NgModule({
 	declarations: [
 		AppComponent,
+		IfRoleDirective,
 		LoginComponent,
 		LogoutComponent,
 		PasswordComponent,

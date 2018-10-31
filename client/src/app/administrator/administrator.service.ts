@@ -4,6 +4,7 @@
  */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import * as _ from 'lodash';
 import { environment } from '../../environments/environment';
 import { Administrator } from './administrator.model';
 
@@ -41,10 +42,11 @@ export class AdministratorService {
 	 * @returns 登録した管理者情報。
 	 */
 	save(administrator: Administrator): Promise<Administrator> {
+		const body = _.pick(administrator, ['name', 'role', 'note']);
 		if (administrator.id) {
-			return this.http.put<Administrator>(`/api/admin/administrators/${administrator.id}`, administrator).toPromise();
+			return this.http.put<Administrator>(`/api/admin/administrators/${administrator.id}`, body).toPromise();
 		} else {
-			return this.http.post<Administrator>('/api/admin/administrators/', administrator).toPromise();
+			return this.http.post<Administrator>('/api/admin/administrators/', body).toPromise();
 		}
 	}
 

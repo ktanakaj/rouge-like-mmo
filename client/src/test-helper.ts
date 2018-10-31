@@ -10,6 +10,9 @@ import { FormsModule } from '@angular/forms';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BsDropdownModule, CollapseModule, ModalModule, PaginationModule } from 'ngx-bootstrap';
 import { AuthService } from './app/auth/auth.service';
+import { IfRoleDirective } from './app/shared/if-role.directive';
+import { AdminRoleComponent } from './app/shared/admin-role.component';
+import { MasterStatusComponent } from './app/shared/master-status.component';
 
 /** JSONファイルを使用するローカライズファイルローダー */
 class JsonTranslationLoader implements TranslateLoader {
@@ -20,27 +23,32 @@ class JsonTranslationLoader implements TranslateLoader {
 }
 
 /** アプリ共通のモジュール群 */
-const modules = [
-	HttpClientTestingModule,
-	RouterTestingModule,
-	FormsModule,
-	TranslateModule.forRoot({
-		loader: {
-			provide: TranslateLoader,
-			useClass: JsonTranslationLoader,
-		}
-	}),
-	BsDropdownModule.forRoot(),
-	CollapseModule.forRoot(),
-	ModalModule.forRoot(),
-	PaginationModule.forRoot(),
-];
-
-/** アプリ共通のプロバイダー群 */
-const providers = [
-	TranslateService,
-	AuthService,
-];
+const commonModuleDef = {
+	imports: [
+		HttpClientTestingModule,
+		RouterTestingModule,
+		FormsModule,
+		TranslateModule.forRoot({
+			loader: {
+				provide: TranslateLoader,
+				useClass: JsonTranslationLoader,
+			}
+		}),
+		BsDropdownModule.forRoot(),
+		CollapseModule.forRoot(),
+		ModalModule.forRoot(),
+		PaginationModule.forRoot(),
+	],
+	providers: [
+		TranslateService,
+		AuthService,
+	],
+	declarations: [
+		IfRoleDirective,
+		AdminRoleComponent,
+		MasterStatusComponent,
+	],
+};
 
 /**
  * アプリ共通のモジュールロード等を追加したTestBed.configureTestingModule。
@@ -48,20 +56,14 @@ const providers = [
  * @returns configureTestingModuleの戻り値。
  */
 function configureTestingModule(moduleDef: TestModuleMetadata): typeof TestBed {
-	moduleDef.imports = moduleDef.imports || [];
-	for (const m of modules) {
-		if (!moduleDef.imports.includes(m)) {
-			moduleDef.imports.push(m);
+	for (const key of ['imports', 'providers', 'declarations']) {
+		moduleDef[key] = moduleDef[key] || [];
+		for (const o of commonModuleDef[key]) {
+			if (!moduleDef[key].includes(o)) {
+				moduleDef[key].push(o);
+			}
 		}
 	}
-
-	moduleDef.providers = moduleDef.providers || [];
-	for (const p of providers) {
-		if (!moduleDef.providers.includes(p)) {
-			moduleDef.providers.push(p);
-		}
-	}
-
 	return TestBed.configureTestingModule(moduleDef);
 }
 

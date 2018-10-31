@@ -12,6 +12,7 @@ import { BadRequestError } from '../../core/errors';
 import { IdParam, PagingQuery, ErrorResult } from '../../shared/common.dto';
 import { User } from '../../shared/user.decorator';
 import { AuthGuard } from '../auth.guard';
+import { Roles } from '../shared/roles.decorator';
 import Administrator from '../shared/administrator.model';
 
 class FindAndCountAdministratorsResult {
@@ -84,9 +85,9 @@ export class AdministratorsController {
 	@ApiForbiddenResponse({ description: '権限無し', type: ErrorResult })
 	@ApiConflictResponse({ description: 'name重複', type: ErrorResult })
 	@UseGuards(AuthGuard)
+	@Roles('admin')
 	@Post()
 	async createAdministrator(@Body() body: CreateAdministratorBody): Promise<Administrator> {
-		// FIXME: role=admin の管理者のみ実行可
 		const password = Administrator.randomPassword();
 		const admin = await Administrator.create(Object.assign(body, { password }));
 		// ※ 自動生成したパスワードを返す
@@ -101,9 +102,9 @@ export class AdministratorsController {
 	@ApiNotFoundResponse({ description: 'データ無し', type: ErrorResult })
 	@ApiConflictResponse({ description: 'name重複', type: ErrorResult })
 	@UseGuards(AuthGuard)
+	@Roles('admin')
 	@Put('/:id(\\d+)')
 	async updateAdministrator(@Param() param: IdParam, @Body() body: UpdateAdministratorBody): Promise<Administrator> {
-		// FIXME: role=admin の管理者のみ実行可
 		const admin = await Administrator.findOrFail(param.id);
 		admin.set(body);
 		return await admin.save();
@@ -114,9 +115,9 @@ export class AdministratorsController {
 	@ApiForbiddenResponse({ description: '権限無し', type: ErrorResult })
 	@ApiNotFoundResponse({ description: 'データ無し', type: ErrorResult })
 	@UseGuards(AuthGuard)
+	@Roles('admin')
 	@Delete('/:id(\\d+)')
 	async deleteAdministrator(@Param() param: IdParam): Promise<Administrator> {
-		// FIXME: role=admin の管理者のみ実行可
 		const admin = await Administrator.findOrFail(param.id);
 		await admin.destroy();
 		return admin;
@@ -127,10 +128,10 @@ export class AdministratorsController {
 	@ApiForbiddenResponse({ description: '権限無し', type: ErrorResult })
 	@ApiNotFoundResponse({ description: 'データ無し', type: ErrorResult })
 	@UseGuards(AuthGuard)
+	@Roles('admin')
 	@Post('/:id(\\d+)/reset')
 	@HttpCode(200)
 	async resetPassword(@Param() param: IdParam): Promise<Administrator> {
-		// FIXME: role=admin の管理者のみ実行可
 		let admin = await Administrator.findOrFail(param.id);
 		const password = Administrator.randomPassword();
 		admin.password = password;
@@ -180,7 +181,6 @@ export class AdministratorsController {
 	@UseGuards(AuthGuard)
 	@Put('/me')
 	async updateMe(@Body() body: UpdateMeBody, @User() user): Promise<Administrator> {
-		// FIXME: role=admin の管理者のみ実行可
 		let admin = await Administrator.findOrFail(user.id);
 		admin.set(body);
 		admin = await admin.save();

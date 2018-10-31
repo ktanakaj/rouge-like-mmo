@@ -4,7 +4,6 @@
  */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import testHelper from '../../test-helper';
-import { MasterStatusComponent } from '../shared/master-status.component';
 
 import { MasterVersionComponent } from './master-version.component';
 
@@ -14,10 +13,7 @@ describe('MasterVersionComponent', () => {
 
 	beforeEach(async(() => {
 		testHelper.configureTestingModule({
-			declarations: [
-				MasterStatusComponent,
-				MasterVersionComponent,
-			],
+			declarations: [MasterVersionComponent],
 		}).compileComponents();
 	}));
 
