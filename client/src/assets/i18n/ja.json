@@ -11,6 +11,8 @@
 	"BACK_TO_TOP": "TOPに戻る",
 	"BACK_TO_LIST": "一覧に戻る",
 	"BACK_TO_DETAIL": "詳細に戻る",
+	"LOGIN": "ログイン",
+	"LOGOUT": "ログアウト",
 	"ERROR": {
 		"BAD_REQUEST": "指定されたパラメータは無効です。",
 		"UNAUTHORIZED": "認証されていません。ブラウザを再読み込みしてください。",
@@ -56,6 +58,10 @@
 		"LATEST_ADMIN_LOGS": "最近のデータ操作履歴",
 		"DOCUMENTS": "各種ドキュメント",
 		"DOCUMENTS_SWAGGER": "REST APIドキュメント (Swagger UI)"
+	},
+	"LOGIN_PAGE": {
+		"TITLE": "ローグライクなMMO GM Toolログイン",
+		"FAILED": "管理者名またはパスワードが確認できません。"
 	},
 	"MASTER_VERSION_PAGE": {
 		"TITLE": "マスタバージョン一覧",

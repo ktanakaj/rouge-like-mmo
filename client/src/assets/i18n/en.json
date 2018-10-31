@@ -12,6 +12,8 @@
 	"BACK_TO_TOP": "Back to Top",
 	"BACK_TO_LIST": "Back to List",
 	"BACK_TO_DETAIL": "Back to Detail",
+	"LOGIN": "Login",
+	"LOGOUT": "Logout",
 	"ERROR": {
 		"BAD_REQUEST": "Bad request.",
 		"UNAUTHORIZED": "Unauthorized.",
@@ -57,6 +59,10 @@
 		"LATEST_ADMIN_LOGS": "Latest Operation History",
 		"DOCUMENTS": "Documents",
 		"DOCUMENTS_SWAGGER": "REST API Specification (Swagger UI)"
+	},
+	"LOGIN_PAGE": {
+		"TITLE": "Rouge-like MMO GM Tool Login",
+		"FAILED": "The user name or password is incorrect."
 	},
 	"MASTER_VERSION_PAGE": {
 		"TITLE": "Master Version List",

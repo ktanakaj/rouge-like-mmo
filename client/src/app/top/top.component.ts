@@ -18,7 +18,6 @@ export class TopComponent implements OnInit {
 
 	/**
 	 * サービスをDIしてコンポーネントを生成する。
-	 * @param router ルートサービス。
 	 */
 	constructor() { }
 
