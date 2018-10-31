@@ -25,12 +25,13 @@ export class AccessLoggerMiddleware implements NestMiddleware {
 			return log4js.connectLogger(logger, option);
 		}
 
-		// bodyログが有効な場合、リクエスト/レスポンスボディも出力
+		// bodyログが有効な場合、リクエスト/レスポンスボディ/プレイヤーor管理者IDも出力
 		option['format'] = (req: express.Request, res: express.Response, format: (str: string) => string) => {
 			const reqBody = this.hidePasswordLog(JSON.stringify(req.body));
 			const resBody = this.hidePasswordLog((res as any)._getData());
-			return format(':remote-addr - - ":method :url HTTP/:http-version" :status :content-length ":referrer" ":user-agent" req=')
-				+ reqBody + ' res=' + resBody;
+			const id = req['user'] ? req['user']['id'] : '';
+			return format(':remote-addr - - ":method :url HTTP/:http-version" :status :content-length ":referrer" ":user-agent"')
+				+ ' id=' + id + ' req=' + reqBody + ' res=' + resBody;
 		};
 		const loggerHandler = log4js.connectLogger(logger, option);
 
