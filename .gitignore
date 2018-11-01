@@ -18,9 +18,9 @@ StyleCop.Cache
 server/dist
 server/doc
 server/config/local.yaml
-client/dist
-client/tmp
-client/out-tsc
+web/dist
+web/tmp
+web/out-tsc
 game/Library
 game/Assets/Plugins
 !.gitkeep

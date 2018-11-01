@@ -33,7 +33,7 @@ WebSocketを使ったMMOの練習用に作成したローグライクゲーム�
 * VMルートフォルダ
     * server - Node.js Webアプリサーバーソース
         * config - アプリ設定
-    * client - Angular Webアプリクライアントソース
+    * web - Angular Webアプリクライアントソース
     * game - Unity インゲームアプリソース
     * ansible - Ansible関連ファイル
 
@@ -54,14 +54,14 @@ WebSocketを使ったMMOの練習用に作成したローグライクゲーム�
 
 ## サーバーコマンド
 Webアプリの操作用に、以下のようなサーバーコマンドを用意しています。
-アプリのビルドや再起動などを行う場合は、VMにログインして `server`, `client` ディレクトリでコマンドを実行してください。
+アプリのビルドや再起動などを行う場合は、VMにログインして `server`, `web` ディレクトリでコマンドを実行してください。
 
 * `server`
     * `npm start` - Webアプリの起動
         * `npm run production` Webアプリの起動（運用モード）
     * `npm restart` - Webアプリの再起動
     * `npm stop` - Webアプリの停止
-* `server/client`共通
+* `server/web`共通
     * `npm run build` - Webアプリのビルド
     * `npm run watch` - Webアプリのビルド（ファイル更新監視）
     * `npm run doc` - WebアプリのAPIドキュメント生成
