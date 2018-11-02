@@ -81,3 +81,5 @@ VMのDBを参照する場合は、MySQL Workbench等でMySQLの標準ポート�
 
 ## ライセンス
 [MIT](https://github.com/ktanakaj/rouge-like-mmo/blob/master/LICENSE)
+
+※ ただし `game/Assets/Plugins` 以下のライブラリについては、各ライブラリごとのライセンスが適用されます（zenject, UniRxはMITライセンス）。

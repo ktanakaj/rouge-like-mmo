@@ -22,5 +22,4 @@ web/dist
 web/tmp
 web/out-tsc
 game/Library
-game/Assets/Plugins
 !.gitkeep
