@@ -3,12 +3,13 @@
  * @module ./game/game.module
  */
 import { Module } from '@nestjs/common';
-import { GamesController } from './games/games.controller';
+import { AuthController } from './auth/auth.controller';
+import { GameController } from './games/game.controller';
 
 /**
  * ゲーム用APIルートモジュールクラス。
  */
 @Module({
-	controllers: [GamesController],
+	controllers: [AuthController, GameController],
 })
 export class GameModule { }

@@ -11,8 +11,14 @@ module.exports = {
 				type: Sequelize.INTEGER,
 				allowNull: false,
 				primaryKey: true,
-				autoIncrement: false,
+				autoIncrement: true,
 				comment: 'プレイヤーID',
+			},
+			token: {
+				type: Sequelize.STRING,
+				allowNull: false,
+				unique: true,
+				comment: '端末トークン',
 			},
 			level: {
 				type: Sequelize.INTEGER.UNSIGNED,
@@ -31,10 +37,6 @@ module.exports = {
 				allowNull: false,
 				defaultValue: 0,
 				comment: 'プレイヤー所持金',
-			},
-			authToken: {
-				type: Sequelize.STRING,
-				comment: '認証用トークン',
 			},
 			lastLogin: {
 				type: Sequelize.DATE,

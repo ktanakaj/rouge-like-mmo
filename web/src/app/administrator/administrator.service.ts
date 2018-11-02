@@ -30,7 +30,7 @@ export class AdministratorService {
 	findAndCount(page: number, max: number): Promise<{ rows: Administrator[], count: number }> {
 		const params = new HttpParams()
 			.set('page', String(page))
-			.set('ipp', String(max));
+			.set('max', String(max));
 		return this.http.get<{ rows: Administrator[], count: number }>('/api/admin/administrators/', { params })
 			.retry(environment.maxRetry)
 			.toPromise();

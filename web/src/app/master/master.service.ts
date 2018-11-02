@@ -50,7 +50,7 @@ export class MasterService {
 	findAndCountVersions(page: number, max: number): Promise<{ rows: MasterVersion[], count: number }> {
 		const params = new HttpParams()
 			.set('page', String(page))
-			.set('ipp', String(max));
+			.set('max', String(max));
 		return this.http.get<{ rows: MasterVersion[], count: number }>('/api/admin/masters/', { params })
 			.retry(environment.maxRetry)
 			.toPromise();

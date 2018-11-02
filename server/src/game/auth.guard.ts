@@ -3,7 +3,7 @@
  * @module ./game/auth.guard
  */
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import Player from './shared/player.model';
+import { UnauthorizedError } from '../core/errors';
 
 /**
  * ゲームAPI用アクセス制限クラス。
@@ -14,19 +14,16 @@ export class AuthGuard implements CanActivate {
 	 * アクセス可否を判定する。
 	 * @param context アクセス情報。
 	 * @returns アクセス可の場合true。
+	 * @throws UnauthorizedError アクセス不可の場合。
 	 */
-	async canActivate(context: ExecutionContext): Promise<boolean> {
-		// このアプリは未認証でもアクセス可能だが、
-		// 内部的には自動的にユーザーを登録する
+	canActivate(context: ExecutionContext): boolean {
+		// Nest.jsとpassportの組み合わせがいまいち上手くいかないため、sessionで独自に認証管理。
+		// req.userにuser情報をコピーして、コントローラからはpassportのように見えるようにする。
 		const req = context.switchToHttp().getRequest();
-		if (!req.session['user']) {
-			// TODO: プレイヤーIDはランダムに採番するようにする？
-			const user = await Player.create({ lastLogin: new Date() });
-			req.session['user'] = user.toJSON();
-		}
-
-		// passport未使用だが、同じプロパティでアクセスできるようにする
 		req.user = req.session['user'];
-		return true;
+		if (req.user) {
+			return true;
+		}
+		throw new UnauthorizedError('/api/auth is not called');
 	}
 }

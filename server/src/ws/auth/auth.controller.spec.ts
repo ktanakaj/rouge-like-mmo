@@ -13,7 +13,7 @@ describe('AuthController', () => {
 	let controller: AuthController;
 
 	before(async () => {
-		await Player.create({ id: 100, authToken: 'WS_UNITTEST', lastLogin: new Date() });
+		await Player.create({ id: 100, token: 'WS_UNITTEST_TOKEN100', lastLogin: new Date() });
 
 		module = await testHelper.createTestingModule({
 			controllers: [AuthController],
@@ -24,7 +24,7 @@ describe('AuthController', () => {
 	describe('#auth()', () => {
 		it('認証成功', async () => {
 			const conn = { session: {} };
-			await controller.auth({ id: 100, token: 'WS_UNITTEST' }, conn as any);
+			await controller.auth({ token: 'WS_UNITTEST_TOKEN100' }, conn as any);
 
 			// セッションも確認する
 			assert.strictEqual(conn.session['id'], 100);
@@ -35,7 +35,7 @@ describe('AuthController', () => {
 			// TODO: power-assertが対応したら assert.rejects() に変える
 			try {
 				const conn = { session: {} };
-				await controller.auth({ id: 100, token: 'TEST' }, conn as any);
+				await controller.auth({ token: 'INVALID_TOKEN' }, conn as any);
 				assert.fail('Missing expected exception');
 			} catch (err) {
 				assert(err instanceof BadRequestError);
