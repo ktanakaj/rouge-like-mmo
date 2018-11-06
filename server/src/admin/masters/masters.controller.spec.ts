@@ -38,24 +38,4 @@ describe('MastersController', () => {
 			assert.strictEqual(version.note, 'Updated by unittest');
 		});
 	});
-
-	describe('#findLatestMasters()', () => {
-		it('成功', async () => {
-			const results = await controller.findLatestMasters();
-
-			// マスタ名が1件以上返ること
-			assert(Array.isArray(results));
-			assert(results.length > 0);
-		});
-	});
-
-	describe('#findLatestMaster()', () => {
-		it('成功', async () => {
-			const results = await controller.findLatestMaster('error-code');
-
-			// マスタが1件以上返ること
-			assert(Array.isArray(results));
-			assert(results.length > 0);
-		});
-	});
 });

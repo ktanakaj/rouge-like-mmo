@@ -25,7 +25,7 @@ export class MasterService {
 	 * @returns マスタ情報。
 	 */
 	findLatestMasters(): Promise<string[]> {
-		return this.http.get<string[]>(`/api/admin/masters/latest`)
+		return this.http.get<string[]>(`/api/masters`)
 			.retry(environment.maxRetry)
 			.toPromise();
 	}
@@ -36,7 +36,7 @@ export class MasterService {
 	 * @returns マスタ情報。
 	 */
 	findLatestMaster(name: string): Promise<object[]> {
-		return this.http.get<object[]>(`/api/admin/masters/latest/${name}`)
+		return this.http.get<object[]>(`/api/masters/${name}`)
 			.retry(environment.maxRetry)
 			.toPromise();
 	}

@@ -121,6 +121,18 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 	}
 
 	/**
+	 * 有効期間内の全てのレコードを取得する。
+	 * @param options 検索オプション。
+	 * @returns レコード配列。
+	 */
+	public static async findAllWithIsActive<T extends MasterModel<T>>(
+		this: NonAbstractTypeOfMasterModel<T>, options?: IFindOptions<T>): Promise<T[]> {
+
+		const instances = await this.findAll(options);
+		return instances.filter((m) => m.isActive());
+	}
+
+	/**
 	 * 有効期間内のマスタを主キーで取得する。
 	 * @param identifier マスタの主キー。
 	 * @param options 検索オプション。
