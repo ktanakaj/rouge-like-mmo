@@ -1,6 +1,6 @@
 ﻿// ================================================================================================
 // <summary>
-//      ローグ風MMO 認証APIリポジトリソース</summary>
+//      認証APIリポジトリソース</summary>
 //
 // <copyright file="AuthRepository.cs">
 //      Copyright (C) 2018 Koichi Tanaka. All rights reserved.</copyright>
@@ -11,8 +11,6 @@
 namespace Honememo.RougeLikeMmo.Gateways
 {
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using UniRx;
     using UnityEngine;
@@ -26,24 +24,24 @@ namespace Honememo.RougeLikeMmo.Gateways
         #region 内部変数
 
         /// <summary>
-        /// 初期化ユースケース。
+        /// APIクライアント。
         /// </summary>
         [Inject]
-        private ObservableSerialRunner taskRunner;
+        private AppWebRequest request;
 
         #endregion
 
         #region API呼び出しメソッド
 
+        /// <summary>
+        /// 端末トークンを認証する。
+        /// </summary>
+        /// <param name="token">端末トークン。</param>
+        /// <returns>処理状態。</returns>
+        /// <remarks>エラーにならなければOK。通信できれば基本的に必ず成功。</remarks>
         public async Task Auth(string token)
         {
-            var headers = new Dictionary<string, string>();
-            headers["Content-Type"] = "application/json";
-            var param = new AuthParam { token = token };
-            await this.taskRunner.Enqueue<object>(ObservableWWW.Post(
-                "http://172.28.128.3/api/auth",
-                System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(param)),
-                headers));
+            await this.request.Post("api/auth", JsonUtility.ToJson(new AuthParam { token = token }));
         }
 
         #endregion
@@ -54,7 +52,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// /api/auth API引数パラメータ。
         /// </summary>
         [Serializable]
-        private class AuthParam
+        public class AuthParam
         {
             public string token;
         }

@@ -1,6 +1,6 @@
 // ================================================================================================
 // <summary>
-//      ローグ風MMO Zenject初期化ソース</summary>
+//      Zenject初期化ソース</summary>
 //
 // <copyright file="DefaultInstaller.cs">
 //      Copyright (C) 2018 Koichi Tanaka. All rights reserved.</copyright>
@@ -11,6 +11,7 @@
 namespace Honememo.RougeLikeMmo.Core
 {
     using Zenject;
+    using Honememo.RougeLikeMmo.Entities;
     using Honememo.RougeLikeMmo.Gateways;
     using Honememo.RougeLikeMmo.UseCases;
 
@@ -27,8 +28,10 @@ namespace Honememo.RougeLikeMmo.Core
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<ObservableSerialRunner>().AsSingle().NonLazy();
+            Container.Bind<AppWebRequest>().AsSingle().NonLazy();
             Container.Bind<AuthRepository>().AsSingle().NonLazy();
             Container.Bind<GameRepository>().AsSingle().NonLazy();
+            Container.Bind<PlayerEntity>().AsSingle().NonLazy();
             Container.Bind<InitializeUseCase>().AsSingle().NonLazy();
         }
 

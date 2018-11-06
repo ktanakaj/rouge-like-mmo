@@ -1,6 +1,6 @@
 ﻿// ================================================================================================
 // <summary>
-//      ローグ風MMO初期化コントローラソース</summary>
+//      初期化コントローラソース</summary>
 //
 // <copyright file="InitializeController.cs">
 //      Copyright (C) 2018 Koichi Tanaka. All rights reserved.</copyright>
@@ -16,7 +16,7 @@ namespace Honememo.RougeLikeMmo.Controllers
     using Honememo.RougeLikeMmo.UseCases;
 
     /// <summary>
-    /// ローグ風MMO初期化コントローラクラス。
+    /// 初期化コントローラクラス。
     /// </summary>
     public class InitializeController : MonoBehaviour
     {

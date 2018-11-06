@@ -1,6 +1,6 @@
 ﻿// ================================================================================================
 // <summary>
-//      ローグ風MMO初期化ユースケースソース</summary>
+//      初期化ユースケースソース</summary>
 //
 // <copyright file="InitializeUseCase.cs">
 //      Copyright (C) 2018 Koichi Tanaka. All rights reserved.</copyright>
@@ -10,21 +10,27 @@
 
 namespace Honememo.RougeLikeMmo.UseCases
 {
-    using System.Collections;
-    using System.Collections.Generic;
+    using System;
     using UnityEngine;
     using Zenject;
+    using Honememo.RougeLikeMmo.Entities;
     using Honememo.RougeLikeMmo.Gateways;
 
     /// <summary>
-    /// ローグ風MMO初期化ユースケースクラス。
+    /// 初期化ユースケースクラス。
     /// </summary>
     public class InitializeUseCase
     {
         #region 内部変数
 
         /// <summary>
-        /// 初期化ユースケース。
+        /// プレイヤーエンティティ。
+        /// </summary>
+        [Inject]
+        private PlayerEntity player;
+
+        /// <summary>
+        /// 認証リポジトリ。
         /// </summary>
         [Inject]
         private AuthRepository authRepository;
@@ -33,10 +39,12 @@ namespace Honememo.RougeLikeMmo.UseCases
 
         #region 公開メソッド
 
+        /// <summary>
+        /// 初期化を行う。
+        /// </summary>
         public async void Initialize()
         {
-            Debug.Log("InitializeUseCase.Initialize");
-            await this.authRepository.Auth("TEST");
+            await this.authRepository.Auth(this.player.Token);
         }
 
         #endregion

@@ -1,6 +1,6 @@
 ﻿// ================================================================================================
 // <summary>
-//      ローグ風MMO 非同期処理逐次実行管理ソース</summary>
+//      非同期処理逐次実行管理ソース</summary>
 //
 // <copyright file="ObservableSerialRunner.cs">
 //      Copyright (C) 2018 Koichi Tanaka. All rights reserved.</copyright>
@@ -11,6 +11,7 @@
 namespace Honememo.RougeLikeMmo.Gateways
 {
     using System;
+    using System.Linq;
     using System.Collections.Concurrent;
     using System.Threading;
     using UniRx;
@@ -65,7 +66,7 @@ namespace Honememo.RougeLikeMmo.Gateways
             if (this.current == null && this.queue.TryDequeue(out queue))
             {
                 // サブスクライブして処理を起動させる
-                Subject<object> subject = (Subject<object>)queue.responser;
+                var subject = queue.responser;
                 this.current = queue.observable;
                 this.current.Subscribe(
                     (ret) => 
@@ -93,13 +94,11 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>処理結果を受け取るためのObservable。</returns>
         public IObservable<T> Enqueue<T>(IObservable<T> observable)
         {
-            var responser = new Subject<T>();
             var v = new QueueValue();
             v.observable = (IObservable<object>)observable;
-            v.responser = responser;
+            v.responser = new Subject<object>();
             this.queue.Enqueue(v);
-            return responser;
-
+            return v.responser.Select((res) => (T)res);
         }
 
         #endregion
@@ -112,7 +111,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         private class QueueValue
         {
             public IObservable<object> observable;
-            public object responser;
+            public Subject<object> responser;
         }
 
         #endregion
