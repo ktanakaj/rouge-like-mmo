@@ -54,6 +54,14 @@
 		"UPDATED_AT": "更新日時",
 		"DELETED_AT": "削除日時"
 	},
+	"PLAYER": {
+		"ID": "ID",
+		"LEVEL": "レベル",
+		"GAME_COINS": "所持金",
+		"LAST_LOGIN": "最終ログイン日時",
+		"CREATED_AT": "登録日時",
+		"UPDATED_AT": "更新日時"
+	},
 	"TOP_PAGE": {
 		"LATEST_ADMIN_LOGS": "最近のデータ操作履歴",
 		"DOCUMENTS": "各種ドキュメント",
@@ -94,8 +102,8 @@
 		"REPEAT_PASSWORD": "新しいパスワード（再入力）",
 		"NOT_SAME": "パスワード入力欄と再入力欄が一致しません。もう一度入力してください。"
 	},
-	"CONTEST_PAGE": {
-		"TITLE": "コンテスト一覧",
-		"LINK": "コンテスト情報"
+	"PLAYER_PAGE": {
+		"TITLE": "プレイヤー一覧",
+		"LINK": "プレイヤー情報"
 	}
 }

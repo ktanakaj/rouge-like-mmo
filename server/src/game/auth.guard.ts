@@ -24,6 +24,6 @@ export class AuthGuard implements CanActivate {
 		if (req.user) {
 			return true;
 		}
-		throw new UnauthorizedError('/api/auth is not called');
+		throw new UnauthorizedError('Session not found');
 	}
 }

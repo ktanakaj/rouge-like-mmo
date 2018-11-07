@@ -17,11 +17,11 @@ export class AuthGuard implements CanActivate {
 	 * @throws UnauthorizedError アクセス不可の場合。
 	 */
 	async canActivate(context: ExecutionContext): Promise<boolean> {
-		// authでセッションにプレイヤーIDが設定されているかで判定
+		// loginでセッションにプレイヤーIDが設定されているかで判定
 		const args = context.getArgs();
 		if (args[1].session['id']) {
 			return true;
 		}
-		throw new UnauthorizedError('auth is not called');
+		throw new UnauthorizedError('login is not called');
 	}
 }

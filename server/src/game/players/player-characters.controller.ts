@@ -1,6 +1,6 @@
 /**
  * PC操作コントローラモジュール。
- * @module ./game/games/player-characters.controller
+ * @module ./game/players/player-characters.controller
  */
 import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
 import {

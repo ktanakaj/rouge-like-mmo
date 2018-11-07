@@ -27,6 +27,7 @@ import { PasswordComponent } from './auth/password.component';
 import { AdministratorComponent } from './administrator/administrator.component';
 import { MasterVersionComponent } from './master/master-version.component';
 import { MasterViewerComponent } from './master/master-viewer.component';
+import { PlayerComponent } from './player/player.component';
 
 /** ルート定義 */
 const appRoutes: Routes = [
@@ -38,6 +39,7 @@ const appRoutes: Routes = [
 	{ path: 'masters', component: MasterVersionComponent, canActivate: [AuthGuard] },
 	{ path: 'masters/latest', component: MasterViewerComponent, canActivate: [AuthGuard] },
 	{ path: 'masters/latest/:name', component: MasterViewerComponent, canActivate: [AuthGuard] },
+	{ path: 'players', component: PlayerComponent, canActivate: [AuthGuard] },
 	{ path: '**', redirectTo: '/' }
 ];
 
@@ -100,6 +102,7 @@ class DefaultErrorHandler implements ErrorHandler {
 		AdministratorComponent,
 		MasterVersionComponent,
 		MasterViewerComponent,
+		PlayerComponent,
 	],
 	imports: [
 		BrowserModule,

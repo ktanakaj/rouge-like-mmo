@@ -17,7 +17,6 @@ module.exports = {
 			token: {
 				type: Sequelize.STRING,
 				allowNull: false,
-				unique: true,
 				comment: '端末トークン',
 			},
 			level: {

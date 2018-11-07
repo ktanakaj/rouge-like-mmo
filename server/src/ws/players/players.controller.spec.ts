@@ -1,33 +1,34 @@
 /**
- * @file auth.controller.tsのテスト。
+ * @file players.controller.tsのテスト。
  */
 import * as assert from 'power-assert';
 import { TestingModule } from '@nestjs/testing';
 import testHelper from '../../test-helper';
 import { BadRequestError } from '../../core/errors';
 import Player from '../../game/shared/player.model';
-import { AuthController } from './auth.controller';
+import { PlayersController } from './players.controller';
 
-describe('AuthController', () => {
+describe('PlayersController', () => {
 	let module: TestingModule;
-	let controller: AuthController;
+	let controller: PlayersController;
+	const oldDate = new Date('2017-12-17T03:24:00');
 
 	before(async () => {
-		await Player.create({ id: 100, token: 'WS_UNITTEST_TOKEN100', lastLogin: new Date() });
+		await Player.create({ id: 100, token: 'WS_UNITTEST_TOKEN100', lastLogin: oldDate });
 
 		module = await testHelper.createTestingModule({
-			controllers: [AuthController],
+			controllers: [PlayersController],
 		}).compile();
-		controller = module.get<AuthController>(AuthController);
+		controller = module.get<PlayersController>(PlayersController);
 	});
 
-	describe('#auth()', () => {
+	describe('#login()', () => {
 		it('認証成功', async () => {
 			const conn = { session: {} };
-			await controller.auth({ token: 'WS_UNITTEST_TOKEN100' }, conn as any);
+			const player = await controller.login({ id: 100, token: 'WS_UNITTEST_TOKEN100' }, conn as any);
 
-			// セッションも確認する
 			assert.strictEqual(conn.session['id'], 100);
+			assert(player.lastLogin.getTime() > oldDate.getTime());
 		});
 
 		it('認証失敗', async () => {
@@ -35,7 +36,7 @@ describe('AuthController', () => {
 			// TODO: power-assertが対応したら assert.rejects() に変える
 			try {
 				const conn = { session: {} };
-				await controller.auth({ token: 'INVALID_TOKEN' }, conn as any);
+				await controller.login({ id: 100, token: 'INVALID_TOKEN' }, conn as any);
 				assert.fail('Missing expected exception');
 			} catch (err) {
 				assert(err instanceof BadRequestError);

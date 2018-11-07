@@ -18,8 +18,8 @@ export class SidebarComponent implements OnInit {
 	navi: { title: string, path: string, active?: boolean }[][] = [
 		[
 			{
-				title: 'CONTEST_PAGE.LINK',
-				path: '/contests',
+				title: 'PLAYER_PAGE.LINK',
+				path: '/players',
 			},
 		],
 		[

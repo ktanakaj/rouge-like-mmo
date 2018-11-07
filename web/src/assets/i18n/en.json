@@ -55,6 +55,14 @@
 		"UPDATED_AT": "Updated At",
 		"DELETED_AT": "Deleted At"
 	},
+	"PLAYER": {
+		"ID": "ID",
+		"LEVEL": "Level",
+		"GAME_COINS": "Money",
+		"LAST_LOGIN": "Last Login",
+		"CREATED_AT": "Created At",
+		"UPDATED_AT": "Updated At"
+	},
 	"TOP_PAGE": {
 		"LATEST_ADMIN_LOGS": "Latest Operation History",
 		"DOCUMENTS": "Documents",
@@ -94,8 +102,8 @@
 		"REPEAT_PASSWORD": "Repeat new password",
 		"NOT_SAME": "The two passwords aren't the same."
 	},
-	"CONTEST_PAGE": {
-		"TITLE": "Contest List",
-		"LINK": "Contests"
+	"PLAYER_PAGE": {
+		"TITLE": "Player List",
+		"LINK": "Players"
 	}
 }
