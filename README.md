@@ -8,7 +8,7 @@ WebSocketを使ったMMOの練習用に作成したローグライクゲーム�
 ## 環境
 * CentOS 7
 * Node.js v10.x
-* MariaDB 5.x
+* MySQL 8.x
 * Redis 3.x
 * nginx 1.12.x
 * Nest 6.x

@@ -1,0 +1,4 @@
+mysql_client_conf_src: "my.cnf.j2"
+mysql_client_conf_dest: "/root/.my.cnf"
+mysql_server_conf_dest: "/etc/my.cnf"
+mysql_root_password: "r00+PAssw0rd" # シェルスクリプトの特殊文字はエスケープできていないので使わないでください

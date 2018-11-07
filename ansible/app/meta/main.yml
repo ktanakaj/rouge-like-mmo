@@ -3,7 +3,7 @@ dependencies:
   - { role: nginx }
   - { role: nodejs }
   - { role: pm2 }
-  - { role: mariadb }
+  - { role: mysql }
   - { role: redis }
   - { role: yarn }
   - { role: chromium }

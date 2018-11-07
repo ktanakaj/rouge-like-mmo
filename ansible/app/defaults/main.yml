@@ -10,5 +10,5 @@ app_db:
   - rougelikemmo_admin_db
 app_db_users:
   - user: rougelikemmo_usr
-    password: "rougelikemmo01"
+    password: "rougeL!kemmo01"
     privilege: "rougelikemmo_master_db.*:ALL/rougelikemmo_global_db.*:ALL/rougelikemmo_admin_db.*:ALL" # FIXME: この書き方だと二度目以降のansibleでエラーになる模様

@@ -1,0 +1,38 @@
+---
+- name: Register MySQL repository
+  yum: name={{ mysqlsource }} state=present
+
+- name: Install the latest version of MySQL
+  yum: name=mysql-server state=latest
+  register: mysql_installed
+- name: Install the latest version of MySQL-python
+  yum: name=MySQL-python state=latest
+
+- name: Set server my.cnf
+  lineinfile:
+    dest: "{{ mysql_server_conf_dest }}"
+    regexp: '^default_authentication_plugin\s*='
+    insertafter: '^\[mysqld\]'
+    line: 'default_authentication_plugin=mysql_native_password'
+
+- name: Action to enable service MySQL
+  service: name=mysqld state=started enabled=yes
+
+- name: Get MySQL temporary password
+  shell: cat /var/log/mysqld.log | grep "temporary password" | awk '{print $13}'
+  register: mysql_default_password
+  when: mysql_installed.changed
+- name: Change MySQL root password
+  shell: mysql -u root -p'{{ mysql_default_password.stdout }}' --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ mysql_root_password }}';"
+  when: mysql_installed.changed
+- name: Set client my.cnf to root
+  template:
+    src: "{{ mysql_client_conf_src }}"
+    dest: "{{ mysql_client_conf_dest }}"
+    owner: root
+    group: root
+  when: mysql_installed.changed
+
+- name: Open port for MySQL only internal zone
+  firewalld: service=mysql permanent=true state=enabled zone=internal
+  notify: Restart firewalld

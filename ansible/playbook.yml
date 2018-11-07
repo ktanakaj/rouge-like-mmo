@@ -8,7 +8,7 @@
   - git
   - nginx
   - redis
-  - mariadb
+  - mysql
   - nodejs
   - pm2
   - app

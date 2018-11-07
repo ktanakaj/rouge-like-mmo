@@ -10,7 +10,7 @@
       host: "localhost"
       port: 3306
       username: "rougelikemmo_usr"
-      password: "rougelikemmo01"
+      password: "rougeL!kemmo01"
       database: "rougelikemmo_master_db"
       benchmark: true
     admin:
@@ -18,7 +18,7 @@
       host: "localhost"
       port: 3306
       username: "rougelikemmo_usr"
-      password: "rougelikemmo01"
+      password: "rougeL!kemmo01"
       database: "rougelikemmo_admin_db"
       benchmark: true
     global:
@@ -26,7 +26,7 @@
       host: "localhost"
       port: 3306
       username: "rougelikemmo_usr"
-      password: "rougelikemmo01"
+      password: "rougeL!kemmo01"
       database: "rougelikemmo_global_db"
       benchmark: true
   redis:
