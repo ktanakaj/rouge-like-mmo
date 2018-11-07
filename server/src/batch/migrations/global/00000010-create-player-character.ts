@@ -7,6 +7,13 @@ import { QueryInterface, SequelizeStatic } from 'sequelize';
 module.exports = {
 	up: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
 		await queryInterface.createTable('playerCharacters', {
+			id: {
+				type: Sequelize.INTEGER,
+				allowNull: false,
+				primaryKey: true,
+				autoIncrement: true,
+				comment: 'プレイヤーキャラクターID',
+			},
 			playerId: {
 				type: Sequelize.INTEGER,
 				allowNull: false,
@@ -16,6 +23,11 @@ module.exports = {
 				// 	model: 'players',
 				// 	key: 'id',
 				// }
+			},
+			name: {
+				type: Sequelize.STRING,
+				allowNull: false,
+				comment: 'キャラクター名',
 			},
 			level: {
 				type: Sequelize.INTEGER.UNSIGNED,
@@ -41,7 +53,7 @@ module.exports = {
 				comment: '所持金',
 			},
 			items: {
-				type: Sequelize.TEXT,
+				type: Sequelize.JSON,
 				allowNull: false,
 				comment: '所持品',
 			},

@@ -2,7 +2,7 @@
  * プレイヤーモデルモジュール。
  * @module ./game/shared/player.model
  */
-import { Column, DataType, Unique, AllowNull, Default, IsDate } from 'sequelize-typescript';
+import { Column, DataType, Unique, AllowNull, Default, IsDate, DefaultScope } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Table } from '../../core/models/decorators';
 import DataModel from '../../core/models/data-model';
@@ -10,6 +10,11 @@ import DataModel from '../../core/models/data-model';
 /**
  * プレイヤーモデルクラス。
  */
+@DefaultScope({
+	order: [
+		['id', 'ASC'],
+	],
+})
 @Table({
 	db: 'global',
 	tableName: 'players',

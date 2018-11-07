@@ -7,6 +7,13 @@ import { QueryInterface, SequelizeStatic } from 'sequelize';
 module.exports = {
 	up: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
 		await queryInterface.createTable('playerItems', {
+			id: {
+				type: Sequelize.INTEGER,
+				allowNull: false,
+				primaryKey: true,
+				autoIncrement: true,
+				comment: 'プレイヤーアイテムID',
+			},
 			playerId: {
 				type: Sequelize.INTEGER,
 				allowNull: false,

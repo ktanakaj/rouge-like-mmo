@@ -2,7 +2,7 @@
  * プレイヤー所有アイテムモデルモジュール。
  * @module ./game/shared/player-item.model
  */
-import { Column, DataType, AllowNull, Default, ForeignKey } from 'sequelize-typescript';
+import { Column, DataType, AllowNull, Default, ForeignKey, DefaultScope } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Table } from '../../core/models/decorators';
 import DataModel from '../../core/models/data-model';
@@ -14,6 +14,12 @@ import Item from './item.model';
  * プレイヤーが所持するアイテムを管理する。
  * ※ キャラクターが持ち帰ったアイテム。
  */
+@DefaultScope({
+	order: [
+		['playerId', 'ASC'],
+		['itemId', 'ASC'],
+	],
+})
 @Table({
 	db: 'global',
 	tableName: 'playerItems',
