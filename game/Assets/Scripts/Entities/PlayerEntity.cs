@@ -21,6 +21,29 @@ namespace Honememo.RougeLikeMmo.Entities
         #region 公開プロパティ
 
         /// <summary>
+        /// プレイヤーID。
+        /// </summary>
+        public int Id
+        {
+            get
+            {
+                // 保存済みならその値をを返す
+                if (PlayerPrefs.HasKey("PlayerId"))
+                {
+                    return PlayerPrefs.GetInt("PlayerId");
+                }
+
+                return 0;
+            }
+            set
+            {
+                // 設定されたタイミングで端末に保存する
+                PlayerPrefs.SetInt("PlayerId", value);
+                PlayerPrefs.Save();
+            }
+        }
+
+        /// <summary>
         /// 端末トークン。
         /// </summary>
         public string Token
@@ -39,6 +62,21 @@ namespace Honememo.RougeLikeMmo.Entities
                 return token;
             }
         }
+
+        /// <summary>
+        /// プレイヤーレベル。
+        /// </summary>
+        public uint Level { get; set; }
+
+        /// <summary>
+        /// プレイヤー経験値。
+        /// </summary>
+        public ulong Exp { get; set; }
+
+        /// <summary>
+        /// プレイヤー所持金。
+        /// </summary>
+        public ulong GameCoins { get; set; }
 
         #endregion
     }

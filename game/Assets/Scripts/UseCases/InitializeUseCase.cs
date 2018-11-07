@@ -11,7 +11,7 @@
 namespace Honememo.RougeLikeMmo.UseCases
 {
     using System;
-    using UnityEngine;
+    using System.Threading.Tasks;
     using Zenject;
     using Honememo.RougeLikeMmo.Entities;
     using Honememo.RougeLikeMmo.Gateways;
@@ -30,10 +30,16 @@ namespace Honememo.RougeLikeMmo.UseCases
         private PlayerEntity player;
 
         /// <summary>
-        /// 認証リポジトリ。
+        /// プレイヤーリポジトリ。
         /// </summary>
         [Inject]
-        private AuthRepository authRepository;
+        private PlayerRepository playerRepository;
+
+        /// <summary>
+        /// システムリポジトリ。
+        /// </summary>
+        [Inject]
+        private SystemRepository systemRepository;
 
         #endregion
 
@@ -44,9 +50,57 @@ namespace Honememo.RougeLikeMmo.UseCases
         /// </summary>
         public async void Initialize()
         {
-            await this.authRepository.Auth(this.player.Token);
+            await this.LoadEnv();
+            await this.Login();
+            await this.LoadMasters();
         }
 
         #endregion
+
+        /// <summary>
+        /// プレイヤーをログインさせる。
+        /// </summary>
+        /// <returns>処理状態。</returns>
+        private async Task Login()
+        {
+            dynamic player;
+            if (this.player.Id == 0)
+            {
+                player = await this.playerRepository.Create(this.player.Token);
+                this.player.Id = (int)player.id;
+            }
+            else
+            {
+                player = await this.playerRepository.Login(this.player.Id, this.player.Token);
+            }
+
+            this.player.Level = (uint)player.level;
+            this.player.Exp = (ulong)player.exp;
+            this.player.GameCoins = (ulong)player.gameCoins;
+        }
+
+        /// <summary>
+        /// 環境情報を読み込む。
+        /// </summary>
+        /// <returns>処理状態。</returns>
+        private async Task LoadEnv()
+        {
+            // TODO: 扱いは未定
+            await this.systemRepository.GetEnv();
+        }
+
+        /// <summary>
+        /// マスタ情報を読み込む。
+        /// </summary>
+        /// <returns>処理状態。</returns>
+        private async Task LoadMasters()
+        {
+            var names = await this.systemRepository.FindLatestMasters();
+            foreach (var name in names)
+            {
+                // TODO: どこかグローバルなところに詰める
+                await this.systemRepository.FindLatestMaster<object>(name);
+            }
+        }
     }
 }
