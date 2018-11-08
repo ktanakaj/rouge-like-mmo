@@ -52,10 +52,11 @@ namespace Honememo.RougeLikeMmo.Gateways
         {
             var url = this.CreateUrl(api);
             return this.taskRunner.Enqueue<string>(
-                this.LogFilter(
-                    ObservableWWW.Get(url),
-                    "GET",
-                    url));
+                this.ExceptionFilter(
+                    this.LogFilter(
+                        ObservableWWW.Get(url),
+                        "GET",
+                        url)));
         }
 
         /// <summary>
@@ -70,11 +71,12 @@ namespace Honememo.RougeLikeMmo.Gateways
             headers["Content-Type"] = "application/json";
             var url = this.CreateUrl(api);
             return this.taskRunner.Enqueue<string>(
-                this.LogFilter(
-                    ObservableWWW.Post(this.CreateUrl(api), System.Text.Encoding.UTF8.GetBytes(json), headers),
-                    "POST",
-                    url,
-                    json));
+                this.ExceptionFilter(
+                    this.LogFilter(
+                        ObservableWWW.Post(this.CreateUrl(api), System.Text.Encoding.UTF8.GetBytes(json), headers),
+                        "POST",
+                        url,
+                        json)));
         }
 
         #endregion
@@ -157,6 +159,25 @@ namespace Honememo.RougeLikeMmo.Gateways
             {
                 Debug.Log(log);
             }
+        }
+
+        /// <summary>
+        /// API例外のフィルターを追加する。
+        /// </summary>
+        /// <param name="observable">フィルター対象のAPI呼び出し。</param>
+        /// <returns>フィルターしたAPI呼び出し。</returns>
+        private IObservable<string> ExceptionFilter(IObservable<string> observable)
+        {
+            return observable
+                .Catch((WWWErrorException ex) => {
+                    // サーバーエラーのエラーコードの場合、リトライ可として例外を投げる
+                    if (ex.StatusCode == HttpStatusCode.InternalServerError || ex.StatusCode == HttpStatusCode.ServiceUnavailable)
+                    {
+                        throw new ObservableSerialRunner.RetryableException(ex);
+                    }
+
+                    throw ex;
+                });
         }
 
         #endregion

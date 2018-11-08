@@ -11,11 +11,11 @@
 namespace Honememo.RougeLikeMmo.Gateways
 {
     using System;
-    using System.Linq;
     using System.Collections.Concurrent;
+    using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
     using UniRx;
-    using UnityEngine;
     using Zenject;
 
     /// <summary>
@@ -31,17 +31,31 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <summary>
         /// 処理待ちキュー。
         /// </summary>
-        private ConcurrentQueue<QueueValue> queue = new ConcurrentQueue<QueueValue>();
+        private ConcurrentQueue<RunInfo> queue = new ConcurrentQueue<RunInfo>();
 
         /// <summary>
         /// 実行中処理。
         /// </summary>
-        private IObservable<object> current;
+        private RunInfo current;
 
         /// <summary>
         /// メインスレッドのコンテキスト。
         /// </summary>
         private SynchronizationContext mainContext;
+
+        #endregion
+
+        #region 公開プロパティ
+
+        /// <summary>
+        /// リトライ許容回数。
+        /// </summary>
+        public int MaxRetry { get; set; } = 3;
+
+        /// <summary>
+        /// リトライ時のウェイト (ms)。
+        /// </summary>
+        public int Wait { get; set; } = 1000;
 
         #endregion
 
@@ -62,23 +76,9 @@ namespace Honememo.RougeLikeMmo.Gateways
         public void Tick()
         {
             // 現在実行中のものが無い場合、キューから1件取り出して実行する
-            QueueValue queue;
-            if (this.current == null && this.queue.TryDequeue(out queue))
+            if (this.current == null && this.queue.TryDequeue(out this.current))
             {
-                // サブスクライブして処理を起動させる
-                var subject = queue.responser;
-                this.current = queue.observable;
-                this.current.Subscribe(
-                    (ret) => 
-                    {
-                        // OnNextが呼ばれたタイミングで次のキューを呼べる状態にする
-                        // ※ OnCompletedまで待ってもいいけど、現状はそうしている
-                        subject.OnNext(ret);
-                        this.current = null;
-                    },
-                    // TODO: リトライの仕組みを入れる
-                    (ex) => subject.OnError(ex),
-                    subject.OnCompleted);
+                this.RunCurrent();
             }
         }
 
@@ -92,13 +92,58 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <typeparam name="T">処理の戻り値型。</typeparam>
         /// <param name="observable">登録する非同期処理。</param>
         /// <returns>処理結果を受け取るためのObservable。</returns>
+        /// <remarks>
+        /// Subscribeのタイミングで起動するCold Observableである必要があります。
+        /// OnCompletedしないものは処理が終わらないため実行できません。
+        /// </remarks>
         public IObservable<T> Enqueue<T>(IObservable<T> observable)
         {
-            var v = new QueueValue();
-            v.observable = (IObservable<object>)observable;
-            v.responser = new Subject<object>();
-            this.queue.Enqueue(v);
-            return v.responser.Select((res) => (T)res);
+            var info = new RunInfo();
+            info.observable = (IObservable<object>)observable;
+            info.responser = new Subject<object>();
+            this.queue.Enqueue(info);
+            return info.responser.Select((res) => (T)res);
+        }
+
+        #endregion
+
+        #region 内部メソッド
+
+        /// <summary>
+        /// 現在の処理を実行する。
+        /// </summary>
+        private void RunCurrent()
+        {
+            var info = this.current;
+            info.observable.Subscribe(
+                // OnCompleted,OnErrorが呼ばれたタイミングで次のキューを呼べる状態にする
+                info.responser.OnNext,
+                async (ex) => {
+                    // リトライ可能例外が投げられた場合、リトライする
+                    if (ex is RetryableException)
+                    {
+                        // FIXME: 即エラーではなく、確認ダイアログ用のイベントに通知する
+                        if (++info.retry >= this.MaxRetry)
+                        {
+                            info.responser.OnError(ex.InnerException);
+                            this.current = null;
+                        }
+                        else
+                        {
+                            await Task.Delay(this.Wait);
+                            this.RunCurrent();
+                        }
+                    }
+                    else
+                    {
+                        info.responser.OnError(ex);
+                        this.current = null;
+                    }
+                },
+                () => {
+                    info.responser.OnCompleted();
+                    this.current = null;
+                });
         }
 
         #endregion
@@ -106,12 +151,27 @@ namespace Honememo.RougeLikeMmo.Gateways
         #region 内部クラス
 
         /// <summary>
+        /// リトライ可能であることを示す例外ラッパークラス。
+        /// </summary>
+        public class RetryableException : Exception
+        {
+            /// <summary>
+            /// 指定された例外をラップするインスタンスを生成する。
+            /// </summary>
+            /// <param name="innerException">発生した例外。</param>
+            public RetryableException(Exception innerException) : base(innerException.Message, innerException)
+            {
+            }
+        }
+
+        /// <summary>
         /// キューに入れる情報を扱うタプル。
         /// </summary>
-        private class QueueValue
+        private class RunInfo
         {
             public IObservable<object> observable;
             public Subject<object> responser;
+            public int retry;
         }
 
         #endregion

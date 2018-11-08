@@ -29,12 +29,28 @@ namespace Honememo.RougeLikeMmo.Core
         /// </summary>
         public string ApiBase = "/";
 
+        /// <summary>
+        /// リトライ許容回数。
+        /// </summary>
+        public int MaxRetry = 3;
+
+        /// <summary>
+        /// リトライ時のウェイト (ms)。
+        /// </summary>
+        public int RetryWait = 1000;
+
         #endregion
 
         #region 設定対象
 
         /// <summary>
-        /// 認証リポジトリ。
+        /// タスクランナー。
+        /// </summary>
+        [Inject]
+        private ObservableSerialRunner taskRunner;
+
+        /// <summary>
+        /// APIリクエストクライアント。
         /// </summary>
         [Inject]
         private AppWebRequest webRequest;
@@ -49,6 +65,8 @@ namespace Honememo.RougeLikeMmo.Core
         public void Start()
         {
             // インスペクターで設定された値をシングルトンの各インスタンスにコピーする
+            this.taskRunner.MaxRetry = this.MaxRetry;
+            this.taskRunner.Wait = this.RetryWait;
             this.webRequest.ApiBase = this.ApiBase;
         }
 
