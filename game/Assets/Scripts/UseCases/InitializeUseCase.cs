@@ -54,7 +54,8 @@ namespace Honememo.RougeLikeMmo.UseCases
         /// <summary>
         /// 初期化を行う。
         /// </summary>
-        public async void Initialize()
+        /// <returns>処理状態。</returns>
+        public async Task Initialize()
         {
             await this.LoadEnv();
             await this.Login();

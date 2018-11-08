@@ -10,8 +10,10 @@
 
 namespace Honememo.RougeLikeMmo.Controllers
 {
+    using System;
     using UnityEngine;
     using UnityEngine.SceneManagement;
+    using UnityEngine.UI;
     using Zenject;
     using Honememo.RougeLikeMmo.UseCases;
 
@@ -35,12 +37,21 @@ namespace Honememo.RougeLikeMmo.Controllers
         /// <summary>
         /// アプリ初期化実行。
         /// </summary>
-        public void Initialize()
+        public async void Initialize()
         {
-            this.useCase.Initialize();
-            // TODO: 結果を非同期で受け取り、完了次第画面遷移を有効にする
-            // TODO: なのでボタンを押せなくして読み込み中表示を出す
-            // SceneManager.LoadScene("Game");
+            var button = this.GetComponent<Button>();
+            button.interactable = false;
+            // TODO: Loding... も出す
+            try
+            {
+                await this.useCase.Initialize();
+                SceneManager.LoadScene("Home");
+            }
+            catch (Exception ex)
+            {
+                button.interactable = true;
+                throw ex;
+            }
         }
 
         #endregion
