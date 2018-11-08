@@ -10,7 +10,6 @@
 
 namespace Honememo.RougeLikeMmo.Gateways
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -18,6 +17,7 @@ namespace Honememo.RougeLikeMmo.Gateways
     using UniRx;
     using UnityEngine;
     using Zenject;
+    using Honememo.RougeLikeMmo.Entities;
 
     /// <summary>
     /// システムAPIリポジトリクラス。
@@ -40,10 +40,10 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// 環境情報を取得する。
         /// </summary>
         /// <returns>環境情報。</returns>
-        public async Task<dynamic> GetEnv()
+        public async Task<EnvEntity> GetEnv()
         {
             var json = await this.request.Get("api/env");
-            return JsonUtility.FromJson<GetEnvResult>(json);
+            return JsonUtility.FromJson<EnvEntity>(json);
         }
 
         /// <summary>
@@ -62,29 +62,11 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <typeparam name="T">マスタ型。</typeparam>
         /// <param name="name">マスタ名。</param>
         /// <returns>マスタ一覧。</returns>
-        public async Task<T[]> FindLatestMaster<T>(string name)
+        public async Task<IList<T>> FindLatestMaster<T>(string name)
         {
             var result = await this.request.Get("api/masters/" + name);
-            // FIXME: 頑張ってキャストする
-            dynamic json = DynamicJson.Parse(result);
-            Debug.Log(json);
-            return null;
-        }
-
-        #endregion
-
-        #region 内部クラス
-
-        /// <summary>
-        /// /api/env API戻り値パラメータ。
-        /// </summary>
-        [Serializable]
-        public class GetEnvResult
-        {
-            public string serverVersion;
-            public long serverTime;
-            public string minimumAppVersion;
-            public int latestMasterVersion;
+            var records = (object[])DynamicJson.Parse(result);
+            return records.Select((rec) => JsonUtility.FromJson<T>(rec.ToString())).ToList();
         }
 
         #endregion

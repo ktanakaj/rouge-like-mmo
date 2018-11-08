@@ -29,10 +29,11 @@ namespace Honememo.RougeLikeMmo.Core
         {
             Container.BindInterfacesAndSelfTo<ObservableSerialRunner>().AsSingle().NonLazy();
             Container.Bind<AppWebRequest>().AsSingle().NonLazy();
+            Container.Bind<LocalRepository>().AsSingle().NonLazy();
             Container.Bind<SystemRepository>().AsSingle().NonLazy();
             Container.Bind<PlayerRepository>().AsSingle().NonLazy();
             Container.Bind<GameRepository>().AsSingle().NonLazy();
-            Container.Bind<PlayerEntity>().AsSingle().NonLazy();
+            Container.Bind<Global>().AsSingle().NonLazy();
             Container.Bind<InitializeUseCase>().AsSingle().NonLazy();
         }
 

@@ -1,8 +1,8 @@
 ﻿// ================================================================================================
 // <summary>
-//      プレイヤーエンティティソース</summary>
+//      ダンジョンマスタエンティティソース</summary>
 //
-// <copyright file="PlayerEntity.cs">
+// <copyright file="DungeonEntity.cs">
 //      Copyright (C) 2018 Koichi Tanaka. All rights reserved.</copyright>
 // <author>
 //      Koichi Tanaka</author>
@@ -14,60 +14,60 @@ namespace Honememo.RougeLikeMmo.Entities
     using UnityEngine;
 
     /// <summary>
-    /// プレイヤーエンティティクラス。
+    /// ダンジョンマスタエンティティクラス。
     /// </summary>
     [Serializable]
-    public class PlayerEntity
+    public class DungeonEntity
     {
         #region 内部変数
 
         /// <summary>
-        /// プレイヤーID。
+        /// ダンジョンID。
         /// </summary>
         [SerializeField]
         private int id;
 
         /// <summary>
-        /// プレイヤーレベル。
+        /// ダンジョン名。
         /// </summary>
         [SerializeField]
-        private uint level;
+        private string name;
 
         /// <summary>
-        /// プレイヤー経験値。
+        /// 難易度。
         /// </summary>
         [SerializeField]
-        private ulong exp;
+        private uint difficulty;
 
         /// <summary>
-        /// プレイヤー所持金。
+        /// 総フロア数。
         /// </summary>
         [SerializeField]
-        private ulong gameCoins;
+        private uint numbers;
 
         #endregion
 
         #region 公開プロパティ
 
         /// <summary>
-        /// プレイヤーID。
+        /// ダンジョンID。
         /// </summary>
         public int Id { get { return this.id; } set { this.id = value; } }
 
         /// <summary>
-        /// プレイヤーレベル。
+        /// ダンジョン名。
         /// </summary>
-        public uint Level { get { return this.level; } set { this.level = value; } }
+        public string Name { get { return this.name; } set { this.name = value; } }
 
         /// <summary>
-        /// プレイヤー経験値。
+        /// 難易度。
         /// </summary>
-        public ulong Exp { get { return this.exp; } set { this.exp = value; } }
+        public uint Difficulty { get { return this.difficulty; } set { this.difficulty = value; } }
 
         /// <summary>
-        /// プレイヤー所持金。
+        /// 総フロア数。
         /// </summary>
-        public ulong GameCoins { get { return this.gameCoins; } set { this.gameCoins = value; } }
+        public uint Numbers { get { return this.numbers; } set { this.numbers = value; } }
 
         #endregion
     }

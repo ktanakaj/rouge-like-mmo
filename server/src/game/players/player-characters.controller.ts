@@ -34,7 +34,7 @@ class UpdatePcBody {
 @Controller('api/pc')
 export class PlayerCharactersController {
 	@ApiOperation({ title: 'PC一覧取得', description: 'プレイヤーのPC一覧を取得する。' })
-	@ApiCreatedResponse({ description: 'PC一覧', type: PlayerCharacter })
+	@ApiOkResponse({ description: 'PC一覧', type: PlayerCharacter, isArray: true })
 	@Get()
 	async findAll(@User() user): Promise<PlayerCharacter[]> {
 		return await PlayerCharacter.findAllByPlayerId(user.id);
