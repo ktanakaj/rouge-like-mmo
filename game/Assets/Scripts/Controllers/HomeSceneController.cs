@@ -1,8 +1,8 @@
 ﻿// ================================================================================================
 // <summary>
-//      初期化コントローラソース</summary>
+//      ホーム画面コントローラソース</summary>
 //
-// <copyright file="InitializeController.cs">
+// <copyright file="HomeSceneController.cs">
 //      Copyright (C) 2018 Koichi Tanaka. All rights reserved.</copyright>
 // <author>
 //      Koichi Tanaka</author>
@@ -18,34 +18,49 @@ namespace Honememo.RougeLikeMmo.Controllers
     using Honememo.RougeLikeMmo.UseCases;
 
     /// <summary>
-    /// 初期化コントローラクラス。
+    /// ホーム画面コントローラクラス。
     /// </summary>
-    public class InitializeController : MonoBehaviour
+    public class HomeSceneController : MonoBehaviour
     {
         #region 内部変数
 
         /// <summary>
-        /// 初期化ユースケース。
+        /// ホーム情報読み込みユースケース。
         /// </summary>
         [Inject]
-        private InitializeUseCase useCase;
+        private LoadHomeUseCase loadHomeUseCase;
+
+        /// <summary>
+        /// ゲーム開始ユースケース。
+        /// </summary>
+        [Inject]
+        private StartGameUseCase startGameUseCase;
 
         #endregion
 
         #region イベントメソッド
 
         /// <summary>
-        /// アプリ初期化実行。
+        /// 画面表示時。
+        /// </summary>
+        public async void Start()
+        {
+            //await this.loadHomeUseCase.Load();
+        }
+
+        /// <summary>
+        /// ゲーム開始実行ボタン。
         /// </summary>
         public async void Initialize()
         {
             var button = this.GetComponent<Button>();
             button.interactable = false;
-            // TODO: Loding... も出す
+            // TODO: Loding... も出す、ドロップダウンも触れなくする
             try
             {
-                await this.useCase.Initialize();
-                SceneManager.LoadScene("Home");
+                // FIXME: ダミーデータなので直す
+                await this.startGameUseCase.Start(1, 1);
+                SceneManager.LoadScene("Game");
             }
             catch (Exception ex)
             {

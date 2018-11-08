@@ -12,6 +12,7 @@ namespace Honememo.RougeLikeMmo.Gateways
 {
     using System;
     using System.Threading.Tasks;
+    using Codeplex.Data;
     using UniRx;
     using UnityEngine;
     using Zenject;
@@ -47,12 +48,17 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <summary>
         /// 新しいゲームを開始する。
         /// </summary>
+        /// <param name="pcId">プレイヤーキャラクターID。</param>
         /// <param name="dungeonId">ダンジョンID。</param>
         /// <returns>ゲーム情報。</returns>
-        public async Task<StartResult> Start(int dungeonId)
+        public async Task<StartResult> Start(int pcId, int dungeonId)
         {
-            var json = await this.request.Post("api/game/start", JsonUtility.ToJson(new StartParam { dungeonId = dungeonId }));
-            return JsonUtility.FromJson<StartResult>(json);
+            dynamic body = new DynamicJson();
+            body.pcId = pcId;
+            body.dungeonId = dungeonId;
+            string json = body.ToString();
+            var result = await this.request.Post("api/game/start", json);
+            return JsonUtility.FromJson<StartResult>(result);
         }
 
         #endregion
@@ -69,15 +75,6 @@ namespace Honememo.RougeLikeMmo.Gateways
             public int dungeonId;
             public int floorNo;
             public string server;
-        }
-
-        /// <summary>
-        /// /api/game/start API引数パラメータ。
-        /// </summary>
-        [Serializable]
-        public class StartParam
-        {
-            public int dungeonId;
         }
 
         /// <summary>

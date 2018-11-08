@@ -8,6 +8,7 @@ import { IsInt } from 'class-validator';
 import { User } from '../../shared/user.decorator';
 import { AuthGuard } from '../auth.guard';
 import Dungeon from '../shared/dungeon.model';
+import PlayerCharacter from '../shared/player-character.model';
 
 class GetStatusResult {
 	// TODO: 項目はインゲーム実装に合わせて精査する
@@ -22,6 +23,9 @@ class GetStatusResult {
 }
 
 class StartBody {
+	@ApiModelProperty({ description: 'プレイヤーキャラクターID', type: 'integer' })
+	@IsInt()
+	pcId: number;
 	@ApiModelProperty({ description: 'ダンジョンID', type: 'integer' })
 	@IsInt()
 	dungeonId: number;
@@ -58,6 +62,7 @@ export class GameController {
 	async start(@Body() body: StartBody, @User() user): Promise<StartResult> {
 		// TODO: ダンジョンの1階を探索して、必要に応じて新規作成
 		// TODO: プレイヤーをフロアに配置して、接続情報を返す
+		const pc = await PlayerCharacter.findOrFailByIdAndPlayerId(body.pcId, user.id);
 		const dungeon = await Dungeon.findOrFail(body.dungeonId);
 		return {
 			server: 'FIXME',
