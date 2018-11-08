@@ -104,15 +104,21 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>フィルターしたAPI呼び出し。</returns>
         private IObservable<string> LogFilter(IObservable<string> observable, string method, string url, string body = "")
         {
-            return observable
-                .Select((result) => {
-                    this.Log(method, url, body, result, HttpStatusCode.OK);
-                    return result;
-                })
-                .Catch((WWWErrorException ex) => {
-                    this.Log(method, url, body, ex.Text, ex.StatusCode);
-                    throw ex;
-                });
+            return Observable.Defer(() =>
+            {
+                var start = DateTimeOffset.Now;
+                return observable
+                    .Select((result) =>
+                    {
+                        this.Log(method, url, body, result, HttpStatusCode.OK, start);
+                        return result;
+                    })
+                    .Catch((WWWErrorException ex) =>
+                    {
+                        this.Log(method, url, body, ex.Text, ex.StatusCode, start);
+                        throw ex;
+                    });
+            });
         }
 
         /// <summary>
@@ -169,7 +175,8 @@ namespace Honememo.RougeLikeMmo.Gateways
         private IObservable<string> ExceptionFilter(IObservable<string> observable)
         {
             return observable
-                .Catch((WWWErrorException ex) => {
+                .Catch((WWWErrorException ex) =>
+                {
                     // サーバーエラーのエラーコードの場合、リトライ可として例外を投げる
                     if (ex.StatusCode == HttpStatusCode.InternalServerError || ex.StatusCode == HttpStatusCode.ServiceUnavailable)
                     {
