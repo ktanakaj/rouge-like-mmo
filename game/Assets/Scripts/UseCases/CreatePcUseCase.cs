@@ -39,7 +39,7 @@ namespace Honememo.RougeLikeMmo.UseCases
         /// <summary>
         /// 結果通知用Subject。
         /// </summary>
-        private Subject<PlayerCharacterEntity> outputPort;
+        private Subject<PlayerCharacterEntity> outputPort = new Subject<PlayerCharacterEntity>();
 
         #endregion
 
@@ -67,8 +67,7 @@ namespace Honememo.RougeLikeMmo.UseCases
         public async Task Create(string name)
         {
             var pc = await this.playerRepository.CreatePlayerCharacter(name);
-            // TODO: 未実装
-            // this.global.
+            this.global.PlayerCharacterEntities[pc.Id] = pc;
             this.outputPort.OnNext(pc);
         }
 

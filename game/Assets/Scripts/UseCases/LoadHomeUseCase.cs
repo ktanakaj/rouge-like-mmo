@@ -10,7 +10,10 @@
 
 namespace Honememo.RougeLikeMmo.UseCases
 {
+    using System;
+    using System.Linq;
     using System.Threading.Tasks;
+    using UniRx;
     using Zenject;
     using Honememo.RougeLikeMmo.Entities;
     using Honememo.RougeLikeMmo.Gateways;
@@ -18,7 +21,7 @@ namespace Honememo.RougeLikeMmo.UseCases
     /// <summary>
     /// ホーム情報読み込みユースケースクラス。
     /// </summary>
-    public class LoadHomeUseCase
+    public class LoadHomeUseCase : IObservable<Unit>
     {
         #region 内部変数
 
@@ -34,6 +37,25 @@ namespace Honememo.RougeLikeMmo.UseCases
         [Inject]
         private PlayerRepository playerRepository;
 
+        /// <summary>
+        /// 結果通知用Subject。
+        /// </summary>
+        private Subject<Unit> outputPort = new Subject<Unit>();
+
+        #endregion
+
+        #region I/F実装メソッド
+
+        /// <summary>
+        /// ホーム情報の読み込みを監視する。
+        /// </summary>
+        /// <param name="observer">監視処理。</param>
+        /// <returns>リソース解放用。</returns>
+        public IDisposable Subscribe(IObserver<Unit> observer)
+        {
+            return this.outputPort.Subscribe(observer);
+        }
+
         #endregion
 
         #region 公開メソッド
@@ -44,9 +66,9 @@ namespace Honememo.RougeLikeMmo.UseCases
         /// <returns>処理状態。</returns>
         public async Task Load()
         {
-            await this.playerRepository.FindPlayerCharacters();
-            // TODO: 未実装
-            // this.global.
+            var playerCharacters = await this.playerRepository.FindPlayerCharacters();
+            this.global.PlayerCharacterEntities = playerCharacters.ToDictionary((n) => n.Id, (n) => n);
+            this.outputPort.OnNext(Unit.Default);
         }
 
         #endregion

@@ -40,18 +40,15 @@ namespace Honememo.RougeLikeMmo.Presenters
             // マスタをリストとして表示する
             var dropdown = this.GetComponent<Dropdown>();
             dropdown.options.Clear();
-            foreach (var kv in this.global.DungeonEntities)
+            foreach (var dungeon in this.global.DungeonEntities.Values)
             {
-                // TODO: IDを持たせたい。textにはIDを入れて、imageに名前を入れる？
-                dropdown.options.Add(new Dropdown.OptionData(kv.Value.Name));
+                // TODO: 設定値のフォーマットは仮、将来的にはそもそもDropbox止める
+                dropdown.options.Add(new Dropdown.OptionData("#" + dungeon.Id + " " + dungeon.Name));
             }
 
             // 先頭データを選択中にする
             // TODO: 前回選択したものを選択中にする
-            if (dropdown.options.Count > 0)
-            {
-                dropdown.value = 1;
-            }
+            dropdown.RefreshShownValue();
         }
 
         #endregion

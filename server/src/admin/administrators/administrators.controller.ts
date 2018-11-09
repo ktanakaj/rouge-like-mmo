@@ -48,7 +48,7 @@ class UpdateAdministratorBody {
 	note?: string;
 }
 
-class LoginBody {
+class AdminLoginBody {
 	@MinLength(1)
 	@ApiModelProperty({ description: '管理者名' })
 	username: string;
@@ -146,7 +146,7 @@ export class AdministratorsController {
 	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
 	@Post('/login')
 	@HttpCode(200)
-	async login(@Body() body: LoginBody, @Session() session): Promise<Administrator> {
+	async login(@Body() body: AdminLoginBody, @Session() session): Promise<Administrator> {
 		// アカウント名の存在とパスワードの一致をチェック
 		const admin = await Administrator.scope('login').findOne({ where: { name: body.username } });
 		if (!admin || !admin.comparePassword(body.password)) {

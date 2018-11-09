@@ -13,6 +13,7 @@ namespace Honememo.RougeLikeMmo.Gateways
     using System;
     using System.Collections.Generic;
     using System.Net;
+    using System.Text.RegularExpressions;
     using UniRx;
     using UnityEngine;
     using Zenject;
@@ -22,6 +23,15 @@ namespace Honememo.RougeLikeMmo.Gateways
     /// </summary>
     public class AppWebRequest
     {
+        #region 定数
+
+        /// <summary>
+        /// APIサーバーのセッションIDキー名。
+        /// </summary>
+        private const string SESSION_ID = "connect.sid";
+
+        #endregion
+
         #region 内部変数
 
         /// <summary>
@@ -29,6 +39,12 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// </summary>
         [Inject]
         private ObservableSerialRunner taskRunner;
+
+        /// <summary>
+        /// セッションID。
+        /// </summary>
+        /// <remarks>簡易的な管理。シーンを跨ぐと消えてしまうので保持。</remarks>
+        private string sessionId;
 
         #endregion
 
@@ -54,7 +70,8 @@ namespace Honememo.RougeLikeMmo.Gateways
             return this.taskRunner.Enqueue<string>(
                 this.ExceptionFilter(
                     this.LogFilter(
-                        ObservableWWW.Get(url),
+                        this.ResponseFilter(
+                            ObservableWWW.GetWWW(url, this.MakeDefaultHeaders())),
                         "GET",
                         url)));
         }
@@ -67,13 +84,14 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>レスポンス文字列。</returns>
         public IObservable<string> Post(string api, string json = "")
         {
-            var headers = new Dictionary<string, string>();
+            var headers = this.MakeDefaultHeaders();
             headers["Content-Type"] = "application/json";
             var url = this.CreateUrl(api);
             return this.taskRunner.Enqueue<string>(
                 this.ExceptionFilter(
                     this.LogFilter(
-                        ObservableWWW.Post(this.CreateUrl(api), System.Text.Encoding.UTF8.GetBytes(json), headers),
+                        this.ResponseFilter(
+                            ObservableWWW.PostWWW(this.CreateUrl(api), System.Text.Encoding.UTF8.GetBytes(json), headers)),
                         "POST",
                         url,
                         json)));
@@ -185,6 +203,49 @@ namespace Honememo.RougeLikeMmo.Gateways
 
                     throw ex;
                 });
+        }
+
+        /// <summary>
+        /// APIのレスポンス処理用のフィルターを追加する。
+        /// </summary>
+        /// <param name="observable">フィルター対象のAPI呼び出し。</param>
+        /// <returns>フィルターしたAPI呼び出し。</returns>
+        private IObservable<string> ResponseFilter(IObservable<WWW> observable)
+        {
+            // WWWを貰って、レスポンスヘッダーなどを処理した上で、textを返す
+            return observable
+                .Select((www) => {
+                    // レスポンスにCookieがある場合は、セッションIDを取り出して保存する
+                    // （WWWのCookieはシーン切り替えで消滅するため）
+                    string header;
+                    if (www.responseHeaders.TryGetValue("Set-Cookie", out header))
+                    {
+                        // ※ 面倒なのでPathとかHttpOnlyとかは無視している。サーバーが信用できなくなる場合注意
+                        var m = Regex.Match(header, SESSION_ID + "=(.+?);");
+                        if (m.Success)
+                        {
+                            this.sessionId = m.Groups[1].Value;
+                        }
+                    }
+
+                    return www.text;
+                });
+        }
+
+        /// <summary>
+        /// ヘッダーの初期値を生成する。
+        /// </summary>
+        /// <returns>ヘッダー。</returns>
+        private Dictionary<string, string> MakeDefaultHeaders()
+        {
+            var headers = new Dictionary<string, string>();
+            if (this.sessionId != null)
+            {
+                // ※ Cookieは上書きされてしまう？が、APIサーバーでは他に使っていないはずなので許容する
+                headers["Cookie"] = SESSION_ID + "=" + this.sessionId;
+            }
+
+            return headers;
         }
 
         #endregion

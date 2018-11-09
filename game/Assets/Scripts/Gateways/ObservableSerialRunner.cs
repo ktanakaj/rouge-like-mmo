@@ -13,7 +13,6 @@ namespace Honememo.RougeLikeMmo.Gateways
     using System;
     using System.Collections.Concurrent;
     using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
     using UniRx;
     using Zenject;
@@ -24,7 +23,7 @@ namespace Honememo.RougeLikeMmo.Gateways
     /// <remarks>
     /// 毎フレーム呼び出され、処理待ちの非同期処理をキューから取得して順番に実行する。
     /// </remarks>
-    public class ObservableSerialRunner : IInitializable, ITickable
+    public class ObservableSerialRunner : ITickable
     {
         #region 内部変数
 
@@ -37,11 +36,6 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// 実行中処理。
         /// </summary>
         private RunInfo current;
-
-        /// <summary>
-        /// メインスレッドのコンテキスト。
-        /// </summary>
-        private SynchronizationContext mainContext;
 
         #endregion
 
@@ -60,15 +54,6 @@ namespace Honememo.RougeLikeMmo.Gateways
         #endregion
 
         #region I/F実装メソッド
-
-        /// <summary>
-        /// zenjectによる初期化処理。
-        /// </summary>
-        public void Initialize()
-        {
-            // メインスレッドのコンテキストをバックアップする
-            this.mainContext = SynchronizationContext.Current;
-        }
 
         /// <summary>
         /// zenjectによる毎フレームの処理。

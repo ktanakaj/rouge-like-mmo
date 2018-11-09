@@ -45,13 +45,13 @@ namespace Honememo.RougeLikeMmo.Controllers
         /// </summary>
         public async void Start()
         {
-            //await this.loadHomeUseCase.Load();
+            await this.loadHomeUseCase.Load();
         }
 
         /// <summary>
         /// ゲーム開始実行ボタン。
         /// </summary>
-        public async void Initialize()
+        public async void Play()
         {
             var button = this.GetComponent<Button>();
             button.interactable = false;

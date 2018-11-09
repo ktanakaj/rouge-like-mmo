@@ -9,7 +9,7 @@ import { BadRequestError } from '../../core/errors';
 import { ErrorResult } from '../../shared/common.dto';
 import Player from '../shared/player.model';
 
-class CreateBody {
+class CreatePlayerBody {
 	@ApiModelProperty({ description: '端末トークン' })
 	@MinLength(1)
 	token: string;
@@ -33,7 +33,7 @@ export class PlayersController {
 	@ApiOperation({ title: 'プレイヤー登録', description: 'プレイヤーを新規登録する。' })
 	@ApiCreatedResponse({ description: '登録成功', type: Player })
 	@Post()
-	async create(@Body() body: CreateBody, @Session() session): Promise<Player> {
+	async create(@Body() body: CreatePlayerBody, @Session() session): Promise<Player> {
 		// 端末ごとにトークン（クライアント側で自動生成）を貰ってプレイヤー登録
 		const player = await Player.create(Object.assign(body, { lastLogin: new Date() }));
 		// セッションに保存。トークンは返さない

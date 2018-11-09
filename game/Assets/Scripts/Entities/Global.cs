@@ -53,6 +53,11 @@ namespace Honememo.RougeLikeMmo.Entities
         /// </summary>
         public PlayerEntity PlayerEntity { get; set; }
 
+        /// <summary>
+        /// プレイヤーキャラクター情報。
+        /// </summary>
+        public IDictionary<int, PlayerCharacterEntity> PlayerCharacterEntities { get; set; }
+
         #endregion
     }
 }
