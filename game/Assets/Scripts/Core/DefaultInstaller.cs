@@ -35,6 +35,7 @@ namespace Honememo.RougeLikeMmo.Core
             Container.Bind<GameRepository>().AsSingle().NonLazy();
             Container.Bind<Global>().AsSingle().NonLazy();
             Container.Bind<InitializeUseCase>().AsSingle().NonLazy();
+            Container.Bind<ResetPlayerUseCase>().AsSingle().NonLazy();
             Container.Bind<LoadHomeUseCase>().AsSingle().NonLazy();
             Container.Bind<CreatePcUseCase>().AsSingle().NonLazy();
             Container.Bind<StartGameUseCase>().AsSingle().NonLazy();

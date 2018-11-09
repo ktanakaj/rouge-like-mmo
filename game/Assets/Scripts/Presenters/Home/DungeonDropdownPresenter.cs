@@ -2,13 +2,13 @@
 // <summary>
 //      ホーム画面ダンジョンドロップダウンプレゼンターソース</summary>
 //
-// <copyright file="HomeDungeonDropdownPresenter.cs">
+// <copyright file="DungeonDropdownPresenter.cs">
 //      Copyright (C) 2018 Koichi Tanaka. All rights reserved.</copyright>
 // <author>
 //      Koichi Tanaka</author>
 // ================================================================================================
 
-namespace Honememo.RougeLikeMmo.Presenters
+namespace Honememo.RougeLikeMmo.Presenters.Home
 {
     using UnityEngine;
     using UnityEngine.UI;
@@ -18,7 +18,7 @@ namespace Honememo.RougeLikeMmo.Presenters
     /// <summary>
     /// ホーム画面ダンジョンドロップダウンプレゼンタークラス。
     /// </summary>
-    public class HomeDungeonDropdownPresenter : MonoBehaviour
+    public class DungeonDropdownPresenter : MonoBehaviour
     {
         #region 内部変数
 

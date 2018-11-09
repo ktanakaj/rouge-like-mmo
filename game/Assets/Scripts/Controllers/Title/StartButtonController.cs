@@ -1,14 +1,14 @@
 ﻿// ================================================================================================
 // <summary>
-//      タイトル画面コントローラソース</summary>
+//      タイトル画面スタートボタンコントローラソース</summary>
 //
-// <copyright file="TitleSceneController.cs">
+// <copyright file="StartButtonController.cs">
 //      Copyright (C) 2018 Koichi Tanaka. All rights reserved.</copyright>
 // <author>
 //      Koichi Tanaka</author>
 // ================================================================================================
 
-namespace Honememo.RougeLikeMmo.Controllers
+namespace Honememo.RougeLikeMmo.Controllers.Title
 {
     using System;
     using UnityEngine;
@@ -18,9 +18,9 @@ namespace Honememo.RougeLikeMmo.Controllers
     using Honememo.RougeLikeMmo.UseCases;
 
     /// <summary>
-    /// タイトル画面コントローラクラス。
+    /// タイトル画面スタートボタンコントローラクラス。
     /// </summary>
-    public class TitleSceneController : MonoBehaviour
+    public class StartButtonController : MonoBehaviour
     {
         #region 内部変数
 
@@ -35,7 +35,7 @@ namespace Honememo.RougeLikeMmo.Controllers
         #region イベントメソッド
 
         /// <summary>
-        /// アプリ初期化実行ボタン。
+        /// 初期化を行い、次のホーム画面に遷移する。
         /// </summary>
         public async void Initialize()
         {
