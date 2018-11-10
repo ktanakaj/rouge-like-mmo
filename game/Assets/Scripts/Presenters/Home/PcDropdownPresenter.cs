@@ -44,44 +44,27 @@ namespace Honememo.RougeLikeMmo.Presenters.Home
 
         #endregion
 
-        #region 公開変数
-
-        /// <summary>
-        /// ゲーム開始ボタン。
-        /// </summary>
-        public Button StartButton;
-
-        #endregion
-
         #region イベントメソッド
 
         /// <summary>
-        /// 画面表示時。
+        /// ドロップダウンの初期化。
         /// </summary>
         public void Start()
         {
-            Debug.Assert(this.StartButton != null);
-
             var dropdown = this.GetComponent<Dropdown>();
             dropdown.options.Clear();
 
+            // ドロップボックスを再読み込みする
             this.loadHomeUseCase.Subscribe(_ => {
-                // ドロップボックスを再読み込みする
                 foreach (var pc in this.global.PlayerCharacterEntities.Values)
                 {
                     this.AddOption(dropdown, pc);
                 }
-
-                // 先頭データを選択中にする
-                // TODO: 前回選択したものを選択中にする
-                dropdown.RefreshShownValue();
             });
 
+            // 追加されたPCを登録、選択中にする
             this.createPcUseCase.Subscribe((pc) => {
-                // 追加されたPCを登録、選択中にする
-                this.AddOption(dropdown, pc);
-                dropdown.value = dropdown.options.Count - 1;
-                dropdown.RefreshShownValue();
+                this.AddOption(dropdown, pc, true);
             });
         }
 
@@ -94,12 +77,23 @@ namespace Honememo.RougeLikeMmo.Presenters.Home
         /// </summary>
         /// <param name="dropdown">追加するドロップダウン。</param>
         /// <param name="pc">追加するPC。</param>
-        private void AddOption(Dropdown dropdown, PlayerCharacterEntity pc)
+        /// <param name="select">追加したPCを選択中にする場合true。</param>
+        private void AddOption(Dropdown dropdown, PlayerCharacterEntity pc, bool select = false)
         {
-            // 1件でもPCが登録されたらスタートボタンをアンロックする
-            // TODO: 設定値のフォーマットは仮、将来的にはそもそもDropbox止める
+            // TODO: 設定値のフォーマットは仮、将来的にはそもそもDropbox止めるかも
             dropdown.options.Add(new Dropdown.OptionData("#" + pc.Id + " " + pc.Name));
-            this.StartButton.interactable = true;
+            if (select)
+            {
+                dropdown.value = dropdown.options.Count - 1;
+            }
+
+            dropdown.RefreshShownValue();
+
+            // 変更した場合の他、1件目を追加したときも変わっているはずなのでイベントを呼ぶ
+            if (select || dropdown.options.Count == 1)
+            {
+                dropdown.onValueChanged.Invoke(dropdown.value);
+            }
         }
 
         #endregion

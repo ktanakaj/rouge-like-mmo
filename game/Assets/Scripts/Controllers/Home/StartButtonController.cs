@@ -50,12 +50,19 @@ namespace Honememo.RougeLikeMmo.Controllers.Home
         #region イベントメソッド
 
         /// <summary>
-        /// パラメータチェック。
+        /// 初期化。
         /// </summary>
         public void Start()
         {
             Debug.Assert(this.DungeonDropdown != null);
             Debug.Assert(this.PcDropdown != null);
+
+            // ドロップダウンが両方とも有効になったらボタンを押せるようにする
+            var button = this.GetComponent<Button>();
+            this.PcDropdown.onValueChanged.AddListener((n) => 
+            {
+                button.interactable = this.DungeonDropdown.options.Count > 0 && this.PcDropdown.options.Count > 0;
+            });
         }
 
         /// <summary>
@@ -63,6 +70,7 @@ namespace Honememo.RougeLikeMmo.Controllers.Home
         /// </summary>
         public async void Play()
         {
+            // TODO: ボタンの制御を共通化して、CreatePcも含めて押せなくする
             var button = this.GetComponent<Button>();
             button.interactable = false;
             this.DungeonDropdown.interactable = false;
@@ -75,8 +83,7 @@ namespace Honememo.RougeLikeMmo.Controllers.Home
                 var pcMatch = Regex.Match(this.PcDropdown.options[this.PcDropdown.value].text, "#([0-9]+?) ");
                 if (!dungeonMatch.Success || !pcMatch.Success)
                 {
-                    // TODO: 選ばれてない場合はそもそも押せなくする
-                    throw new Exception("Dropdown is not selected");
+                    throw new Exception("Dropdowns are invalid");
                 }
 
                 await this.useCase.Start(int.Parse(pcMatch.Groups[1].Value), int.Parse(dungeonMatch.Groups[1].Value));

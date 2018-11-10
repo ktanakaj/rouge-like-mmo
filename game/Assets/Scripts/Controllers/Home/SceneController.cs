@@ -32,7 +32,7 @@ namespace Honememo.RougeLikeMmo.Controllers.Home
         #region イベントメソッド
 
         /// <summary>
-        /// 画面表示時。
+        /// ホーム画面の諸情報を読み込む。
         /// </summary>
         public async void Start()
         {

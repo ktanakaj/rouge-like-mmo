@@ -39,6 +39,7 @@ namespace Honememo.RougeLikeMmo.Controllers.Title
         /// </summary>
         public async void Initialize()
         {
+            // TODO: ボタンの制御を共通化して、Resetも含めて押せなくする
             var button = this.GetComponent<Button>();
             button.interactable = false;
             // TODO: Loding... も出す

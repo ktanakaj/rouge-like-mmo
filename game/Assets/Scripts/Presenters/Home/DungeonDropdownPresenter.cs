@@ -33,7 +33,7 @@ namespace Honememo.RougeLikeMmo.Presenters.Home
         #region イベントメソッド
 
         /// <summary>
-        /// 画面表示時。
+        /// ドロップダウンの初期化。
         /// </summary>
         public void Start()
         {
