@@ -46,9 +46,14 @@ namespace Honememo.RougeLikeMmo.UseCases
         /// <returns>処理状態。</returns>
         public async Task Start(int pcId, int dungeonId)
         {
-            var result = await this.gameRepository.Start(pcId, dungeonId);
-            // TODO: 未実装
-            // this.global.
+            var pc = this.global.PlayerCharacterEntities[pcId];
+            var dungeon = this.global.DungeonEntities[dungeonId];
+
+            await this.gameRepository.Start(pcId, dungeonId);
+
+            // プレイ中のゲームを保存
+            // TODO: 接続先のサーバーアドレスなども貰う
+            this.global.GameEntity = new GameEntity() { PlayerCharacter = pc, Dungeon = dungeon };
         }
 
         #endregion

@@ -54,9 +54,23 @@ namespace Honememo.RougeLikeMmo.Entities
         public PlayerEntity PlayerEntity { get; set; }
 
         /// <summary>
-        /// プレイヤーキャラクター情報。
+        /// プレイヤーが所持するPC情報。
         /// </summary>
         public IDictionary<int, PlayerCharacterEntity> PlayerCharacterEntities { get; set; }
+
+        #endregion
+
+        #region ゲームデータ
+
+        /// <summary>
+        /// プレイ中のゲーム情報。
+        /// </summary>
+        public GameEntity GameEntity { get; set; }
+
+        /// <summary>
+        /// 滞在中のフロアの情報。
+        /// </summary>
+        public FloorEntity FloorEntity { get; set; }
 
         #endregion
     }

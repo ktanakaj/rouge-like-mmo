@@ -25,10 +25,16 @@ namespace Honememo.RougeLikeMmo.Gateways
         #region 内部変数
 
         /// <summary>
-        /// APIクライアント。
+        /// HTTP APIクライアント。
         /// </summary>
         [Inject]
-        private AppWebRequest request;
+        private AppWebRequest webRequest;
+
+        /// <summary>
+        /// WebSocket/JSON-RPC2 APIクライアント。
+        /// </summary>
+        [Inject]
+        private AppWsRequest wsRequest;
 
         #endregion
 
@@ -41,7 +47,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>ゲーム情報。</returns>
         public async Task<GetStatusResult> GetStatus()
         {
-            var json = await this.request.Get("api/game/status");
+            var json = await this.webRequest.Get("api/game/status");
             return JsonUtility.FromJson<GetStatusResult>(json);
         }
 
@@ -57,7 +63,7 @@ namespace Honememo.RougeLikeMmo.Gateways
             body.pcId = pcId;
             body.dungeonId = dungeonId;
             string json = body.ToString();
-            var result = await this.request.Post("api/game/start", json);
+            var result = await this.webRequest.Post("api/game/start", json);
             return JsonUtility.FromJson<StartResult>(result);
         }
 

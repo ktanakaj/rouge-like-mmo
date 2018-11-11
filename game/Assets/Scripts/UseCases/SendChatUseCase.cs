@@ -1,8 +1,8 @@
 ﻿// ================================================================================================
 // <summary>
-//      PC作成ユースケースソース</summary>
+//      Chat送信ユースケースソース</summary>
 //
-// <copyright file="CreatePcUseCase.cs">
+// <copyright file="SendChatUseCase.cs">
 //      Copyright (C) 2018 Koichi Tanaka. All rights reserved.</copyright>
 // <author>
 //      Koichi Tanaka</author>
@@ -13,15 +13,15 @@ namespace Honememo.RougeLikeMmo.UseCases
     using System;
     using System.Threading.Tasks;
     using UniRx;
-    using UnityEngine;
     using Zenject;
     using Honememo.RougeLikeMmo.Entities;
     using Honememo.RougeLikeMmo.Gateways;
 
     /// <summary>
-    /// PC作成ユースケースクラス。
+    /// Chat送信ユースケースクラス。
     /// </summary>
-    public class CreatePcUseCase : IObservable<PlayerCharacterEntity>
+    /// TODO: 戻り値は自分が送信したメッセージにする、Chat受け取りと共通化でもいいかも
+    public class SendChatUseCase : IObservable<Unit>
     {
         #region 内部変数
 
@@ -32,26 +32,26 @@ namespace Honememo.RougeLikeMmo.UseCases
         private Global global;
 
         /// <summary>
-        /// プレイヤーリポジトリ。
+        /// ゲームリポジトリ。
         /// </summary>
         [Inject]
-        private PlayerRepository playerRepository;
+        private GameRepository gameRepository;
 
         /// <summary>
         /// 結果通知用Subject。
         /// </summary>
-        private Subject<PlayerCharacterEntity> outputPort = new Subject<PlayerCharacterEntity>();
+        private Subject<Unit> outputPort = new Subject<Unit>();
 
         #endregion
 
         #region I/F実装メソッド
 
         /// <summary>
-        /// PCの作成を監視する。
+        /// Chat送信を監視する。
         /// </summary>
         /// <param name="observer">監視処理。</param>
         /// <returns>リソース解放用。</returns>
-        public IDisposable Subscribe(IObserver<PlayerCharacterEntity> observer)
+        public IDisposable Subscribe(IObserver<Unit> observer)
         {
             return this.outputPort.Subscribe(observer);
         }
@@ -61,16 +61,15 @@ namespace Honememo.RougeLikeMmo.UseCases
         #region 公開メソッド
 
         /// <summary>
-        /// PCを作成する。
+        /// Chatを送信する。
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="message">メッセージ。</param>
         /// <returns>処理状態。</returns>
-        public async Task Create(string name)
+        public async Task Send(string message)
         {
-            Debug.Assert(this.global.PlayerCharacterEntities != null);
-            var pc = await this.playerRepository.CreatePlayerCharacter(name);
-            this.global.PlayerCharacterEntities[pc.Id] = pc;
-            this.outputPort.OnNext(pc);
+            // TODO: 未実装
+            // = await this.gameRepository.
+            this.outputPort.OnNext(Unit.Default);
         }
 
         #endregion

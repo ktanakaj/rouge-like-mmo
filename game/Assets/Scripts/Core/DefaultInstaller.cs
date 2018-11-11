@@ -29,6 +29,7 @@ namespace Honememo.RougeLikeMmo.Core
         {
             Container.BindInterfacesAndSelfTo<ObservableSerialRunner>().AsSingle().NonLazy();
             Container.Bind<AppWebRequest>().AsSingle().NonLazy();
+            Container.Bind<AppWsRequest>().AsSingle().NonLazy();
             Container.Bind<LocalRepository>().AsSingle().NonLazy();
             Container.Bind<SystemRepository>().AsSingle().NonLazy();
             Container.Bind<PlayerRepository>().AsSingle().NonLazy();
@@ -39,6 +40,11 @@ namespace Honememo.RougeLikeMmo.Core
             Container.Bind<LoadHomeUseCase>().AsSingle().NonLazy();
             Container.Bind<CreatePcUseCase>().AsSingle().NonLazy();
             Container.Bind<StartGameUseCase>().AsSingle().NonLazy();
+            Container.Bind<LoadGameUseCase>().AsSingle().NonLazy();
+            Container.Bind<SendActionUseCase>().AsSingle().NonLazy();
+            Container.Bind<ReceiveActionUseCase>().AsSingle().NonLazy();
+            Container.Bind<SendChatUseCase>().AsSingle().NonLazy();
+            Container.Bind<ReceiveChatUseCase>().AsSingle().NonLazy();
         }
 
         #endregion
