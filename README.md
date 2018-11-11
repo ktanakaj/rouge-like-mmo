@@ -82,4 +82,4 @@ VMのDBを参照する場合は、MySQL Workbench等でMySQLの標準ポート�
 ## ライセンス
 [MIT](https://github.com/ktanakaj/rouge-like-mmo/blob/master/LICENSE)
 
-※ ただし `game/Assets/Plugins` 以下のライブラリについては、各ライブラリごとのライセンスが適用されます（zenject, UniRxはMITライセンス、DynamicJsonはMs-PL）。
+※ ただし `game/Assets/Plugins` 以下のライブラリについては、各ライブラリごとのライセンスが適用されます（[zenject](https://assetstore.unity.com/packages/tools/integration/zenject-dependency-injection-ioc-17758), [UniRx](https://assetstore.unity.com/packages/tools/integration/unirx-reactive-extensions-for-unity-17276), [websocket-sharp](https://github.com/sta/websocket-sharp)はMITライセンス、[DynamicJson](https://www.nuget.org/packages/DynamicJson/)はMs-PL）。
