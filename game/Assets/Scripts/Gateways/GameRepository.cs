@@ -59,12 +59,28 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>ゲーム情報。</returns>
         public async Task<StartResult> Start(int pcId, int dungeonId)
         {
-            var result = await this.webRequest.Post("api/game/start", new Dictionary<string, object>()
+            var json = await this.webRequest.Post("api/game/start", new Dictionary<string, object>()
             {
                 { "pcId", pcId },
                 { "dungeonId", dungeonId },
             });
-            return JsonUtility.FromJson<StartResult>(result);
+
+            var result = JsonUtility.FromJson<StartResult>(json);
+
+            // 接続先WebSocketの情報を詰める
+            // FIXME: どこか別の場所に整理する
+            this.wsRequest.Url = "ws://" + result.server + ":" + result.port + "/ws/";
+
+            return result;
+        }
+
+        /// <summary>
+        /// PCをゲーム内に出現させる。
+        /// </summary>
+        /// <returns>処理状態。</returns>
+        public async Task Activate()
+        {
+            await this.wsRequest.Call("activate");
         }
 
         #endregion
@@ -90,6 +106,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         public class StartResult
         {
             public string server;
+            public int port;
         }
 
         #endregion

@@ -34,6 +34,8 @@ class StartBody {
 class StartResult {
 	@ApiModelProperty({ description: 'サーバーアドレス' })
 	server: string;
+	@ApiModelProperty({ description: 'ポート番号' })
+	port: number;
 }
 
 /**
@@ -65,7 +67,10 @@ export class GameController {
 		const pc = await PlayerCharacter.findOrFailByIdAndPlayerId(body.pcId, user.id);
 		const dungeon = await Dungeon.findOrFail(body.dungeonId);
 		return {
-			server: 'FIXME',
+			// TODO: DBからフロアが存在するWebSocketサーバーのアドレスとポートを取得して返す
+			// ※ 暫定でlocalhost返す
+			server: 'localhost',
+			port: 80,
 		};
 	}
 }

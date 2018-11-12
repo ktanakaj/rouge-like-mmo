@@ -68,6 +68,7 @@ namespace Honememo.RougeLikeMmo.UseCases
         {
             // TODO: 未実装
             // this.global.FloorEntity = await this.gameRepository.
+            await this.gameRepository.Activate();
             this.outputPort.OnNext(Unit.Default);
         }
 

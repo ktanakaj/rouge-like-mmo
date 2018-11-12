@@ -223,9 +223,10 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <summary>
         /// API例外のフィルターを追加する。
         /// </summary>
+        /// <typeparam name="T">Observableの型。</typeparam>
         /// <param name="observable">フィルター対象のAPI呼び出し。</param>
         /// <returns>フィルターしたAPI呼び出し。</returns>
-        private IObservable<string> ExceptionFilter(IObservable<string> observable)
+        private IObservable<T> ExceptionFilter<T>(IObservable<T> observable)
         {
             return observable
                 .Catch((WWWErrorException ex) =>

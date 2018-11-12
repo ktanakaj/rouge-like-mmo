@@ -36,6 +36,7 @@ describe('GameController', () => {
 		it('成功', async () => {
 			const result = await controller.start({ pcId: testpc1.id, dungeonId: 1 }, testplayer);
 			assert.strictEqual(typeof result.server, 'string');
+			assert.strictEqual(result.port, 80);
 		});
 	});
 });

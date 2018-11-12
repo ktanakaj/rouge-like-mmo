@@ -49,11 +49,15 @@ namespace Honememo.RougeLikeMmo.UseCases
             var pc = this.global.PlayerCharacterEntities[pcId];
             var dungeon = this.global.DungeonEntities[dungeonId];
 
-            await this.gameRepository.Start(pcId, dungeonId);
+            var result = await this.gameRepository.Start(pcId, dungeonId);
 
             // プレイ中のゲームを保存
-            // TODO: 接続先のサーバーアドレスなども貰う
-            this.global.GameEntity = new GameEntity() { PlayerCharacter = pc, Dungeon = dungeon };
+            this.global.GameEntity = new GameEntity() {
+                PlayerCharacter = pc,
+                Dungeon = dungeon,
+                Address = result.server,
+                Port = result.port,
+            };
         }
 
         #endregion
