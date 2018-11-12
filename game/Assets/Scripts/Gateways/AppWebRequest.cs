@@ -14,6 +14,7 @@ namespace Honememo.RougeLikeMmo.Gateways
     using System.Collections.Generic;
     using System.Net;
     using System.Text.RegularExpressions;
+    using MiniJSON;
     using UniRx;
     using UnityEngine;
     using Zenject;
@@ -77,6 +78,17 @@ namespace Honememo.RougeLikeMmo.Gateways
         }
 
         /// <summary>
+        /// APIサーバーにGETリクエストを送信する。
+        /// </summary>
+        /// <typeparam name="T">戻り値の型（MiniJSONで変換可能な型のみ）。</typeparam>
+        /// <param name="api">APIパス。</param>
+        /// <returns>レスポンスJSON。</returns>
+        public IObservable<T> Get<T>(string api)
+        {
+            return this.Get(api).Select((s) => (T)Json.Deserialize(s));
+        }
+
+        /// <summary>
         /// APIサーバーにJSONボディでPOSTリクエストを送信する。
         /// </summary>
         /// <param name="api">APIパス。</param>
@@ -95,6 +107,29 @@ namespace Honememo.RougeLikeMmo.Gateways
                         "POST",
                         url,
                         json)));
+        }
+
+        /// <summary>
+        /// APIサーバーにJSONボディでPOSTリクエストを送信する。
+        /// </summary>
+        /// <param name="api">APIパス。</param>
+        /// <param name="json">送信するJSONオブジェクト。</param>
+        /// <returns>レスポンス文字列。</returns>
+        public IObservable<string> Post(string api, IDictionary<string, object> json)
+        {
+            return this.Post(api, json != null ? Json.Serialize(json) : "");
+        }
+
+        /// <summary>
+        /// APIサーバーにJSONボディでPOSTリクエストを送信する。
+        /// </summary>
+        /// <typeparam name="T">戻り値の型（MiniJSONで変換可能な型のみ）。</typeparam>
+        /// <param name="api">APIパス。</param>
+        /// <param name="json">送信するJSONオブジェクト。</param>
+        /// <returns>レスポンスJSON。</returns>
+        public IObservable<T> Post<T>(string api, IDictionary<string, object> json = null)
+        {
+            return this.Post(api, json).Select((s) => (T)Json.Deserialize(s));
         }
 
         #endregion

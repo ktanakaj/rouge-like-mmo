@@ -13,7 +13,7 @@ namespace Honememo.RougeLikeMmo.Gateways
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Codeplex.Data;
+    using MiniJSON;
     using UniRx;
     using UnityEngine;
     using Zenject;
@@ -43,10 +43,10 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>プレイヤー情報。</returns>
         public async Task<PlayerEntity> CreatePlayer(string token)
         {
-            dynamic body = new DynamicJson();
-            body.token = token;
-            string json = body.ToString();
-            var result = await this.request.Post("api/players", json);
+            var result = await this.request.Post("api/players", new Dictionary<string, object>()
+            {
+                { "token", token },
+            });
             return JsonUtility.FromJson<PlayerEntity>(result);
         }
 
@@ -58,11 +58,11 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>プレイヤー情報。</returns>
         public async Task<PlayerEntity> Login(int playerId, string token)
         {
-            dynamic body = new DynamicJson();
-            body.id = playerId;
-            body.token = token;
-            string json = body.ToString();
-            var result = await this.request.Post("api/players/login", json);
+            var result = await this.request.Post("api/players/login", new Dictionary<string, object>()
+            {
+                { "id", playerId },
+                { "token", token },
+            });
             return JsonUtility.FromJson<PlayerEntity>(result);
         }
 
@@ -72,9 +72,8 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>プレイヤーキャラクター情報。</returns>
         public async Task<IList<PlayerCharacterEntity>> FindPlayerCharacters()
         {
-            var result = await this.request.Get("api/pc");
-            var records = (object[])DynamicJson.Parse(result);
-            return records.Select((rec) => JsonUtility.FromJson<PlayerCharacterEntity>(rec.ToString())).ToList();
+            var records = await this.request.Get<IList<object>>("api/pc");
+            return records.Select((rec) => JsonUtility.FromJson<PlayerCharacterEntity>(Json.Serialize(rec))).ToList();
         }
 
         /// <summary>
@@ -84,10 +83,10 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>登録したプレイヤーキャラクター情報。</returns>
         public async Task<PlayerCharacterEntity> CreatePlayerCharacter(string name)
         {
-            dynamic body = new DynamicJson();
-            body.name = name;
-            string json = body.ToString();
-            var result = await this.request.Post("api/pc", json);
+            var result = await this.request.Post("api/pc", new Dictionary<string, object>()
+            {
+                { "name", name },
+            });
             return JsonUtility.FromJson<PlayerCharacterEntity>(result);
         }
 

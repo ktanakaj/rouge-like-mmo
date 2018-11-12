@@ -13,7 +13,7 @@ namespace Honememo.RougeLikeMmo.Gateways
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Codeplex.Data;
+    using MiniJSON;
     using UniRx;
     using UnityEngine;
     using Zenject;
@@ -52,8 +52,8 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>マスタ名一覧。</returns>
         public async Task<IList<string>> FindLatestMasters()
         {
-            var result = await this.request.Get("api/masters");
-            return ((object[])DynamicJson.Parse(result)).Cast<string>().ToList();
+            var records = await this.request.Get<IList<object>>("api/masters");
+            return records.Cast<string>().ToList();
         }
 
         /// <summary>
@@ -64,9 +64,8 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>マスタ一覧。</returns>
         public async Task<IList<T>> FindLatestMaster<T>(string name)
         {
-            var result = await this.request.Get("api/masters/" + name);
-            var records = (object[])DynamicJson.Parse(result);
-            return records.Select((rec) => JsonUtility.FromJson<T>(rec.ToString())).ToList();
+            var records = await this.request.Get<IList<object>>("api/masters/" + name);
+            return records.Select((rec) => JsonUtility.FromJson<T>(Json.Serialize(rec))).ToList();
         }
 
         #endregion

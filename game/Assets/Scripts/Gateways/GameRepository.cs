@@ -11,8 +11,8 @@
 namespace Honememo.RougeLikeMmo.Gateways
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Codeplex.Data;
     using UniRx;
     using UnityEngine;
     using Zenject;
@@ -59,11 +59,11 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>ゲーム情報。</returns>
         public async Task<StartResult> Start(int pcId, int dungeonId)
         {
-            dynamic body = new DynamicJson();
-            body.pcId = pcId;
-            body.dungeonId = dungeonId;
-            string json = body.ToString();
-            var result = await this.webRequest.Post("api/game/start", json);
+            var result = await this.webRequest.Post("api/game/start", new Dictionary<string, object>()
+            {
+                { "pcId", pcId },
+                { "dungeonId", dungeonId },
+            });
             return JsonUtility.FromJson<StartResult>(result);
         }
 
