@@ -36,54 +36,57 @@ async function bootstrap() {
 	// 全DB or 指定されたDBに対して sequelize-cli のマイグレーションを実行
 	// ※ 非同期で並列に流せば高速化できるが、ログが分かり辛くなるので保留
 	for (const dbkey of dbkeys) {
-		const conf = config['databases'][dbkey];
+		const dbconfig = config['databases'][dbkey];
 		const scriptsDir = __dirname + '/migrations/' + dbkey + '/';
 		if (!fs.existsSync(scriptsDir)) {
 			continue;
 		}
 
-		// sequelize-cli のコマンドを生成
-		let command = `${BIN} db:migrate`;
+		// シャーディングDBの場合は、各シャードに対して繰り返し実行
+		for (const conf of dbconfig['databases'] || [dbconfig]) {
+			// sequelize-cli のコマンドを生成
+			let command = `${BIN} db:migrate`;
 
-		if (undo) {
-			// undoオプションの場合は、undo用のコマンドにする
-			command += ':undo';
+			if (undo) {
+				// undoオプションの場合は、undo用のコマンドにする
+				command += ':undo';
 
-			// allまたはtoがある場合はallオプションも付ける
-			if (all || toscript) {
-				command += ':all';
+				// allまたはtoがある場合はallオプションも付ける
+				if (all || toscript) {
+					command += ':all';
+				}
 			}
+
+			// 接続情報やマイグレーションパスを動的に変えるため、引数で渡す
+			const url = makeConnectionUri(conf);
+			command = `${command} --url '${url}' --migrations-path ${scriptsDir}`;
+
+			if (toscript) {
+				command += ` --to ${toscript}`;
+			}
+
+			// コマンドを実行
+			let commandLog = command;
+			if (conf['password']) {
+				commandLog = commandLog.replace(conf['password'], '******');
+			}
+			logger.info(commandLog);
+			await new Promise((resolve, reject) => child_process.exec(command, { encoding: 'utf8' }, (error, stdout, stderr) => {
+				logger.info(stdout);
+				if (stderr) {
+					// DBをURLで指定するとoperatorsAliasesのwarningが消せないので、無理やり除去
+					stderr = stderr.replace(/^.*?sequelize deprecated String based operators are now deprecated.*$/m, '').trim();
+				}
+				if (stderr) {
+					logger.warn(stderr);
+				}
+				if (error) {
+					reject(error);
+				} else {
+					resolve();
+				}
+			}));
 		}
-
-		// 接続情報やマイグレーションパスを動的に変えるため、引数で渡す
-		const url = makeConnectionUri(conf);
-		command = `${command} --url '${url}' --migrations-path ${scriptsDir}`;
-
-		if (toscript) {
-			command += ` --to ${toscript}`;
-		}
-
-		// コマンドを実行
-		let commandLog = command;
-		if (conf['password']) {
-			commandLog = commandLog.replace(conf['password'], '******');
-		}
-		logger.info(commandLog);
-		await new Promise((resolve, reject) => child_process.exec(command, { encoding: 'utf8' }, (error, stdout, stderr) => {
-			logger.info(stdout);
-			if (stderr) {
-				// DBをURLで指定するとoperatorsAliasesのwarningが消せないので、無理やり除去
-				stderr = stderr.replace(/^.*?sequelize deprecated String based operators are now deprecated.*$/m, '').trim();
-			}
-			if (stderr) {
-				logger.warn(stderr);
-			}
-			if (error) {
-				reject(error);
-			} else {
-				resolve();
-			}
-		}));
 	}
 
 	process.exit(0);

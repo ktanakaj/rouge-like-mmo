@@ -30,7 +30,7 @@ describe('PlayersController', () => {
 			assert.notEqual(session['user']['id'], 105);
 			assert(player.lastLogin.getTime() > oldDate.getTime());
 
-			const dbplayer = await Player.scope('login').findById(session['user']['id']);
+			const dbplayer = await Player.findByIdForAuth(session['user']['id']);
 			assert.notEqual(dbplayer.token, 'UNITTEST_NEW_TOKEN');
 			assert(dbplayer.compareToken('UNITTEST_NEW_TOKEN'));
 		});

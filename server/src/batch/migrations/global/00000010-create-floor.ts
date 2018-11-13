@@ -1,6 +1,6 @@
 /**
  * DBマイグレーションスクリプト。
- * @module ./batch/migrations/global/00000020-create-floor
+ * @module ./batch/migrations/global/00000010-create-floor
  */
 import { QueryInterface, SequelizeStatic } from 'sequelize';
 

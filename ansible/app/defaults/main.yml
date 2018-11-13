@@ -7,8 +7,10 @@ app_log_dir: "/var/log/local/rouge-like-mmo"
 app_db:
   - rougelikemmo_master_db
   - rougelikemmo_global_db
+  - rougelikemmo_shardable_db1
+  - rougelikemmo_shardable_db2
   - rougelikemmo_admin_db
 app_db_users:
   - user: rougelikemmo_usr
     password: "rougeL!kemmo01"
-    privilege: "rougelikemmo_master_db.*:ALL/rougelikemmo_global_db.*:ALL/rougelikemmo_admin_db.*:ALL" # FIXME: この書き方だと二度目以降のansibleでエラーになる模様
+    privilege: "rougelikemmo_master_db.*:ALL/rougelikemmo_global_db.*:ALL/rougelikemmo_shardable_db1.*:ALL/rougelikemmo_shardable_db2.*:ALL/rougelikemmo_admin_db.*:ALL" # FIXME: この書き方だと二度目以降のansibleでエラーになる模様

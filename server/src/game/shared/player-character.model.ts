@@ -4,9 +4,9 @@
  */
 import { Column, DataType, AllowNull, Default, IsDate, ForeignKey, IFindOptions, DefaultScope } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
-import { Table } from '../../core/models/decorators';
+import { Table, DistributionKey } from '../../core/models/decorators';
 import { NotFoundError } from '../../core/errors';
-import DataModel from '../../core/models/data-model';
+import ShardableDataModel from '../../core/models/shardable-data-model';
 import Player from './player.model';
 
 /**
@@ -19,14 +19,15 @@ import Player from './player.model';
 	],
 })
 @Table({
-	db: 'global',
+	db: 'shardable',
 	tableName: 'playerCharacters',
 	comment: 'プレイヤーキャラクター',
 	timestamps: true,
 })
-export default class PlayerCharacter extends DataModel<PlayerCharacter> {
+export default class PlayerCharacter extends ShardableDataModel<PlayerCharacter> {
 	// TODO: 最大HPや攻撃力をどう算出する？レベルから？それとも個別に持たせる？
 	/** プレイヤーID */
+	@DistributionKey
 	@ApiModelProperty({ description: 'プレイヤーID' })
 	@AllowNull(false)
 	@ForeignKey(() => Player)
@@ -109,9 +110,8 @@ export default class PlayerCharacter extends DataModel<PlayerCharacter> {
 	 * @throws NotFoundError レコードが存在しない場合。
 	 */
 	public static async findOrFailByIdAndPlayerId(id: number, playerId: number, options?: IFindOptions<PlayerCharacter>): Promise<PlayerCharacter> {
-		// 主キーだけで取れるが、プレイヤーIDの一致もチェックする
-		const instance = await this.findOrFail(id, options);
-		if (instance.playerId !== playerId) {
+		const instance = await this.shard(playerId).findById(id, options);
+		if (!instance || instance.playerId !== playerId) {
 			throw new NotFoundError(this.name, id);
 		}
 		return instance;

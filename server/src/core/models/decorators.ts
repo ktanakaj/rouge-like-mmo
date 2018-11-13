@@ -10,6 +10,8 @@ import { getCacheStore } from './cache-store';
 
 /** DB情報用のキー */
 export const DB_KEY = Symbol('db');
+/** シャーディングキー情報のキー */
+export const DISTRIBUTION_KEY = Symbol('distributionKey');
 
 /**
  * 拡張Tableデコレーター。
@@ -22,6 +24,16 @@ export function Table(options: IDefineOptions & { db: string }): Function {
 		Reflect.defineMetadata(DB_KEY, options.db, target);
 		(SequelizeTable(options) as any)(target);
 	};
+}
+
+/**
+ * シャーディングキー指定用デコレーター。
+ * Modelクラスで、シャーディングキーにしたい列のプロパティに設定する。
+ * @param target テーブル定義。
+ * @param propertyName プロパティ名。
+ */
+export function DistributionKey(target: any, propertyName: string): void {
+	Reflect.defineMetadata(DISTRIBUTION_KEY, propertyName, target.constructor);
 }
 
 /**

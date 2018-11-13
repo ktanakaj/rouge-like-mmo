@@ -4,8 +4,8 @@
  */
 import { Column, DataType, AllowNull, Default, ForeignKey, DefaultScope } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
-import { Table } from '../../core/models/decorators';
-import DataModel from '../../core/models/data-model';
+import { Table, DistributionKey } from '../../core/models/decorators';
+import ShardableDataModel from '../../core/models/shardable-data-model';
 import Player from './player.model';
 import Item from './item.model';
 
@@ -21,13 +21,14 @@ import Item from './item.model';
 	],
 })
 @Table({
-	db: 'global',
+	db: 'shardable',
 	tableName: 'playerItems',
 	comment: 'プレイヤー所有アイテム情報',
 	timestamps: true,
 })
-export default class PlayerItem extends DataModel<PlayerItem> {
+export default class PlayerItem extends ShardableDataModel<PlayerItem> {
 	/** プレイヤーID */
+	@DistributionKey
 	@ApiModelProperty({ description: 'プレイヤーID' })
 	@AllowNull(false)
 	@ForeignKey(() => Player)

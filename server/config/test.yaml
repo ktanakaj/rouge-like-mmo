@@ -12,6 +12,14 @@
       dialect: "sqlite"
       storage: '/tmp/test_global.sqlite'
       benchmark: true
+    shardable:
+      # ※ shardableだけSequelizeの設定を拡張しているので注意
+      benchmark: true
+      databases: # ※ DBの順番や数を変えるとシャードキーの計算が変わります
+        - dialect: "sqlite"
+          storage: '/tmp/test_shardable1.sqlite'
+        - dialect: "sqlite"
+          storage: '/tmp/test_shardable2.sqlite'
   redis:
     # ※ sessionだけ使用法が別でフォーマットが異なるので注意
     session:

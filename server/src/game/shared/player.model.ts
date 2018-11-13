@@ -2,13 +2,15 @@
  * プレイヤーモデルモジュール。
  * @module ./game/shared/player.model
  */
-import { Column, DataType, AllowNull, Default, IsDate, DefaultScope, BeforeCreate, BeforeUpdate } from 'sequelize-typescript';
+import { Column, DataType, AllowNull, Default, IsDate, DefaultScope, BeforeCreate, BeforeUpdate, ICreateOptions } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
 import * as crypto from 'crypto';
 import * as config from 'config';
 import * as Random from 'random-js';
+import * as Bluebird from 'bluebird';
 import { Table } from '../../core/models/decorators';
-import DataModel from '../../core/models/data-model';
+import ShardableDataModel from '../../core/models/shardable-data-model';
+import Sequence from '../../shared/sequence.model';
 const random = new Random();
 
 /**
@@ -23,7 +25,7 @@ const random = new Random();
 	],
 })
 @Table({
-	db: 'global',
+	db: 'shardable',
 	tableName: 'players',
 	comment: 'プレイヤー情報',
 	timestamps: true,
@@ -31,7 +33,7 @@ const random = new Random();
 		login: {}, // passwordを除外しない
 	},
 })
-export default class Player extends DataModel<Player> {
+export default class Player extends ShardableDataModel<Player> {
 	/** 端末トークン（パスワードに準じた扱いをする） */
 	@ApiModelProperty({ description: '端末トークン' })
 	@AllowNull(false)
@@ -107,5 +109,34 @@ export default class Player extends DataModel<Player> {
 		hashGenerator.update(salt);
 		hashGenerator.update(password);
 		return salt + ';' + hashGenerator.digest('hex');
+	}
+
+	/**
+	 * プレイヤーIDから認証用にプレイヤーを取得する。
+	 * @param id プレイヤーID。
+	 * @returns プレイヤー。
+	 */
+	public static async findByIdForAuth(id: number): Promise<Player> {
+		return this.shard(id).scope('login').findById(id);
+	}
+
+	/**
+	 * モデルのインスタンスを生成してINSERTする。
+	 * @param values インスタンスに指定するパラメータ。
+	 * @param options 作成オプション。※トランザクション等シャード単位でしか機能しません
+	 * @returns 生成したインスタンス。
+	 */
+	// FIXME: 戻り値はPlayer型だが、何故か親クラスとの型不一致となるので一時的にanyに変更
+	public static create<A>(values?: A, options?: ICreateOptions): Bluebird<any> {
+		// プレイヤーIDを非シャードのシーケンスから採番して、その値で生成する
+		values = values || {} as any;
+		let p = Bluebird.resolve(values['id']);
+		if (!values['id']) {
+			p = p.then(() => Sequence.incrementNo('playerId'));
+		}
+		return p.then((id) => {
+			values['id'] = id;
+			return super.create.apply(this, [values, options]);
+		});
 	}
 }

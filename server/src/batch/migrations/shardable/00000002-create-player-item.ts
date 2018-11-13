@@ -1,6 +1,6 @@
 /**
  * DBマイグレーションスクリプト。
- * @module ./batch/migrations/global/00000002-create-player-item
+ * @module ./batch/migrations/shardable/00000002-create-player-item
  */
 import { QueryInterface, SequelizeStatic } from 'sequelize';
 

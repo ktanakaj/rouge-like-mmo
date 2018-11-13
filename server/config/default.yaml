@@ -29,6 +29,22 @@
       password: "rougeL!kemmo01"
       database: "rougelikemmo_global_db"
       benchmark: true
+    shardable:
+      # ※ shardableだけSequelizeの設定を拡張しているので注意
+      benchmark: true
+      databases: # ※ DBの順番や数を変えるとシャードキーの計算が変わります
+        - dialect: "mysql"
+          host: "localhost"
+          port: 3306
+          username: "rougelikemmo_usr"
+          password: "rougeL!kemmo01"
+          database: "rougelikemmo_shardable_db1"
+        - dialect: "mysql"
+          host: "localhost"
+          port: 3306
+          username: "rougelikemmo_usr"
+          password: "rougeL!kemmo01"
+          database: "rougelikemmo_shardable_db2"
   redis:
     # ※ sessionだけ使用法が別でフォーマットが異なるので注意
     session:

@@ -1,6 +1,6 @@
 /**
  * DBマイグレーションスクリプト。
- * @module ./batch/migrations/global/00000001-create-player
+ * @module ./batch/migrations/shardable/00000001-create-player
  */
 import { QueryInterface, SequelizeStatic } from 'sequelize';
 
@@ -11,7 +11,7 @@ module.exports = {
 				type: Sequelize.INTEGER,
 				allowNull: false,
 				primaryKey: true,
-				autoIncrement: true,
+				autoIncrement: false,
 				comment: 'プレイヤーID',
 			},
 			token: {

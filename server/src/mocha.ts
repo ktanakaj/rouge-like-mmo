@@ -13,6 +13,7 @@ import { databaseProviders, IDatabaseProvider } from './shared/database.provider
 import MasterVersion from './shared/master-version.model';
 import fileUtils from './core/utils/file-utils';
 import { getClient } from './core/models/redis-helper';
+import { ShardableSequelize } from './core/models/shardable-sequelize';
 import invokeContext from './shared/invoke-context';
 
 // const execAsync = util.promisify(child_process.exec);
@@ -65,7 +66,26 @@ async function dbinit(databaseProvider: IDatabaseProvider): Promise<void> {
 	// await execAsync(`NODE_ENV=${process.env.NODE_ENV} npm run db-migrate -- --db=${dbname} --undo --all`, { encoding: 'utf8' });
 	// await execAsync(`NODE_ENV=${process.env.NODE_ENV} npm run db-migrate -- --db=${dbname}`, { encoding: 'utf8' });
 	await sequelize.drop();
-	await dbMigrate(dbname, sequelize);
+	if (sequelize instanceof ShardableSequelize) {
+		await shardableDbMigrate(dbname, sequelize);
+	} else {
+		await dbMigrate(dbname, sequelize);
+	}
+}
+
+/**
+ * シャーディングDBをユニットテスト用にマイグレーションする。
+ * @param dbname DB名。
+ * @param sequelize Sequelizeコネクション。
+ * @returns 処理状態。
+ */
+function shardableDbMigrate(dbname: string, sequelize: ShardableSequelize): Promise<void> {
+	// ※ 時間がかかるので非同期で並列に流す
+	const promises = [];
+	for (const s of sequelize.sequelizes) {
+		promises.push(dbMigrate(dbname, s));
+	}
+	return Promise.all(promises) as Promise<any>;
 }
 
 /**

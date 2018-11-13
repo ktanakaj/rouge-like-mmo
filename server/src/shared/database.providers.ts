@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import { Sequelize, Model } from 'sequelize-typescript';
 import fileUtils from '../core/utils/file-utils';
 import { DB_KEY } from '../core/models/decorators';
+import { ShardableSequelize } from '../core/models/shardable-sequelize';
 
 /** モデル一覧 */
 export const MODELS: { master: typeof Model[] } = { master: [] };
@@ -31,7 +32,7 @@ fileUtils.directoryWalkRecursiveSync(__dirname + '/../', (p) => {
 	}
 });
 
-export interface IDatabaseProvider { provide: string; useFactory: () => Promise<Sequelize>; }
+export interface IDatabaseProvider { provide: string; useFactory: () => Promise<Sequelize | ShardableSequelize>; }
 
 /** 各DB接続用のプロバイダー */
 export const databaseProviders: IDatabaseProvider[] = [];
@@ -48,15 +49,21 @@ for (const dbname of Object.keys(MODELS)) {
 		throw new Error(`db='${dbname}' is not found`);
 	}
 
+	// コンフィグにシャーディング用の設定がある場合、シャーディング用のクラスで初期化する
 	const options = Object.assign({
 		logging: debugLog,
 		operatorsAliases: false,
 	}, config['databases'][dbname]);
 
+	let dbclazz: any = Sequelize;
+	if (options['databases']) {
+		dbclazz = ShardableSequelize;
+	}
+
 	databaseProviders.push({
 		provide: _.upperFirst(_.camelCase(dbname)) + 'SequelizeToken',
 		useFactory: async () => {
-			const sequelize = new Sequelize(options);
+			const sequelize = new dbclazz(options);
 			sequelize.addModels(MODELS[dbname]);
 			return sequelize;
 		},
