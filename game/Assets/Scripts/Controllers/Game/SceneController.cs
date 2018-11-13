@@ -25,7 +25,7 @@ namespace Honememo.RougeLikeMmo.Controllers.Game
         /// ゲーム情報読み込みユースケース。
         /// </summary>
         [Inject]
-        private LoadGameUseCase useCase;
+        private ConnectGameUseCase useCase;
 
         #endregion
 
@@ -36,7 +36,7 @@ namespace Honememo.RougeLikeMmo.Controllers.Game
         /// </summary>
         public async void Start()
         {
-            await this.useCase.Load();
+            await this.useCase.Connect();
         }
 
         #endregion

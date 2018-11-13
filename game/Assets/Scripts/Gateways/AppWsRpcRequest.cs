@@ -2,7 +2,7 @@
 // <summary>
 //      WebSocket/JSON-RPC2 APIリクエスト用クライアントソース</summary>
 //
-// <copyright file="AppWsRequest.cs">
+// <copyright file="AppWsRpcRequest.cs">
 //      Copyright (C) 2018 Koichi Tanaka. All rights reserved.</copyright>
 // <author>
 //      Koichi Tanaka</author>
@@ -13,18 +13,19 @@ namespace Honememo.RougeLikeMmo.Gateways
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
+    using MiniJSON;
     using UniRx;
     using Zenject;
 
     /// <summary>
     /// WebSocket/JSON-RPC2 APIリクエスト用クライアントクラス。
     /// </summary>
-    /// <remarks>WebSocket APIは認証必須なので、その辺りも含めて提供する。</remarks>
-    public class AppWsRequest
+    /// <remarks>
+    /// DIをする都合上、接続のたびにConnectionを作る形だと他のクラスから使い難いため、
+    /// Connectionをラップするクライアントとして定義。
+    /// </remarks>
+    public class AppWsRpcRequest
     {
-        // TODO: ApiWebRequestと処理の粒度が異なる（あちらは認証が手動だったり）のが気になる。できれば統一したい。あちらを合わせる？
-
         #region 内部変数
 
         /// <summary>
@@ -38,28 +39,65 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// </summary>
         private WebSocketRpcConnection conn;
 
-        #endregion
-
-        #region 公開変数
-
         /// <summary>
-        /// APIサーバーのルート。
+        /// WebSocket接続先URL。
         /// </summary>
-        public string Url = "/ws/";
+        private string url;
 
         /// <summary>
         /// プレイヤーID。
         /// </summary>
-        public int PlayerId;
+        private int playerId;
 
         /// <summary>
         /// 端末トークン。
         /// </summary>
-        public string Token;
+        private string token;
 
         #endregion
 
         #region 公開メソッド
+
+        /// <summary>
+        /// WebSocket接続を開始する。
+        /// </summary>
+        /// <param name="url">接続先URL。</param>
+        /// <param name="playerId">プレイヤーID。</param>
+        /// <param name="token">端末トークン。</param>
+        /// <returns>処理状態。</returns>
+        public IObservable<Unit> Connect(string url, int playerId, string token)
+        {
+            return Observable.Defer(() =>
+            {
+                // 既に接続済みの場合は一旦終了する
+                this.Close();
+
+                // 再接続用に接続情報を保存
+                this.url = url;
+                this.playerId = playerId;
+                this.token = token;
+
+                // 接続を作成する
+                return this.CreateConnection()
+                    .Select((conn) => {
+                        this.conn = conn;
+                        return Unit.Default;
+                    });
+            });
+        }
+
+        /// <summary>
+        /// WebSocket接続を終了する。
+        /// </summary>
+        public void Close()
+        {
+            var conn = this.conn;
+            if (conn != null)
+            {
+                this.conn = null;
+                conn.Close();
+            }
+        }
 
         /// <summary>
         /// JSON-RPC2リクエストを送信する。
@@ -82,9 +120,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>メソッドの戻り値。</returns>
         public IObservable<string> Call(string method, string param)
         {
-            return this.taskRunner.Enqueue<string>(
-                this.ExceptionFilter(
-                    this.GetConnection().SelectMany((conn) => conn.Call(method, param))));
+            return this.Call(method, (IDictionary<string, object>)Json.Deserialize(param));
         }
 
         /// <summary>
@@ -96,9 +132,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>メソッドの戻り値。</returns>
         public IObservable<T> Call<T>(string method, IDictionary<string, object> param = null)
         {
-            return this.taskRunner.Enqueue<T>(
-                this.ExceptionFilter(
-                    this.GetConnection().SelectMany((conn) => conn.Call<T>(method, param))));
+            return this.Call(method, param).Select((s) => (T)Json.Deserialize(s));
         }
 
         /// <summary>
@@ -122,9 +156,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>処理状態。</returns>
         public IObservable<Unit> Notice(string method, string param)
         {
-            return this.taskRunner.Enqueue<Unit>(
-                this.ExceptionFilter(
-                    this.GetConnection().SelectMany((conn) => conn.Notice(method, param))));
+            return this.Notice(method, (IDictionary<string, object>)Json.Deserialize(param));
         }
 
         #endregion
@@ -132,32 +164,43 @@ namespace Honememo.RougeLikeMmo.Gateways
         #region 内部メソッド
 
         /// <summary>
+        /// WebSocket接続を生成する。
+        /// </summary>
+        /// <returns>コネクション。</returns>
+        private IObservable<WebSocketRpcConnection> CreateConnection()
+        {
+            return Observable.Defer(() =>
+            {
+                try
+                {
+                    // 接続を確立し、各種イベントを登録する
+                    var conn = new WebSocketRpcConnection(this.url);
+                    conn.Connect();
+                    // TODO: イベントの登録
+                    // TODO: コネクションエラー時の再接続もイベントでやる
+
+                    // 自動的にログインAPIも呼ぶ
+                    return conn.Call("login", new Dictionary<string, object>() {
+                        { "id", this.playerId },
+                        { "token", this.token },
+                    }).Select(_ => conn);
+                }
+                catch (Exception e)
+                {
+                    return Observable.Throw<WebSocketRpcConnection>(e);
+                }
+            });
+        }
+
+        /// <summary>
         /// WebSocket接続を取得する。
         /// </summary>
         /// <returns>コネクション。</returns>
-        /// <remarks>未接続の場合は接続する。</remarks>
         private IObservable<WebSocketRpcConnection> GetConnection()
         {
-            return Observable.Defer<WebSocketRpcConnection>(() => 
-            {
-                var conn = this.conn;
-                if (conn != null && conn.IsConnected())
-                {
-                    return Observable.Return(conn);
-                }
-
-                var subject = new Subject<WebSocketRpcConnection>();
-                conn = new WebSocketRpcConnection(this.Url);
-                conn.Connect();
-                conn.Call("login", new Dictionary<string, object>() {
-                    { "id", this.PlayerId },
-                    { "token", this.Token },
-                }).Subscribe(_ => {
-                    this.conn = conn;
-                    subject.OnNext(conn);
-                }, subject.OnError, subject.OnCompleted);
-                return subject;
-            });
+            // this.connから直接Subscribeを伸ばすと、再接続時に古いインスタンスが
+            // 参照される気がしたので、非同期で取得する処理を用意。
+            return Observable.Defer(() => Observable.Return(this.conn));
         }
 
         /// <summary>
@@ -167,15 +210,15 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>フィルターしたAPI呼び出し。</returns>
         private IObservable<T> ExceptionFilter<T>(IObservable<T> observable)
         {
-            // TODO: HTTPエラーみたいに決まったものがないので、アプリ独自のエラーコードを見て判断する
             return observable
-                .Catch((WWWErrorException ex) =>
+                .Catch((WebSocketRpcConnection.JsonRpc2Exception ex) =>
                 {
+                    // TODO: HTTPエラーみたいに汎用的に判断ができないので、アプリ独自のエラーコードを見て判断する
                     // サーバーエラーのエラーコードの場合、リトライ可として例外を投げる
-                    if (ex.StatusCode == HttpStatusCode.InternalServerError || ex.StatusCode == HttpStatusCode.ServiceUnavailable)
-                    {
-                        throw new ObservableSerialRunner.RetryableException(ex);
-                    }
+                    // if (ex.Code == -1)
+                    // {
+                    //     throw new ObservableSerialRunner.RetryableException(ex);
+                    // }
 
                     throw ex;
                 });

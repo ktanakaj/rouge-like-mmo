@@ -22,6 +22,7 @@ namespace Honememo.RougeLikeMmo.Gateways
     /// <summary>
     /// WebSocket/JSON-RPC2コネクションクラス。
     /// </summary>
+    /// TODO: 全体的にソース整理する
     public class WebSocketRpcConnection : IDisposable
     {
         #region 定数
@@ -94,11 +95,10 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// </summary>
         public void Connect()
         {
-            if (this.ws != null)
-            {
-                this.Close();
-            }
+            // 既に接続済みの場合は一旦終了する
+            this.Close();
 
+            // WebSocket接続を確立し、各種イベントを登録する
             var ws = new WebSocket(this.Url);
 
             ws.OnError += (sender, e) =>

@@ -34,7 +34,7 @@ namespace Honememo.RougeLikeMmo.Presenters.Game
         /// ゲーム情報読み込みユースケース。
         /// </summary>
         [Inject]
-        private LoadGameUseCase useCase;
+        private ConnectGameUseCase useCase;
 
         #endregion
 

@@ -34,7 +34,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// WebSocket/JSON-RPC2 APIクライアント。
         /// </summary>
         [Inject]
-        private AppWsRequest wsRequest;
+        private AppWsRpcRequest wsRequest;
 
         #endregion
 
@@ -65,13 +65,20 @@ namespace Honememo.RougeLikeMmo.Gateways
                 { "dungeonId", dungeonId },
             });
 
-            var result = JsonUtility.FromJson<StartResult>(json);
+            return JsonUtility.FromJson<StartResult>(json);
+        }
 
-            // 接続先WebSocketの情報を詰める
-            // FIXME: どこか別の場所に整理する
-            this.wsRequest.Url = "ws://" + result.server + ":" + result.port + "/ws/";
-
-            return result;
+        /// <summary>
+        /// WebSocketサーバーに接続する。
+        /// </summary>
+        /// <param name="playerId">プレイヤーID。</param>
+        /// <param name="token">端末トークン。</param>
+        /// <param name="address">サーバーアドレス。</param>
+        /// <param name="port">サーバーポート。</param>
+        /// <returns>処理状態。</returns>
+        public async Task Connect(int playerId, string token, string address, int port)
+        {
+            await this.wsRequest.Connect("ws://" + address + ":" + port + "/ws/", playerId, token);
         }
 
         /// <summary>
@@ -105,6 +112,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         [Serializable]
         public class StartResult
         {
+            // FIXME: URLを返すようにする（自由度が高くなるので）
             public string server;
             public int port;
         }

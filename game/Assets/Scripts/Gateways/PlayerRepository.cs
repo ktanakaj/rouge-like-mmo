@@ -30,13 +30,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// HTTP APIクライアント。
         /// </summary>
         [Inject]
-        private AppWebRequest webRequest;
-
-        /// <summary>
-        /// WebSocket/JSON-RPC2 APIクライアント。
-        /// </summary>
-        [Inject]
-        private AppWsRequest wsRequest;
+        private AppWebRequest request;
 
         #endregion
 
@@ -49,19 +43,12 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>プレイヤー情報。</returns>
         public async Task<PlayerEntity> CreatePlayer(string token)
         {
-            var result = await this.webRequest.Post("api/players", new Dictionary<string, object>()
+            var result = await this.request.Post("api/players", new Dictionary<string, object>()
             {
                 { "token", token },
             });
 
-            var player = JsonUtility.FromJson<PlayerEntity>(result);
-
-            // WebSocket APIのクライアントにID情報を詰める
-            // TODO: ここでやるのも微妙な気がするので要検討
-            this.wsRequest.PlayerId = player.Id;
-            this.wsRequest.Token = token;
-
-            return player;
+            return JsonUtility.FromJson<PlayerEntity>(result);
         }
 
         /// <summary>
@@ -72,18 +59,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>プレイヤー情報。</returns>
         public async Task<PlayerEntity> Login(int playerId, string token)
         {
-            var result = await this.webRequest.Post("api/players/login", new Dictionary<string, object>()
-            {
-                { "id", playerId },
-                { "token", token },
-            });
-
-            // WebSocket APIのクライアントにID情報を詰める
-            // TODO: ここでやるのも微妙な気がするので要検討
-            this.wsRequest.PlayerId = playerId;
-            this.wsRequest.Token = token;
-
-            return JsonUtility.FromJson<PlayerEntity>(result);
+            return await this.request.Login(playerId, token);
         }
 
         /// <summary>
@@ -92,7 +68,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>プレイヤーキャラクター情報。</returns>
         public async Task<IList<PlayerCharacterEntity>> FindPlayerCharacters()
         {
-            var records = await this.webRequest.Get<IList<object>>("api/pc");
+            var records = await this.request.Get<IList<object>>("api/pc");
             return records.Select((rec) => JsonUtility.FromJson<PlayerCharacterEntity>(Json.Serialize(rec))).ToList();
         }
 
@@ -103,7 +79,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>登録したプレイヤーキャラクター情報。</returns>
         public async Task<PlayerCharacterEntity> CreatePlayerCharacter(string name)
         {
-            var result = await this.webRequest.Post("api/pc", new Dictionary<string, object>()
+            var result = await this.request.Post("api/pc", new Dictionary<string, object>()
             {
                 { "name", name },
             });

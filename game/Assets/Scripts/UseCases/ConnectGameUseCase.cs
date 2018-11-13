@@ -1,8 +1,8 @@
 ﻿// ================================================================================================
 // <summary>
-//      ゲーム情報読み込みユースケースソース</summary>
+//      ゲーム接続ユースケースソース</summary>
 //
-// <copyright file="LoadGameUseCase.cs">
+// <copyright file="ConnectGameUseCase.cs">
 //      Copyright (C) 2018 Koichi Tanaka. All rights reserved.</copyright>
 // <author>
 //      Koichi Tanaka</author>
@@ -18,10 +18,10 @@ namespace Honememo.RougeLikeMmo.UseCases
     using Honememo.RougeLikeMmo.Gateways;
 
     /// <summary>
-    /// ゲーム情報読み込みユースケースクラス。
+    /// ゲーム接続ユースケースクラス。
     /// </summary>
-    /// <remarks>現在居るフロアの情報を読み込む。</remarks>
-    public class LoadGameUseCase : IObservable<Unit>
+    /// <remarks>現在居るフロアのサーバーにコネクション確立、フロア情報を読み込む。</remarks>
+    public class ConnectGameUseCase : IObservable<Unit>
     {
         #region 内部変数
 
@@ -47,7 +47,7 @@ namespace Honememo.RougeLikeMmo.UseCases
         #region I/F実装メソッド
 
         /// <summary>
-        /// ゲーム情報の読み込みを監視する。
+        /// 接続成功、フロア情報の読み込みを監視する。
         /// </summary>
         /// <param name="observer">監視処理。</param>
         /// <returns>リソース解放用。</returns>
@@ -61,12 +61,18 @@ namespace Honememo.RougeLikeMmo.UseCases
         #region 公開メソッド
 
         /// <summary>
-        /// ゲーム情報読み込む。
+        /// サーバーに接続して、フロア情報を読み込む。
         /// </summary>
         /// <returns>処理状態。</returns>
-        public async Task Load()
+        public async Task Connect()
         {
-            // TODO: 未実装
+            await this.gameRepository.Connect(
+                this.global.AuthEntity.Id,
+                this.global.AuthEntity.Token,
+                this.global.GameEntity.Address,
+                this.global.GameEntity.Port);
+
+            // TODO: フロア情報読み込みは未実装
             // this.global.FloorEntity = await this.gameRepository.
             await this.gameRepository.Activate();
             this.outputPort.OnNext(Unit.Default);
