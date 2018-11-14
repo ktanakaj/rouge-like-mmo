@@ -9,7 +9,7 @@ import * as config from 'config';
 import * as Random from 'random-js';
 import * as Bluebird from 'bluebird';
 import { Table } from '../../core/models/decorators';
-import ShardableDataModel from '../../core/models/shardable-data-model';
+import ShardableModel from '../../core/models/shardable-model';
 import Sequence from '../../shared/sequence.model';
 const random = new Random();
 
@@ -33,7 +33,7 @@ const random = new Random();
 		login: {}, // passwordを除外しない
 	},
 })
-export default class Player extends ShardableDataModel<Player> {
+export default class Player extends ShardableModel<Player> {
 	/** 端末トークン（パスワードに準じた扱いをする） */
 	@ApiModelProperty({ description: '端末トークン' })
 	@AllowNull(false)

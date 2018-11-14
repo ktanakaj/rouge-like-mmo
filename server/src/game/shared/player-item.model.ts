@@ -5,14 +5,17 @@
 import { Column, DataType, AllowNull, Default, ForeignKey, DefaultScope } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Table, DistributionKey } from '../../core/models/decorators';
-import ShardableDataModel from '../../core/models/shardable-data-model';
+import ShardableModel from '../../core/models/shardable-model';
 import Player from './player.model';
 import Item from './item.model';
 
 /**
  * プレイヤー所有アイテムモデルクラス。
  * プレイヤーが所持するアイテムを管理する。
+ *
  * ※ キャラクターが持ち帰ったアイテム。
+ * ※ モデル上の主キーはidですが、playerIdによるシャーディングテーブルのため、
+ *    idでは全シャードで一意になりません。必ずplayerIdも含めて処理してください。
  */
 @DefaultScope({
 	order: [
@@ -26,7 +29,7 @@ import Item from './item.model';
 	comment: 'プレイヤー所有アイテム情報',
 	timestamps: true,
 })
-export default class PlayerItem extends ShardableDataModel<PlayerItem> {
+export default class PlayerItem extends ShardableModel<PlayerItem> {
 	/** プレイヤーID */
 	@DistributionKey
 	@ApiModelProperty({ description: 'プレイヤーID' })

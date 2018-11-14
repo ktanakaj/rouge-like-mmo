@@ -81,7 +81,7 @@ namespace Honememo.RougeLikeMmo.Presenters.Home
         private void AddOption(Dropdown dropdown, PlayerCharacterEntity pc, bool select = false)
         {
             // TODO: 設定値のフォーマットは仮、将来的にはそもそもDropbox止めるかも
-            dropdown.options.Add(new Dropdown.OptionData("#" + pc.Id + " " + pc.Name));
+            dropdown.options.Add(new Dropdown.OptionData("#" + pc.PcId + " " + pc.Name));
             if (select)
             {
                 dropdown.value = dropdown.options.Count - 1;

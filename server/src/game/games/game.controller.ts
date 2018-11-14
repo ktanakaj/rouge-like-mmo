@@ -64,7 +64,7 @@ export class GameController {
 	async start(@Body() body: StartBody, @User() user): Promise<StartResult> {
 		// TODO: ダンジョンの1階を探索して、必要に応じて新規作成
 		// TODO: プレイヤーをフロアに配置して、接続情報を返す
-		const pc = await PlayerCharacter.findOrFailByIdAndPlayerId(body.pcId, user.id);
+		const pc = await PlayerCharacter.findOrFail(user.id, body.pcId);
 		const dungeon = await Dungeon.findOrFail(body.dungeonId);
 		return {
 			// TODO: DBからフロアが存在するWebSocketサーバーのアドレスとポートを取得して返す

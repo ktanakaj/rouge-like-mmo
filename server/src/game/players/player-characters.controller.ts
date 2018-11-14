@@ -55,7 +55,7 @@ export class PlayerCharactersController {
 	@ApiNotFoundResponse({ description: 'データ無し', type: ErrorResult })
 	@Put('/:id(\\d+)')
 	async update(@Param() param: IdParam, @Body() body: UpdatePcBody, @User() user): Promise<PlayerCharacter> {
-		const pc = await PlayerCharacter.findOrFailByIdAndPlayerId(param.id, user.id);
+		const pc = await PlayerCharacter.findOrFail(user.id, param.id);
 		pc.set(body);
 		return await pc.save();
 	}
@@ -65,7 +65,7 @@ export class PlayerCharactersController {
 	@ApiNotFoundResponse({ description: 'データ無し', type: ErrorResult })
 	@Delete('/:id(\\d+)')
 	async delete(@Param() param: IdParam, @User() user): Promise<PlayerCharacter> {
-		const pc = await PlayerCharacter.findOrFailByIdAndPlayerId(param.id, user.id);
+		const pc = await PlayerCharacter.findOrFail(user.id, param.id);
 		await pc.destroy();
 		return pc;
 	}

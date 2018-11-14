@@ -6,11 +6,14 @@ import { Column, DataType, AllowNull, Default, IsDate, ForeignKey, IFindOptions,
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Table, DistributionKey } from '../../core/models/decorators';
 import { NotFoundError } from '../../core/errors';
-import ShardableDataModel from '../../core/models/shardable-data-model';
+import ShardableModel from '../../core/models/shardable-model';
 import Player from './player.model';
 
 /**
  * プレイヤーキャラクターモデルクラス。
+ *
+ * ※ モデル上の主キーはidですが、playerIdによるシャーディングテーブルのため、
+ *    idでは全シャードで一意になりません。必ずplayerIdも含めて処理してください。
  */
 @DefaultScope({
 	order: [
@@ -24,7 +27,7 @@ import Player from './player.model';
 	comment: 'プレイヤーキャラクター',
 	timestamps: true,
 })
-export default class PlayerCharacter extends ShardableDataModel<PlayerCharacter> {
+export default class PlayerCharacter extends ShardableModel<PlayerCharacter> {
 	// TODO: 最大HPや攻撃力をどう算出する？レベルから？それとも個別に持たせる？
 	/** プレイヤーID */
 	@DistributionKey
@@ -90,6 +93,22 @@ export default class PlayerCharacter extends ShardableDataModel<PlayerCharacter>
 	lastSelected: Date;
 
 	/**
+	 * レコードをプレイヤーIDとプレイヤーキャラクターIDで取得する。
+	 * @param playerId プレイヤーID。
+	 * @param pcId プレイヤーキャラクターID。
+	 * @param options 検索オプション。
+	 * @returns レコード。
+	 * @throws NotFoundError レコードが存在しない場合。
+	 */
+	public static async findOrFail(playerId: number, pcId: number, options?: IFindOptions<PlayerCharacter>): Promise<PlayerCharacter> {
+		const instance = await this.shard(playerId).findById(pcId, options);
+		if (!instance || instance.playerId !== playerId) {
+			throw new NotFoundError(this.name, pcId);
+		}
+		return instance;
+	}
+
+	/**
 	 * プレイヤーと紐づく全てのレコードを取得する。
 	 * @param playerId プレイヤーID。
 	 * @param options 検索オプション。
@@ -99,21 +118,5 @@ export default class PlayerCharacter extends ShardableDataModel<PlayerCharacter>
 		options.where = options.where || {};
 		options.where['playerId'] = playerId;
 		return await this.findAll(options);
-	}
-
-	/**
-	 * レコードをプレイヤーキャラクターIDとプレイヤーIDで取得する。
-	 * @param id プレイヤーキャラクターID。
-	 * @param playerId プレイヤーID。
-	 * @param options 検索オプション。
-	 * @returns レコード。
-	 * @throws NotFoundError レコードが存在しない場合。
-	 */
-	public static async findOrFailByIdAndPlayerId(id: number, playerId: number, options?: IFindOptions<PlayerCharacter>): Promise<PlayerCharacter> {
-		const instance = await this.shard(playerId).findById(id, options);
-		if (!instance || instance.playerId !== playerId) {
-			throw new NotFoundError(this.name, id);
-		}
-		return instance;
 	}
 }

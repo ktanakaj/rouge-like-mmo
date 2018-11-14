@@ -68,14 +68,15 @@ namespace Honememo.RougeLikeMmo.Entities
         #region 公開プロパティ
 
         /// <summary>
-        /// プレイヤーキャラクターID。
-        /// </summary>
-        public int Id { get { return this.id; } set { this.id = value; } }
-
-        /// <summary>
         /// プレイヤーID。
         /// </summary>
         public int PlayerId { get { return this.playerId; } set { this.playerId = value; } }
+
+        /// <summary>
+        /// プレイヤーキャラクターID。
+        /// </summary>
+        /// <remarks>PlayerCharacterはPlayerIdとPcIdの複合主キーで一意になります。</remarks>
+        public int PcId { get { return this.id; } set { this.id = value; } }
 
         /// <summary>
         /// キャラクター名。

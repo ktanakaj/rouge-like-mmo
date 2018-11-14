@@ -67,7 +67,7 @@ namespace Honememo.RougeLikeMmo.UseCases
         public async Task Load()
         {
             var playerCharacters = await this.playerRepository.FindPlayerCharacters();
-            this.global.PlayerCharacterEntities = playerCharacters.ToDictionary((n) => n.Id, (n) => n);
+            this.global.PlayerCharacterEntities = playerCharacters.ToDictionary((n) => n.PcId, (n) => n);
             this.outputPort.OnNext(Unit.Default);
         }
 

@@ -69,7 +69,7 @@ namespace Honememo.RougeLikeMmo.UseCases
         {
             Debug.Assert(this.global.PlayerCharacterEntities != null);
             var pc = await this.playerRepository.CreatePlayerCharacter(name);
-            this.global.PlayerCharacterEntities[pc.Id] = pc;
+            this.global.PlayerCharacterEntities[pc.PcId] = pc;
             this.outputPort.OnNext(pc);
         }
 
