@@ -4,3 +4,4 @@
 3,401,UNAUTHORIZED,未認証,debug
 4,403,FORBIDDEN,権限無し,debug
 5,404,NOT_FOUND,データ無し,debug
+6,409,CONFLICT,データが既に存在,debug

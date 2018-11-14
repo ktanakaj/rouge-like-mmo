@@ -120,7 +120,17 @@ export class AppError extends Error {
 	 * @returns 変換後の例外。
 	 */
 	private static fromUniqueConstraintError(err: UniqueConstraintError): AppError {
-		return new BadRequestError(err.message, err);
+		let name = '';
+		let value = '';
+		if (Array.isArray(err.errors) && err.errors[0]) {
+			value = err.errors[0].value;
+			if (err.errors[0]['instance']) {
+				name = err.errors[0]['instance']['constructor']['name'];
+			}
+		}
+		const newErr = new ConflictError(name, value);
+		newErr.cause = err;
+		return newErr;
 	}
 
 	/**
@@ -201,8 +211,8 @@ export class NotFoundError extends AppError {
 	constructor(message: string, data?: object);
 	/**
 	 * 例外を生成する。
-	 * @param name リソース名。
-	 * @param id リソースID。
+	 * @param name モデル名。
+	 * @param id ID。
 	 */
 	constructor(name: string, id: number | string);
 	constructor(messageOrName: string, dataOrId: any = null) {
@@ -210,6 +220,31 @@ export class NotFoundError extends AppError {
 			super(messageOrName, 'NOT_FOUND', dataOrId);
 		} else {
 			super(`id=${dataOrId} is not found in ${messageOrName}`, 'NOT_FOUND', { name: messageOrName, id: dataOrId });
+		}
+	}
+}
+
+/**
+ * データ競合の例外クラス。
+ */
+export class ConflictError extends AppError {
+	/**
+	 * 例外を生成する。
+	 * @param name メッセージ。
+	 * @param data エラーの追加情報。
+	 */
+	constructor(message: string, data?: object);
+	/**
+	 * 例外を生成する。
+	 * @param name モデル名。
+	 * @param id ID。
+	 */
+	constructor(name: string, id: number | string);
+	constructor(messageOrName: string, dataOrId: any = null) {
+		if (typeof dataOrId === 'object') {
+			super(messageOrName, 'CONFLICT', dataOrId);
+		} else {
+			super(`id=${dataOrId} is found in ${messageOrName} data`, 'CONFLICT', { name: messageOrName, id: dataOrId });
 		}
 	}
 }
