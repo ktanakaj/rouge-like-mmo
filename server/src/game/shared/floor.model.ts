@@ -43,6 +43,12 @@ export default class Floor extends DataModel<Floor> {
 	@Column
 	server: string;
 
+	/** ポート番号 */
+	@ApiModelProperty({ description: 'ポート番号' })
+	@AllowNull(false)
+	@Column(DataType.SMALLINT.UNSIGNED)
+	port: number;
+
 	/** 滞在プレイヤー数 */
 	@ApiModelProperty({ description: '滞在プレイヤー数' })
 	@AllowNull(false)

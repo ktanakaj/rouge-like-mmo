@@ -29,14 +29,9 @@ namespace Honememo.RougeLikeMmo.Entities
         public PlayerCharacterEntity PlayerCharacter { get; set; }
 
         /// <summary>
-        /// サーバーアドレス。
+        /// フロアサーバーURL。
         /// </summary>
-        public string Address { get; set; }
-
-        /// <summary>
-        /// サーバーport。
-        /// </summary>
-        public int Port { get; set; }
+        public string Url { get; set; }
 
         #endregion
     }

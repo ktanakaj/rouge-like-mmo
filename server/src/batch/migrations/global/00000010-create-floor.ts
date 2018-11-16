@@ -34,6 +34,11 @@ module.exports = {
 				allowNull: false,
 				comment: 'サーバーアドレス',
 			},
+			port: {
+				type: Sequelize.SMALLINT.UNSIGNED,
+				allowNull: false,
+				comment: 'ポート番号',
+			},
 			players: {
 				type: Sequelize.INTEGER.UNSIGNED,
 				allowNull: false,

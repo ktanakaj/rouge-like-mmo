@@ -26,17 +26,16 @@ describe('GameController', () => {
 
 	describe('#getStatus()', () => {
 		it('成功', async () => {
-			const result = await controller.getStatus(testplayer);
+			const result = await controller.getStatus(testplayer, { headers: { host: 'localhost' } });
 			assert.strictEqual(result.playerLevel, 1);
-			assert.strictEqual(typeof result.server, 'string');
+			assert.strictEqual(result.url, 'ws://localhost/ws/');
 		});
 	});
 
 	describe('#start()', () => {
 		it('成功', async () => {
-			const result = await controller.start({ pcId: testpc1.id, dungeonId: 1 }, testplayer);
-			assert.strictEqual(typeof result.server, 'string');
-			assert.strictEqual(result.port, 80);
+			const url = await controller.start({ pcId: testpc1.id, dungeonId: 1 }, testplayer, { headers: { host: 'localhost' } });
+			assert.strictEqual(url, 'ws://localhost/ws/');
 		});
 	});
 });

@@ -56,29 +56,26 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// </summary>
         /// <param name="pcId">プレイヤーキャラクターID。</param>
         /// <param name="dungeonId">ダンジョンID。</param>
-        /// <returns>ゲーム情報。</returns>
-        public async Task<StartResult> Start(int pcId, int dungeonId)
+        /// <returns>フロアサーバーURL。</returns>
+        public async Task<string> Start(int pcId, int dungeonId)
         {
-            var json = await this.webRequest.Post("api/game/start", new Dictionary<string, object>()
+            return await this.webRequest.Post("api/game/start", new Dictionary<string, object>()
             {
                 { "pcId", pcId },
                 { "dungeonId", dungeonId },
             });
-
-            return JsonUtility.FromJson<StartResult>(json);
         }
 
         /// <summary>
-        /// WebSocketサーバーに接続する。
+        /// フロアサーバーに接続する。
         /// </summary>
+        /// <param name="url">接続先URL。</param>
         /// <param name="playerId">プレイヤーID。</param>
         /// <param name="token">端末トークン。</param>
-        /// <param name="address">サーバーアドレス。</param>
-        /// <param name="port">サーバーポート。</param>
         /// <returns>処理状態。</returns>
-        public async Task Connect(int playerId, string token, string address, int port)
+        public async Task Connect(string url, int playerId, string token)
         {
-            await this.wsRequest.Connect("ws://" + address + ":" + port + "/ws/", playerId, token);
+            await this.wsRequest.Connect(url, playerId, token);
         }
 
         /// <summary>
@@ -103,18 +100,7 @@ namespace Honememo.RougeLikeMmo.Gateways
             public int playerLevel;
             public int dungeonId;
             public int floorNo;
-            public string server;
-        }
-
-        /// <summary>
-        /// /api/game/start API戻り値パラメータ。
-        /// </summary>
-        [Serializable]
-        public class StartResult
-        {
-            // FIXME: URLを返すようにする（自由度が高くなるので）
-            public string server;
-            public int port;
+            public string url;
         }
 
         #endregion

@@ -67,10 +67,9 @@ namespace Honememo.RougeLikeMmo.UseCases
         public async Task Connect()
         {
             await this.gameRepository.Connect(
+                this.global.GameEntity.Url,
                 this.global.AuthEntity.Id,
-                this.global.AuthEntity.Token,
-                this.global.GameEntity.Address,
-                this.global.GameEntity.Port);
+                this.global.AuthEntity.Token);
 
             // TODO: フロア情報読み込みは未実装
             // this.global.FloorEntity = await this.gameRepository.
