@@ -36,6 +36,9 @@
       port: 6379
       options:
         db: 7
+    pubsub:
+      host: "127.0.0.1"
+      port: 6379
   log4js:
     pm2: false
     appenders:
@@ -53,6 +56,14 @@
           - "stdout"
         level: "info"
       ws:
+        appenders:
+          - "stdout"
+        level: "info"
+      db:
+        appenders:
+          - "stdout"
+        level: "info"
+      redis:
         appenders:
           - "stdout"
         level: "info"

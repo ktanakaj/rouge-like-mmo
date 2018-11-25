@@ -14,7 +14,7 @@ export interface WebSocketRpcServerConfig {
 	/** コントローラのMessagePattern用プレフィックス */
 	prefix?: string;
 	/** WebSocket通信用のロガー */
-	wslogger?: (level, message) => {};
+	logger?: (level, message) => {};
 }
 
 export type WebSocketRpcServerMiddleware = (
@@ -56,14 +56,9 @@ export class WebSocketRpcServer extends Server implements CustomTransportStrateg
 		this.server = new WebSocket.Server(this.options);
 
 		this.server.on('connection', (ws: WebSocket) => {
-			const options = {};
-			if (this.config.wslogger) {
-				options['wslogger'] = this.config.wslogger;
-			}
-
 			const conn = new WebSocketRpcConnection(ws, Object.assign({
 				methodHandler: (method, params, id) => this.handleMessageWithMiddlewares(method, params, id, conn),
-			}, options));
+			}, this.config));
 
 			this.emit('connection', conn);
 		});

@@ -19,7 +19,7 @@ export interface WebSocketRpcConnectionOptions extends WebSocketConnectionOption
  */
 export class WebSocketRpcConnection extends WebSocketConnection {
 	/** JSON-RPC2実装 */
-	rpc: JsonRpc2Implementer;
+	public readonly rpc: JsonRpc2Implementer;
 
 	/**
 	 * WebSocket上にJSON-RPC2コネクション用のインスタンスを生成する。

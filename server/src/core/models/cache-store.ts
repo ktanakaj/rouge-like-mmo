@@ -3,7 +3,7 @@
  * @module ./core/models/cache-store
  */
 import * as crypto from 'crypto';
-import { getClient, IRedisClientAsync, IRedisConfig } from './redis-helper';
+import { getClient, IRedisClientAsync, IRedisConfig } from '../redis/redis-helper';
 
 /**
  * Redisによるキャッシュストアクラス。

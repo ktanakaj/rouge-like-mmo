@@ -41,7 +41,7 @@ const debugLog = (log, time) => {
 	if (typeof time === 'number') {
 		log = `${log} Elapsed time: ${time}ms`;
 	}
-	log4js.getLogger('debug').debug(log);
+	log4js.getLogger('db').debug(log);
 };
 
 for (const dbname of Object.keys(MODELS)) {

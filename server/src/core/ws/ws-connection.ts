@@ -24,11 +24,11 @@ export interface WebSocketConnectionOptions {
  */
 export class WebSocketConnection extends EventEmitter {
 	/** 生のWebSocket接続 */
-	public ws: WebSocket;
+	public readonly ws: WebSocket;
 	/** 一意なコネクションID */
-	public id: string = this.generateUniqueId();
+	public readonly id: string = this.generateUniqueId();
 	/** 簡易セッション用オブジェクト */
-	public session: Object = this.makeSessionObject();
+	public readonly session: Object = this.makeSessionObject();
 	/** コネクションがクローズ済か？ */
 	private closed: boolean = false;
 

@@ -17,15 +17,17 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, SwaggerDocument } from '@nestjs/swagger';
 import * as session from 'express-session';
 import * as connectRedis from 'connect-redis';
-import { startMonitoring } from './core/models/redis-helper';
+import { startMonitoring } from './core/redis/redis-helper';
 import { AllExceptionsFilter } from './shared/all-exceptions.filter';
 import { DebugLoggerService } from './shared/debug-logger.service';
 import { WebSocketRpcServer } from './core/ws/ws-rpc-server';
+import { RedisRpcServer } from './core/redis/redis-rpc-server';
 import { invokeContextRpcHandler } from './shared/invoke-context.middleware';
 import { AppModule } from './app.module';
 const RedisStore = connectRedis(session);
 const errorLogger = log4js.getLogger('error');
 const wsLogger = log4js.getLogger('ws');
+const redisLogger = log4js.getLogger('redis');
 
 /**
  * サーバーの起動。
@@ -59,18 +61,28 @@ async function bootstrap(): Promise<void> {
 	// （forbidNonWhitelistedは要らない気もするが、付けないと原因不明になりがちなので）
 	app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true, forbidNonWhitelisted: true }));
 
-	// WebSocketサーバーの初期化
-	const wsrpc = new WebSocketRpcServer(
-		{ server: app.getHttpServer(), path: '/ws/' },
-		{ prefix: '/ws/', wslogger: (level, message) => wsLogger[level](message) });
-	wsrpc.on('error', (err) => errorLogger.error(err));
-	// ※ コネクションのエラーは、wsLoggerの方でもログが出るのでここは無視
-	wsrpc.on('connection', (conn) => conn.on('error', () => { }));
-	wsrpc.use(invokeContextRpcHandler);
-	app.connectMicroservice({ strategy: wsrpc });
+	// フロアサーバーとして機能する場合、WebSocketとRedis pub/subのマイクロサービスも起動する
+	if (config['floorserver']) {
+		// WebSocketサーバーの初期化
+		const wsrpc = new WebSocketRpcServer(
+			{ server: app.getHttpServer(), path: '/ws/' },
+			{ prefix: '/ws/', logger: (level, message) => wsLogger[level](message) });
+		wsrpc.on('error', (err) => errorLogger.error(err));
+		// ※ コネクションのエラーは、wsLoggerの方でもログが出るのでここは無視
+		wsrpc.on('connection', (conn) => conn.on('error', () => { }));
+		wsrpc.use(invokeContextRpcHandler);
+		app.connectMicroservice({ strategy: wsrpc });
+
+		// Redisによるpub/sub待ち受けの初期化
+		const redisrpc = new RedisRpcServer(config['redis']['pubsub'], {
+			prefix: '/redis/', logger: (level, message) => redisLogger[level](message),
+		});
+		app.connectMicroservice({ strategy: redisrpc });
+
+		await app.startAllMicroservicesAsync();
+	}
 
 	// サーバー待ち受け開始
-	await app.startAllMicroservicesAsync();
 	await app.listen(process.env.PORT || 3000);
 	log4js.getLogger('debug').info(`${hostName}: Worker: pid=${process.pid} up`);
 }

@@ -9,6 +9,7 @@ import { User } from '../../shared/user.decorator';
 import { AuthGuard } from '../auth.guard';
 import Dungeon from '../shared/dungeon.model';
 import PlayerCharacter from '../shared/player-character.model';
+import { GameService } from './game.service';
 
 class GetStatusResult {
 	// TODO: 項目はインゲーム実装に合わせて精査する
@@ -38,6 +39,8 @@ class StartBody {
 @ApiUseTags('game')
 @Controller('api/game')
 export class GameController {
+	constructor(private readonly gameService: GameService) { }
+
 	@ApiOperation({ title: 'ゲーム状態取得', description: '現在のゲーム状態を取得する。' })
 	@ApiCreatedResponse({ description: 'ゲーム状態', type: GetStatusResult })
 	@Get('/status')
@@ -60,6 +63,7 @@ export class GameController {
 		// TODO: プレイヤーをフロアに配置して、接続情報を返す
 		const pc = await PlayerCharacter.findOrFail(user.id, body.pcId);
 		const dungeon = await Dungeon.findOrFail(body.dungeonId);
+		const floor = await this.gameService.create(user.id, pc.id, dungeon.id);
 
 		// TODO: 本当は、フロア生成時にDBにフロアを管理するサーバーのURLを保存して、ここではそれを返す
 		// ※ 以下は、開発用の1台のサーバーでHTTPリクエストも捌く場合のURL。

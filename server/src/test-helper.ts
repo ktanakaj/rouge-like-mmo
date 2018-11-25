@@ -4,7 +4,9 @@
  */
 import { Test, TestingModuleBuilder } from '@nestjs/testing';
 import { ModuleMetadata } from '@nestjs/common/interfaces/modules/module-metadata.interface';
+import { Observable } from 'rxjs';
 import { databaseProviders, modelProviders } from './shared/database.providers';
+import { RedisRpcClient } from './core/redis/redis-rpc-client';
 
 /** アプリ共通のモジュール群 */
 const modules = [];
@@ -13,6 +15,16 @@ const modules = [];
 const providers = [
 	...databaseProviders,
 	...modelProviders,
+	{
+		// 通信されないよう空のモッククライアントに差し替え
+		provide: RedisRpcClient,
+		useValue: {
+			send: () => Observable.create((observer) => {
+				observer.next(null);
+				observer.complete();
+			}),
+		},
+	},
 ];
 
 /**

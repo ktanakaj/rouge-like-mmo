@@ -1,12 +1,12 @@
 /**
  * Redisの各種共通処理モジュール。
- * @module ./core/models/redis-helper
+ * @module ./core/redis/redis-helper
  */
 import * as redis from 'redis';
 import * as redisAsync from 'redis-promisify';
 import * as log4js from 'log4js';
 
-const debugLogger = log4js.getLogger('debug');
+const redisLogger = log4js.getLogger('redis');
 const errorLogger = log4js.getLogger('error');
 
 export interface IRedisClientAsync extends redis.RedisClient {
@@ -38,6 +38,7 @@ export interface IRedisClientAsync extends redis.RedisClient {
 	hgetAsync(key: string, field: string): Promise<string>;
 	hdelAsync(key: string, field: string): Promise<number>;
 	hgetallAsync(key: string): Promise<{ [key: string]: string }>;
+	publishAsync(channel: string, value: string): Promise<number>;
 	monitorAsync(): Promise<void>;
 }
 
@@ -121,7 +122,7 @@ export async function startMonitoring(config: IRedisConfig): Promise<void> {
 	await client.monitorAsync();
 	// ※ monitorコマンドを使用しているため、アプリ外のRedisコマンドログも出力されます
 	client.on('monitor', (time, args) => {
-		debugLogger.trace('Executing (redis): ' + args.join(' '));
+		redisLogger.trace('Executing (redis): ' + args.join(' '));
 	});
 	monitorPool.set(key, client);
 }

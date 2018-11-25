@@ -6,6 +6,7 @@ import { TestingModule } from '@nestjs/testing';
 import testHelper from '../../test-helper';
 import Player from '../../game/shared/player.model';
 import PlayerCharacter from '../../game/shared/player-character.model';
+import { GameService } from './game.service';
 import { GameController } from './game.controller';
 
 describe('GameController', () => {
@@ -20,6 +21,7 @@ describe('GameController', () => {
 
 		module = await testHelper.createTestingModule({
 			controllers: [GameController],
+			providers: [GameService],
 		}).compile();
 		controller = module.get<GameController>(GameController);
 	});

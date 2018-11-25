@@ -12,7 +12,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { databaseProviders, IDatabaseProvider } from './shared/database.providers';
 import MasterVersion from './shared/master-version.model';
 import fileUtils from './core/utils/file-utils';
-import { getClient } from './core/models/redis-helper';
+import { getClient } from './core/redis/redis-helper';
 import { ShardableSequelize } from './core/models/shardable-sequelize';
 import invokeContext from './shared/invoke-context';
 
