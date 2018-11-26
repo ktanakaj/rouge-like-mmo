@@ -1,5 +1,5 @@
 /**
- * 「ローグライクなMMOブラウザゲーム」マスタインポートスクリプト。
+ * マスタインポートスクリプト。
  * @module ./batch/master-import
  */
 import './core';

@@ -1,5 +1,5 @@
 /**
- * 「ローグライクなMMOブラウザゲーム」認証アクセス制御のテスト。
+ * GM Tool認証アクセス制御のテスト。
  * @module ./app/auth.guard.spec
  */
 import { async, inject } from '@angular/core/testing';

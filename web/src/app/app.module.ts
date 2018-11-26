@@ -1,5 +1,5 @@
 /**
- * 「ローグライクなMMOブラウザゲーム」ルートモジュール。
+ * アプリのルートモジュール。
  * @module ./app/app.module
  */
 import { BrowserModule } from '@angular/platform-browser';
@@ -85,7 +85,7 @@ class DefaultErrorHandler implements ErrorHandler {
 }
 
 /**
- * 「ローグライクなMMOブラウザゲーム」ルートモジュールクラス。
+ * アプリのルートモジュールクラス。
  */
 @NgModule({
 	declarations: [

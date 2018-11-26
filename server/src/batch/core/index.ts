@@ -1,5 +1,5 @@
 /**
- * 「ローグライクなMMOブラウザゲーム」サーバーバッチ共通モジュール。
+ * ゲームサーバーバッチ共通モジュール。
  * @module ./batch/core
  */
 import * as config from 'config';

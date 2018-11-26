@@ -1,5 +1,5 @@
 {
-	"APP_NAME": "ローグライクなMMOブラウザゲーム",
+	"APP_NAME": "ローグ風オンラインゲーム",
 	"COPYRIGHT": "Copyright (C) 2018 Koichi Tanaka All Rights Reserved.",
 	"NEW": "新規",
 	"EDIT": "編集",
@@ -65,10 +65,10 @@
 	"TOP_PAGE": {
 		"LATEST_ADMIN_LOGS": "最近のデータ操作履歴",
 		"DOCUMENTS": "各種ドキュメント",
-		"DOCUMENTS_SWAGGER": "REST APIドキュメント (Swagger UI)"
+		"DOCUMENTS_SWAGGER": "HTTP APIドキュメント (Swagger UI)"
 	},
 	"LOGIN_PAGE": {
-		"TITLE": "ローグライクなMMO GM Toolログイン",
+		"TITLE": "ローグ風オンラインゲームGM Toolログイン",
 		"FAILED": "管理者名またはパスワードが確認できません。"
 	},
 	"MASTER_VERSION_PAGE": {

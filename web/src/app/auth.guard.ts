@@ -1,5 +1,5 @@
 /**
- * 「ローグライクなMMOブラウザゲーム」認証アクセス制御モジュール。
+ * GM Tool認証アクセス制御モジュール。
  * @module ./app/auth.guard
  */
 import { Injectable } from '@angular/core';

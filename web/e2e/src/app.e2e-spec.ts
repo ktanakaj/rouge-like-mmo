@@ -1,10 +1,10 @@
 /**
- * 「ローグライクなMMOブラウザゲーム」e2eテスト。
+ * アプリのe2eテスト。
  * @module ./app.e2e-spec
  */
 import { AppPage } from './app.po';
 
-describe('ローグライクなMMOブラウザゲーム', () => {
+describe('GM Tool', () => {
 	let page: AppPage;
 
 	beforeEach(() => {
@@ -13,6 +13,6 @@ describe('ローグライクなMMOブラウザゲーム', () => {
 
 	it('should display top page', () => {
 		page.navigateTo();
-		expect(page.getHeaderTitle()).toEqual('ローグライクなMMOブラウザゲーム');
+		expect(page.getHeaderTitle()).toEqual('ローグ風オンラインゲーム');
 	});
 });

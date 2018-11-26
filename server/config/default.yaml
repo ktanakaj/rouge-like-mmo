@@ -157,9 +157,9 @@
   swagger:
     swagger: "2.0"
     info:
-      title: "Rouge-like MMO server"
+      title: "Rouge-like MMO HTTP API"
       version: 0.0.1
-      description: "ローグライクなMMOブラウザゲームサーバーAPI。"
+      description: "ローグ風オンラインゲームHTTP API。"
     consumes:
       - "application/json"
     produces:

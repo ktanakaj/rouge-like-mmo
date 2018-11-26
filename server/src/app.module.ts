@@ -1,5 +1,5 @@
 /**
- * 「ローグライクなMMOブラウザゲーム」サーバールートモジュール。
+ * ゲームサーバールートモジュール。
  * @module ./app.module
  */
 import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
@@ -10,7 +10,7 @@ import { GameModule } from './game/game.module';
 import { AdminModule } from './admin/admin.module';
 
 /**
- * 「ローグライクなMMOブラウザゲーム」サーバールートモジュールクラス。
+ * ゲームサーバールートモジュールクラス。
  */
 @Module({
 	imports: [GameModule, AdminModule],

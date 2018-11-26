@@ -1,5 +1,5 @@
 /**
- * @file 「ローグライクなMMOブラウザゲーム」ブートローダー。
+ * @file アプリのブートローダー。
  */
 import 'rxjs/add/operator/retry';
 import { enableProdMode } from '@angular/core';
