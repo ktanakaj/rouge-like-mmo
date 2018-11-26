@@ -3,10 +3,10 @@
  */
 import * as assert from 'power-assert';
 import { TestingModule } from '@nestjs/testing';
-import testHelper from '../../test-helper';
+import testHelper from '../../../test-helper';
 import { MastersController } from './masters.controller';
 
-describe('MastersController', () => {
+describe('http/MastersController', () => {
 	let module: TestingModule;
 	let controller: MastersController;
 

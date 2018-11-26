@@ -1,11 +1,11 @@
 /**
  * 環境情報コントローラモジュール。
- * @module ./system/env.controller
+ * @module ./game/http/system/env.controller
  */
 import { Controller, Get } from '@nestjs/common';
 import { ApiUseTags, ApiModelProperty, ApiOperation, ApiOkResponse } from '@nestjs/swagger';
 import * as path from 'path';
-import MasterVersion from '../../shared/master-version.model';
+import MasterVersion from '../../../shared/master-version.model';
 import AppVersion from './app-version.model';
 const packagejson = require(path.resolve('./package.json'));
 

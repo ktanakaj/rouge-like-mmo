@@ -1,14 +1,14 @@
 /**
  * プレイヤーコントローラモジュール。
- * @module ./ws/players/players.controller
+ * @module ./game/ws/players/players.controller
  */
 import { Controller, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { IsInt, MinLength } from 'class-validator';
-import { BadRequestError } from '../../core/errors';
-import { WebSocketRpcConnection } from '../../core/ws/ws-rpc-connection';
-import { AllExceptionsFilter } from '../../shared/all-exceptions.filter';
-import Player from '../../game/shared/player.model';
+import { BadRequestError } from '../../../core/errors';
+import { WebSocketRpcConnection } from '../../../core/ws/ws-rpc-connection';
+import { AllExceptionsFilter } from '../../../shared/all-exceptions.filter';
+import Player from '../../../game/shared/player.model';
 
 class LoginBody {
 	@IsInt()

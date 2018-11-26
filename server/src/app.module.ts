@@ -7,17 +7,14 @@ import { databaseProviders } from './shared/database.providers';
 import { invokeContextHandler } from './shared/invoke-context.middleware';
 import { AccessLoggerMiddleware } from './shared/access-logger.middleware';
 import { GameModule } from './game/game.module';
-import { WsModule } from './ws/ws.module';
-import { RedisModule } from './redis/redis.module';
 import { AdminModule } from './admin/admin.module';
 
 /**
  * 「ローグライクなMMOブラウザゲーム」サーバールートモジュールクラス。
  */
 @Module({
-	imports: [GameModule, WsModule, RedisModule, AdminModule],
+	imports: [GameModule, AdminModule],
 	providers: [...databaseProviders],
-	exports: [...databaseProviders],
 })
 export class AppModule {
 	configure(consumer: MiddlewareConsumer) {

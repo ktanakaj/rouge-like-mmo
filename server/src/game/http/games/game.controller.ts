@@ -1,15 +1,15 @@
 /**
  * ゲームコントローラモジュール。
- * @module ./game/games/game.controller
+ * @module ./game/http/games/game.controller
  */
 import { Controller, Get, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { ApiUseTags, ApiModelProperty, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
 import { IsInt } from 'class-validator';
-import { User } from '../../shared/user.decorator';
+import { User } from '../../../shared/user.decorator';
 import { AuthGuard } from '../auth.guard';
-import Dungeon from '../shared/dungeon.model';
-import PlayerCharacter from '../shared/player-character.model';
-import { GameService } from './game.service';
+import Dungeon from '../../shared/dungeon.model';
+import PlayerCharacter from '../../shared/player-character.model';
+import { GameService } from '../../shared/game.service';
 
 class GetStatusResult {
 	// TODO: 項目はインゲーム実装に合わせて精査する

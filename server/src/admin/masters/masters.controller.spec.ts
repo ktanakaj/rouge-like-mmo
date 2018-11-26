@@ -7,7 +7,7 @@ import testHelper from '../../test-helper';
 import invokeContext from '../../shared/invoke-context';
 import { MastersController } from './masters.controller';
 
-describe('MastersController', () => {
+describe('admin/MastersController', () => {
 	let module: TestingModule;
 	let controller: MastersController;
 

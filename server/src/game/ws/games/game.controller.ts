@@ -1,14 +1,14 @@
 /**
  * ゲームロジック用コントローラモジュール。
- * @module ./ws/games/game.controller
+ * @module ./game/ws/games/game.controller
  */
 import { Controller, UseFilters, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { IsInt, Min, Max } from 'class-validator';
-import { WebSocketRpcConnection } from '../../core/ws/ws-rpc-connection';
-import { AllExceptionsFilter } from '../../shared/all-exceptions.filter';
+import { WebSocketRpcConnection } from '../../../core/ws/ws-rpc-connection';
+import { AllExceptionsFilter } from '../../../shared/all-exceptions.filter';
+import { GameService } from '../../shared/game.service';
 import { AuthGuard } from '../auth.guard';
-import { GameService } from './game.service';
 
 class GetStatusResult {
 	floorId: number;

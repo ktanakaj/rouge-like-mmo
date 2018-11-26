@@ -1,10 +1,10 @@
 /**
  * ゲームロジック用サービスモジュール。
- * @module ./game/games/game.service
+ * @module ./game/shared/game.service
  */
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 import { RedisRpcClient } from '../../core/redis/redis-rpc-client';
-import Floor from '../shared/floor.model';
+import Floor from './floor.model';
 
 /**
  * ゲームロジック用サービスクラス。
@@ -15,7 +15,7 @@ export class GameService {
 	 * 引数をDIしてサービスインスタンスを生成する。
 	 * @param client Redis pub/sub用クライアント。
 	 */
-	constructor(private readonly client: RedisRpcClient) { }
+	constructor(@Optional() private readonly client: RedisRpcClient) { }
 
 	/**
 	 * 指定されたダンジョンにフロアを新規作成、PCを配置する。

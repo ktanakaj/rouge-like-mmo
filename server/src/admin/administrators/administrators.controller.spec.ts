@@ -8,7 +8,7 @@ import { BadRequestError, NotFoundError } from '../../core/errors';
 import Administrator from '../shared/administrator.model';
 import { AdministratorsController } from './administrators.controller';
 
-describe('AdministratorsController', () => {
+describe('admin/AdministratorsController', () => {
 	let module: TestingModule;
 	let controller: AdministratorsController;
 	let testadmin1: Administrator;

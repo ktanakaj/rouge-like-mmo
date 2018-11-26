@@ -1,6 +1,6 @@
 /**
  * PC操作コントローラモジュール。
- * @module ./game/players/player-characters.controller
+ * @module ./game/http/players/player-characters.controller
  */
 import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
 import {
@@ -8,10 +8,10 @@ import {
 	ApiBadRequestResponse, ApiNotFoundResponse,
 } from '@nestjs/swagger';
 import { IsOptional, MinLength } from 'class-validator';
-import { IdParam, ErrorResult } from '../../shared/common.dto';
-import { User } from '../../shared/user.decorator';
+import { IdParam, ErrorResult } from '../../../shared/common.dto';
+import { User } from '../../../shared/user.decorator';
 import { AuthGuard } from '../auth.guard';
-import PlayerCharacter from '../shared/player-character.model';
+import PlayerCharacter from '../../shared/player-character.model';
 
 class CreatePcBody {
 	@MinLength(1)

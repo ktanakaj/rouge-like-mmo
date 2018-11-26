@@ -7,7 +7,7 @@ import testHelper from '../../test-helper';
 import Player from '../../game/shared/player.model';
 import { PlayersController } from './players.controller';
 
-describe('PlayersController', () => {
+describe('admin/PlayersController', () => {
 	let module: TestingModule;
 	let controller: PlayersController;
 

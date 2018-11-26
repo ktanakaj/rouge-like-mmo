@@ -1,9 +1,9 @@
 /**
  * WebSocket APIルートモジュール。
- * @module ./ws/ws.module
+ * @module ./game/ws/ws.module
  */
 import { Module } from '@nestjs/common';
-import { GameService } from './games/game.service';
+import { GameService } from '../shared/game.service';
 import { PlayersController } from './players/players.controller';
 import { GameController } from './games/game.controller';
 

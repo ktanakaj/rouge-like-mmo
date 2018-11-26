@@ -1,9 +1,9 @@
 /**
  * WebSocket API用アクセス制限モジュール。
- * @module ./ws/auth.guard
+ * @module ./game/ws/auth.guard
  */
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { UnauthorizedError } from '../core/errors';
+import { UnauthorizedError } from '../../core/errors';
 
 /**
  * WebSocket API用アクセス制限クラス。

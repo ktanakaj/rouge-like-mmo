@@ -1,12 +1,12 @@
 /**
- * ゲームAPI用アクセス制限モジュール。
- * @module ./game/auth.guard
+ * HTTP API用アクセス制限モジュール。
+ * @module ./game/http/auth.guard
  */
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { UnauthorizedError } from '../core/errors';
+import { UnauthorizedError } from '../../core/errors';
 
 /**
- * ゲームAPI用アクセス制限クラス。
+ * HTTP API用アクセス制限クラス。
  */
 @Injectable()
 export class AuthGuard implements CanActivate {

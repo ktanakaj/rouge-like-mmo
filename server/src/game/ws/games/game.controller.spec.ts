@@ -3,12 +3,12 @@
  */
 import * as assert from 'power-assert';
 import { TestingModule } from '@nestjs/testing';
-import testHelper from '../../test-helper';
-import { BadRequestError } from '../../core/errors';
+import testHelper from '../../../test-helper';
+import { BadRequestError } from '../../../core/errors';
+import { GameService } from '../../shared/game.service';
 import { GameController } from './game.controller';
-import { GameService } from './game.service';
 
-describe('GameController', () => {
+describe('ws/GameController', () => {
 	let module: TestingModule;
 	let controller: GameController;
 

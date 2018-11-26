@@ -3,13 +3,13 @@
  */
 import * as assert from 'power-assert';
 import { TestingModule } from '@nestjs/testing';
-import testHelper from '../../test-helper';
-import Player from '../../game/shared/player.model';
-import PlayerCharacter from '../../game/shared/player-character.model';
-import { GameService } from './game.service';
+import testHelper from '../../../test-helper';
+import Player from '../../shared/player.model';
+import PlayerCharacter from '../../shared/player-character.model';
+import { GameService } from '../../shared/game.service';
 import { GameController } from './game.controller';
 
-describe('GameController', () => {
+describe('http/GameController', () => {
 	let module: TestingModule;
 	let controller: GameController;
 	let testplayer: Player;

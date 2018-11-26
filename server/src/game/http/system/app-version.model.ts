@@ -1,10 +1,10 @@
 /**
  * アプリバージョンマスタモデルモジュール。
- * @module ./game/system/app-version.model
+ * @module ./game/http/system/app-version.model
  */
 import { Column, Comment } from 'sequelize-typescript';
-import { Table } from '../../core/models/decorators';
-import MasterModel from '../../core/models/master-model';
+import { Table } from '../../../core/models/decorators';
+import MasterModel from '../../../core/models/master-model';
 
 /**
  * アプリバージョンマスタモデルクラス。

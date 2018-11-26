@@ -1,14 +1,14 @@
 /**
  * マスタコントローラモジュール。
- * @module ./system/masters.controller
+ * @module ./game/http/system/masters.controller
  */
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiUseTags, ApiOperation, ApiImplicitParam, ApiOkResponse, ApiBadRequestResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 import * as _ from 'lodash';
-import { BadRequestError } from '../../core/errors';
-import { ErrorResult } from '../../shared/common.dto';
-import { MODELS } from '../../shared/database.providers';
-import MasterVersion from '../../shared/master-version.model';
+import { BadRequestError } from '../../../core/errors';
+import { ErrorResult } from '../../../shared/common.dto';
+import { MODELS } from '../../../shared/database.providers';
+import MasterVersion from '../../../shared/master-version.model';
 
 /**
  * マスタコントローラクラス。

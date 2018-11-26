@@ -1,13 +1,13 @@
 /**
  * プレイヤーコントローラモジュール。
- * @module ./game/players/players.controller
+ * @module ./game/http/players/players.controller
  */
 import { Controller, Post, Body, Session, HttpCode } from '@nestjs/common';
 import { ApiUseTags, ApiModelProperty, ApiOperation, ApiOkResponse, ApiCreatedResponse, ApiBadRequestResponse } from '@nestjs/swagger';
 import { IsInt, MinLength } from 'class-validator';
-import { BadRequestError } from '../../core/errors';
-import { ErrorResult } from '../../shared/common.dto';
-import Player from '../shared/player.model';
+import { BadRequestError } from '../../../core/errors';
+import { ErrorResult } from '../../../shared/common.dto';
+import Player from '../../shared/player.model';
 
 class CreatePlayerBody {
 	@ApiModelProperty({ description: '端末トークン' })

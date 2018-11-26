@@ -3,9 +3,9 @@
  */
 import * as assert from 'power-assert';
 import { TestingModule } from '@nestjs/testing';
-import testHelper from '../../test-helper';
-import { BadRequestError } from '../../core/errors';
-import Player from '../../game/shared/player.model';
+import testHelper from '../../../test-helper';
+import { BadRequestError } from '../../../core/errors';
+import Player from '../../../game/shared/player.model';
 import { PlayersController } from './players.controller';
 
 describe('PlayersController', () => {
