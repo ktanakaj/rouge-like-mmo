@@ -79,7 +79,7 @@ export class RedisRpcClient extends ClientProxy {
 			return callback({ err: new Error('Connection is closed') });
 		}
 		try {
-			this.connection.call(packet.pattern, packet.data)
+			this.connection.call(this.patternToString(packet.pattern), packet.data)
 				.then((response) => {
 					// 一行目がObservableのOnNextで、二行目がOnComplete
 					// ※ 複数のサーバーが値を返すことも出来るが、とりあえず最初に返ってきた値を使用する
@@ -91,6 +91,31 @@ export class RedisRpcClient extends ClientProxy {
 		} catch (err) {
 			callback({ err });
 		}
+	}
+
+	/**
+	 * JSON-RPC2通知リクエストを送信する。
+	 * @param method メソッド名。
+	 * @param params 引数。
+	 * @return 処理状態。
+	 */
+	public async notice(pattern: any, data: any): Promise<void> {
+		if (!this.connection) {
+			throw new Error('Connection is closed');
+		}
+		await this.connection.notice(this.patternToString(pattern), data);
+	}
+
+	/**
+	 * パターンが文字列以外の場合、JSON文字列に変換する。
+	 * @param pattern Nestマイクロサービス呼び出し用のパターン。
+	 * @returns 変換した文字列。
+	 */
+	private patternToString(pattern: any): string {
+		if (typeof pattern === 'string') {
+			return pattern;
+		}
+		return JSON.stringify(pattern);
 	}
 
 	// イベント定義

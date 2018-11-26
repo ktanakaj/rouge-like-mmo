@@ -23,7 +23,7 @@ export interface IRedisClientAsync extends redis.RedisClient {
 	expireAsync(key: string, seconds: number): Promise<number>;
 	flushdbAsync(): Promise<string>;
 	getAsync(key: string): Promise<string>;
-	setAsync(key: string, value: string): Promise<void>;
+	setAsync(key: string, value: string, modeOrFlag?: string, duration?: number, flag?: string): Promise<void>;
 	zaddAsync(key: string, score: number, member: string): Promise<number>;
 	zremAsync(key: string, member: string): Promise<number>;
 	zcardAsync(key: string): Promise<number>;

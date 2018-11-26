@@ -11,7 +11,7 @@ module.exports = {
 				type: Sequelize.BIGINT,
 				allowNull: false,
 				primaryKey: true,
-				autoIncrement: false,
+				autoIncrement: true,
 				comment: 'フロアID',
 			},
 			dungeonId: {

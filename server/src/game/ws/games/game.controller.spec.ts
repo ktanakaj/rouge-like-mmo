@@ -22,21 +22,25 @@ describe('ws/GameController', () => {
 
 	describe('#activate()', () => {
 		it('成功', async () => {
+			await controller.activate({}, {} as any);
 		});
 	});
 
 	describe('#deactivate()', () => {
 		it('成功', async () => {
+			await controller.deactivate({}, {} as any);
 		});
 	});
 
 	describe('#getStatus()', () => {
 		it('成功', async () => {
+			await controller.getStatus({}, {} as any);
 		});
 	});
 
 	describe('#getFloor()', () => {
 		it('成功', async () => {
+			await controller.getFloor({}, {} as any);
 		});
 	});
 });

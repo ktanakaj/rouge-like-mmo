@@ -6,8 +6,8 @@ import { Server, CustomTransportStrategy } from '@nestjs/microservices';
 import { ArgumentsHost } from '@nestjs/common';
 import { EventEmitter } from 'events';
 import { Observable } from 'rxjs';
-import { JsonRpcError, ErrorCode } from 'json-rpc2-implementer';
-import { IRedisConfig } from './redis-helper';
+import { JsonRpcError, ErrorCode, NoResponse } from 'json-rpc2-implementer';
+import { IRedisConfig, getClient } from './redis-helper';
 import { RedisRpcConnection } from './redis-rpc-connection';
 
 export interface RedisRpcServerConfig {
@@ -119,7 +119,6 @@ export class RedisRpcServer extends Server implements CustomTransportStrategy {
 			throw new JsonRpcError(ErrorCode.MethodNotFound);
 		}
 
-		// TODO: NoResponseやる
 		const result = await handler(params, connection, id);
 		if (result instanceof Observable) {
 			return await result.toPromise();
@@ -160,8 +159,16 @@ export function isRedisRpc(host: ArgumentsHost): boolean {
 }
 
 /**
- * レスポンスを返さない場合に投げる例外。
- * （多対多などで自分宛じゃないリクエストではこれを投げるか NoResponse シンボルを返す。）
+ * 多対多通信の排他用ロックを取得する。
+ * @param config ロックに使用するRedisの接続情報。
+ * @param id ロックするリクエストID。
+ * @param timeout ロック有効期間。デフォルトはJSON-RPC2のデフォルトタイムアウト時間×2。
+ * @returns ロックに成功した場合true。
  */
-export class NoResponseError extends Error {
+export async function lockRequest(config: IRedisConfig, id: string, timeout: number = 120000): Promise<boolean> {
+	// ※ @typesの型定義には無いが、RedisのsetコマンドとしてはNX,EX同時に渡せたので無理やり実行
+	const client = getClient(config);
+	const func = client.setAsync as Function;
+	const res = await func.apply(client, [`jsonrpc2:lock:${id}`, '1', 'NX', 'EX', timeout]);
+	return !!res;
 }

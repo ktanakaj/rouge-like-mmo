@@ -63,7 +63,7 @@ export class GameController {
 		// TODO: プレイヤーをフロアに配置して、接続情報を返す
 		const pc = await PlayerCharacter.findOrFail(user.id, body.pcId);
 		const dungeon = await Dungeon.findOrFail(body.dungeonId);
-		const floor = await this.gameService.create(user.id, pc.id, dungeon.id);
+		const floor = await this.gameService.requestFloor(user.id, pc.id, dungeon.id);
 
 		// TODO: 本当は、フロア生成時にDBにフロアを管理するサーバーのURLを保存して、ここではそれを返す
 		// ※ 以下は、開発用の1台のサーバーでHTTPリクエストも捌く場合のURL。

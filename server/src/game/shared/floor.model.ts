@@ -58,5 +58,5 @@ export default class Floor extends DataModel<Floor> {
 	@ApiModelProperty({ description: 'フロアマップ' })
 	@AllowNull(false)
 	@Column(DataType.TEXT)
-	map: {};
+	map: string;
 }
