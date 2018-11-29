@@ -1,6 +1,6 @@
 /**
  * マスタモデル抽象クラスモジュール。
- * @module ./core/models/master-model
+ * @module ./core/db/master-model
  */
 import { Column, Model, PrimaryKey, Comment, DefaultScope, BeforeValidate, IFindOptions } from 'sequelize-typescript';
 import { getAttributes } from 'sequelize-typescript/lib/services/models';
@@ -9,8 +9,9 @@ import { ApiModelProperty } from '@nestjs/swagger';
 import * as Bluebird from 'bluebird';
 import * as config from 'config';
 import { NotFoundError } from '../../core/errors';
+// FIXME: coreからsharedを参照するのはルール違反なので直す
 import invokeContext from '../../shared/invoke-context';
-import { getCacheStore } from './cache-store';
+import { getCacheStore } from '../cache';
 
 /** モデル型定義。typeof T がコンパイルエラーになるのでその代替。 */
 type NonAbstractTypeOfMasterModel<T> = (new () => T) & NonAbstract<typeof MasterModel>;

@@ -4,8 +4,7 @@
  */
 import { Column, DataType, AllowNull, Default, ForeignKey, DefaultScope } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
-import { Table, DistributionKey } from '../../core/models/decorators';
-import ShardableModel from '../../core/models/shardable-model';
+import { ShardableModel, Table, DistributionKey } from '../../core/db';
 import Player from './player.model';
 import Item from './item.model';
 

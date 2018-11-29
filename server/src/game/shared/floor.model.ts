@@ -4,8 +4,7 @@
  */
 import { Column, DataType, AllowNull, ForeignKey } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
-import { Table } from '../../core/models/decorators';
-import DataModel from '../../core/models/data-model';
+import { DataModel, Table } from '../../core/db';
 import Dungeon from './dungeon.model';
 
 /**

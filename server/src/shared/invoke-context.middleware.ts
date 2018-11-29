@@ -3,7 +3,7 @@
  * @module ./shared/invoke-context.middleware
  */
 import * as express from 'express';
-import { WebSocketRpcConnection } from '../core/ws/ws-rpc-connection';
+import { WebSocketRpcConnection } from '../core/ws';
 import invoketContext from './invoke-context';
 
 /**

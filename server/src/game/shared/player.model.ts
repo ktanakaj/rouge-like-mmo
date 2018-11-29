@@ -8,8 +8,7 @@ import * as crypto from 'crypto';
 import * as config from 'config';
 import * as Random from 'random-js';
 import * as Bluebird from 'bluebird';
-import { Table } from '../../core/models/decorators';
-import ShardableModel from '../../core/models/shardable-model';
+import { ShardableModel, Table } from '../../core/db';
 import Sequence from '../../shared/sequence.model';
 const random = new Random();
 

@@ -5,7 +5,7 @@
 import { Model, Column, DataType, AllowNull, Default, DefaultScope, IFindOptions } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { NotFoundError } from '../core/errors';
-import { Table } from '../core/models/decorators';
+import { Table } from '../core/db';
 
 /**
  * マスタバージョンマスタモデルクラス。

@@ -4,9 +4,8 @@
  */
 import { Column, DataType, AllowNull, Default, IsDate, ForeignKey, IFindOptions, DefaultScope } from 'sequelize-typescript';
 import { ApiModelProperty } from '@nestjs/swagger';
-import { Table, DistributionKey } from '../../core/models/decorators';
+import { ShardableModel, Table, DistributionKey } from '../../core/db';
 import { NotFoundError } from '../../core/errors';
-import ShardableModel from '../../core/models/shardable-model';
 import Player from './player.model';
 
 /**

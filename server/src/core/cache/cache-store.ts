@@ -1,9 +1,9 @@
 /**
  * キャッシュストアモジュール。
- * @module ./core/models/cache-store
+ * @module ./core/cache/cache-store
  */
 import * as crypto from 'crypto';
-import { getClient, IRedisClientAsync, IRedisConfig } from '../redis/redis-helper';
+import { getClient, IRedisClientAsync, IRedisConfig } from '../redis';
 
 /**
  * Redisによるキャッシュストアクラス。

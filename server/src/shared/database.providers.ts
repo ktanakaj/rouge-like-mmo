@@ -8,8 +8,8 @@ import * as log4js from 'log4js';
 import * as _ from 'lodash';
 import { Sequelize, Model } from 'sequelize-typescript';
 import fileUtils from '../core/utils/file-utils';
-import { DB_KEY } from '../core/models/decorators';
-import { ShardableSequelize } from '../core/models/shardable-sequelize';
+import { DB_KEY } from '../core/db';
+import { ShardableSequelize } from '../core/db';
 
 /** モデル一覧 */
 export const MODELS: { master: typeof Model[] } = { master: [] };

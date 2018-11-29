@@ -6,7 +6,7 @@ import { Test, TestingModuleBuilder } from '@nestjs/testing';
 import { ModuleMetadata } from '@nestjs/common/interfaces/modules/module-metadata.interface';
 import { Observable } from 'rxjs';
 import { databaseProviders, modelProviders } from './shared/database.providers';
-import { RedisRpcClient } from './core/redis/redis-rpc-client';
+import { RedisRpcClient } from './core/redis';
 
 /** アプリ共通のモジュール群 */
 const modules = [];

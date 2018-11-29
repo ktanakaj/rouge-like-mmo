@@ -1,53 +1,25 @@
 /**
- * モデル用カスタムデコレーターモジュール。
- * @module ./core/models/decorators
+ * キャッシュデコレーターモジュール。
+ * @module ./core/cache/cache.decorator
  */
 import 'reflect-metadata';
-import { Table as SequelizeTable } from 'sequelize-typescript';
-import { IDefineOptions } from 'sequelize-typescript/lib/interfaces/IDefineOptions';
 import * as config from 'config';
 import { getCacheStore } from './cache-store';
 
-/** DB情報用のキー */
-export const DB_KEY = Symbol('db');
-/** シャーディングキー情報のキー */
-export const DISTRIBUTION_KEY = Symbol('distributionKey');
-
 /**
- * 拡張Tableデコレーター。
- * 標準のTableデコレーターに、DBの設定を追加している。
- * @param options テーブル定義。
- * @returns デコレーターファクトリー。
- */
-export function Table(options: IDefineOptions & { db: string }): Function {
-	return (target: any) => {
-		Reflect.defineMetadata(DB_KEY, options.db, target);
-		(SequelizeTable(options) as any)(target);
-	};
-}
-
-/**
- * シャーディングキー指定用デコレーター。
- * Modelクラスで、シャーディングキーにしたい列のプロパティに設定する。
- * @param target テーブル定義。
- * @param propertyName プロパティ名。
- */
-export function DistributionKey(target: any, propertyName: string): void {
-	Reflect.defineMetadata(DISTRIBUTION_KEY, propertyName, target.constructor);
-}
-
-/**
- * キャッシュ用デコレーター。
+ * キャッシュ用メソッドデコレーター。
  * メソッドに付けると、その戻り値をキャッシュする。
  * @param options キャッシュ設定。
  * @returns デコレーターファクトリー。
  */
 export function Cache(options: { ttl?: number, factory?: (json) => any }): Function;
 /**
- * キャッシュ用デコレーター。
+ * キャッシュ用メソッドデコレーター。
  * メソッドに付けると、その戻り値をキャッシュする。
- * @param options キャッシュ設定。
- * @returns デコレーターファクトリー。
+ * @param target クラスのコンストラクタorプロトタイプ。
+ * @param propertyKey メソッド名。
+ * @param descriptor メソッドのプロパティディスクリプタ。
+ * @returns キャッシュ処理でラップしたプロパティディスクリプタ。
  */
 export function Cache(target: any, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor;
 export function Cache(targetOrOptions: any, propertyKey?: string, descriptor?: PropertyDescriptor): PropertyDescriptor | Function {
@@ -58,6 +30,8 @@ export function Cache(targetOrOptions: any, propertyKey?: string, descriptor?: P
 	// ※ Redisアクセスの都合上、戻り値はPromiseとなります。
 	// ※ デコレーターの仕組み上、親クラスのstaticメソッドに付けても子クラスのクラス名が取れません。
 	//    子クラス側でオーバーライドするか、独自に実装してください。
+	// TODO: ライブラリ的なモジュールにするために、configは外から注入する形にして結合度を下げたい
+	const redisConfig = config['redis']['cache'];
 	if (propertyKey) {
 		return Cache({})(targetOrOptions, propertyKey, descriptor);
 	} else {
@@ -67,7 +41,7 @@ export function Cache(targetOrOptions: any, propertyKey?: string, descriptor?: P
 			}
 			// キャッシュ処理でラップしたメソッドを返す
 			const name = typeof target === 'function' ? target.name : target.constructor.name;
-			const cachedfunc = getCacheStore(config['redis']['cache']).wrap(desc.value, Object.assign({
+			const cachedfunc = getCacheStore(redisConfig).wrap(desc.value, Object.assign({
 				prefix: name + ':' + propKey,
 			}, targetOrOptions));
 			return Object.assign(desc, {

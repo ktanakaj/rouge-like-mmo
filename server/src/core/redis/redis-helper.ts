@@ -6,6 +6,7 @@ import * as redis from 'redis';
 import * as redisAsync from 'redis-promisify';
 import * as log4js from 'log4js';
 
+// TODO: ライブラリ的なモジュールにするために、ロガーは外から注入する形にして結合度を下げたい
 const redisLogger = log4js.getLogger('redis');
 const errorLogger = log4js.getLogger('error');
 

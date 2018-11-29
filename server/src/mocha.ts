@@ -11,9 +11,9 @@ import * as log4js from 'log4js';
 import { Sequelize } from 'sequelize-typescript';
 import { databaseProviders, IDatabaseProvider } from './shared/database.providers';
 import MasterVersion from './shared/master-version.model';
-import fileUtils from './core/utils/file-utils';
-import { getClient } from './core/redis/redis-helper';
-import { ShardableSequelize } from './core/models/shardable-sequelize';
+import { fileUtils } from './core/utils';
+import { getClient } from './core/redis';
+import { ShardableSequelize } from './core/db';
 import invokeContext from './shared/invoke-context';
 
 // const execAsync = util.promisify(child_process.exec);

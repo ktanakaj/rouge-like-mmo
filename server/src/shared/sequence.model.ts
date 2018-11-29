@@ -3,7 +3,7 @@
  * @module ./shared/sequence.model
  */
 import { Model, Column, DataType, PrimaryKey, AllowNull, Comment } from 'sequelize-typescript';
-import { Table } from '../core/models/decorators';
+import { Table } from '../core/db';
 import { NotFoundError } from '../core/errors';
 
 /**

@@ -3,8 +3,7 @@
  * @module ./game/shared/dungeon.model
  */
 import { Column, DataType, AllowNull, Comment } from 'sequelize-typescript';
-import { Table } from '../../core/models/decorators';
-import MasterModel from '../../core/models/master-model';
+import { MasterModel, Table } from '../../core/db';
 
 /**
  * ダンジョンマスタモデルクラス。

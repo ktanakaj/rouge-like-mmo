@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 import * as log4js from 'log4js';
 import * as csvtojson from 'csvtojson';
 import * as minimist from 'minimist';
-import fileUtils from '../core/utils/file-utils';
+import { fileUtils } from '../core/utils';
 
 const logger = log4js.getLogger('batch');
 

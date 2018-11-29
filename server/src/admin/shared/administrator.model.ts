@@ -7,8 +7,7 @@ import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
 import * as crypto from 'crypto';
 import * as config from 'config';
 import * as Random from 'random-js';
-import { Table } from '../../core/models/decorators';
-import DataModel from '../../core/models/data-model';
+import { DataModel, Table } from '../../core/db';
 const random = new Random();
 
 /**

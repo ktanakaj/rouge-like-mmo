@@ -5,9 +5,9 @@
 import 'reflect-metadata';
 import { Sequelize, ISequelizeConfig, ISequelizeUriConfig, ISequelizeValidationOnlyConfig } from 'sequelize-typescript';
 import { SyncOptions, DropOptions } from 'sequelize';
-import fileUtils from '../../core/utils/file-utils';
+import { fileUtils } from '../../core/utils';
 import ShardableModel from './shardable-model';
-import { DISTRIBUTION_KEY } from './decorators';
+import { DISTRIBUTION_KEY } from './distribution-key.decorator';
 
 interface ShardableSequelizeConfig {
 	// 本来のSequelizeのoptionsのうち、DB固有のものは配列で、それ以外は直接指定するイメージ

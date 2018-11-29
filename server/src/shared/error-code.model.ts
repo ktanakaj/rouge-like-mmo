@@ -3,8 +3,7 @@
  * @module ./shared/error-code.model
  */
 import { Column, DataType, Unique, AllowNull, Default, Comment } from 'sequelize-typescript';
-import { Table } from '../core/models/decorators';
-import MasterModel from '../core/models/master-model';
+import { MasterModel, Table } from '../core/db';
 
 /**
  * エラーコードマスタモデルクラス。

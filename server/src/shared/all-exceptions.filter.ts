@@ -8,8 +8,8 @@ import * as express from 'express';
 import * as config from 'config';
 import * as log4js from 'log4js';
 import { JsonRpcError } from 'json-rpc2-implementer';
-import { isWebSocketRpc } from '../core/ws/ws-rpc-server';
-import { isRedisRpc } from '../core/redis/redis-rpc-server';
+import { isWebSocketRpc } from '../core/ws';
+import { isRedisRpc } from '../core/redis';
 import { AppError } from '../core/errors';
 import ErrorCode from '../shared/error-code.model';
 

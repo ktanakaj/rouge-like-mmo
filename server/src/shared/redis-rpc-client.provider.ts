@@ -4,7 +4,7 @@
  */
 import * as config from 'config';
 import * as log4js from 'log4js';
-import { RedisRpcClient } from '../core/redis/redis-rpc-client';
+import { RedisRpcClient } from '../core/redis';
 const redisLogger = log4js.getLogger('redis');
 
 /** RedisRpcClientのプロバイダー */

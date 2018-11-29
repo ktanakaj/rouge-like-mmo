@@ -1,6 +1,6 @@
 /**
  * データモデル抽象クラスモジュール。
- * @module ./core/models/data-model
+ * @module ./core/db/data-model
  */
 import { Model, DefaultScope, IFindOptions } from 'sequelize-typescript';
 import { NotFoundError } from '../../core/errors';
