@@ -31,7 +31,7 @@ WebSocketを使ったオンラインゲームのネットワークやDB周りの
     * vagrant-vbguest - Vagrantプラグイン
 * Visual Studio Code - アプリ開発用エディター
 * MySQL Workbench 6.x - DB管理・EL図作成用ツール
-* Unity 2018.2.13f1 - インゲーム部分開発用
+* Unity 2018.3.0 - インゲーム部分開発用
 
 ## フォルダ構成
 * VMルートフォルダ
