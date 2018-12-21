@@ -2,6 +2,7 @@
  * プレイヤー関連サービスモジュール。
  * @module app/player/player.service
  */
+import { retry } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -31,7 +32,7 @@ export class PlayerService {
 			.set('page', String(page))
 			.set('max', String(max));
 		return this.http.get<{ rows: Player[], count: number }>('/api/admin/players/', { params })
-			.retry(environment.maxRetry)
+			.pipe(retry(environment.maxRetry))
 			.toPromise();
 	}
 }

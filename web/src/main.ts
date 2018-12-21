@@ -1,7 +1,6 @@
 /**
  * @file アプリのブートローダー。
  */
-import 'rxjs/add/operator/retry';
 import { enableProdMode } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeJa from '@angular/common/locales/ja';

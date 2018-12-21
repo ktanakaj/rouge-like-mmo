@@ -2,6 +2,7 @@
  * マスタ関連サービスモジュール。
  * @module app/master/master.service
  */
+import { retry } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -26,7 +27,7 @@ export class MasterService {
 	 */
 	findLatestMasters(): Promise<string[]> {
 		return this.http.get<string[]>(`/api/masters`)
-			.retry(environment.maxRetry)
+			.pipe(retry(environment.maxRetry))
 			.toPromise();
 	}
 
@@ -37,7 +38,7 @@ export class MasterService {
 	 */
 	findLatestMaster(name: string): Promise<object[]> {
 		return this.http.get<object[]>(`/api/masters/${name}`)
-			.retry(environment.maxRetry)
+			.pipe(retry(environment.maxRetry))
 			.toPromise();
 	}
 
@@ -52,7 +53,7 @@ export class MasterService {
 			.set('page', String(page))
 			.set('max', String(max));
 		return this.http.get<{ rows: MasterVersion[], count: number }>('/api/admin/masters/', { params })
-			.retry(environment.maxRetry)
+			.pipe(retry(environment.maxRetry))
 			.toPromise();
 	}
 

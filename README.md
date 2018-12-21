@@ -20,7 +20,7 @@ WebSocketを使ったオンラインゲームのネットワークやDB周りの
     * Sequelize-typescript 0.6.x
     * Node-config 2.x
     * Log4js 3.x
-* Angular 6.x
+* Angular 7.x
 
 ### 動作確認ブラウザ
 * &gt;= Google Chrome Ver69.0.3497.100
