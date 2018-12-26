@@ -2,8 +2,9 @@
  * サイドバーコンポーネント。
  * @module ./app/layout/header.component
  */
+import { filter } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, UrlSegment } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 /**
  * サイドバーコンポーネントクラス。
@@ -45,27 +46,23 @@ export class SidebarComponent implements OnInit {
 	 * @param route ルート情報。
 	 */
 	constructor(
-		private route: ActivatedRoute) { }
+		private router: Router) { }
 
 	/**
 	 * コンポーネント起動時の処理。
 	 */
 	ngOnInit(): void {
 		// 画面移動に応じて現在値選択
-		this.route.url.subscribe(async (url: UrlSegment[]) => {
-			this.activateNavi(url);
+		this.router.events.pipe(filter(ev => ev instanceof NavigationEnd)).subscribe((ev: NavigationEnd) => {
+			this.activateNavi(ev.url);
 		});
 	}
 
 	/**
 	 * 選択中のナビをアクティブにする。
-	 * @param url 表示中のURL。
+	 * @param path 表示中のパス。
 	 */
-	activateNavi(url: UrlSegment[]): void {
-		let path = '/';
-		if (url.length > 0) {
-			path += url[0].path;
-		}
+	activateNavi(path: string): void {
 		for (let i = 0; i < this.navi.length; i++) {
 			for (let j = 0; j < this.navi[i].length; j++) {
 				this.navi[i][j].active = this.navi[i][j].path === path;

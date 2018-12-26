@@ -28,7 +28,7 @@
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
     "@types/lodash": "^4.14.117",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^4.2.1",
     "core-js": "^2.5.4",
     "lodash": "^4.17.11",
     "ngx-bootstrap": "^3.0.1",

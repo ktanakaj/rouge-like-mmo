@@ -1,5 +1,5 @@
 <nav class="sidebar">
-    <ul *ngFor="let subnavi of navi" class="nav nav-sidebar">
-        <li *ngFor="let n of subnavi" class="{{ n.active ? 'active' : '' }}"><a routerLink="{{ n.path }}">{{ n.title | translate }}</a></li>
+    <ul *ngFor="let subnavi of navi" class="nav flex-column">
+        <li *ngFor="let n of subnavi" class="nav-item"><a class="nav-link{{ n.active ? ' active' : '' }}" routerLink="{{ n.path }}">{{ n.title | translate }}</a></li>
     </ul>
 </nav>

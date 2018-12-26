@@ -1,19 +1,19 @@
-<h1 class="page-header">{{ "LOGIN_PAGE.TITLE" | translate }}</h1>
-<form #f="ngForm" (ngSubmit)="submit()" novalidate class="form-horizontal">
-    <fieldset class="form-group">
-        <label for="name" class="control-label col-xs-2">{{ "ADMINISTRATOR.NAME" | translate }}:</label>
-        <div class="col-xs-5">
-            <input type="text" id="name" name="name" [(ngModel)]="user.name" #name="ngModel" required>
+<h1>{{ "LOGIN_PAGE.TITLE" | translate }}</h1>
+<form #f="ngForm" (ngSubmit)="submit()" novalidate>
+    <div class="form-group row">
+        <label for="name" class="col-form-label col-2">{{ "ADMINISTRATOR.NAME" | translate }}:</label>
+        <div class="col-5">
+            <input type="text" id="name" class="form-control" name="name" [(ngModel)]="user.name" #name="ngModel" required>
         </div>
-    </fieldset>
-    <fieldset class="form-group">
-        <label for="password" class="control-label col-xs-2">{{ "ADMINISTRATOR.PASSWORD" | translate }}:</label>
-        <div class="col-xs-5">
-            <input type="password" id="password" name="password" [(ngModel)]="user.password" #password="ngModel" required>
+    </div>
+    <div class="form-group row">
+        <label for="password" class="col-form-label col-2">{{ "ADMINISTRATOR.PASSWORD" | translate }}:</label>
+        <div class="col-5">
+            <input type="password" id="password" class="form-control" name="password" [(ngModel)]="user.password" #password="ngModel" required>
         </div>
-    </fieldset>
+    </div>
     <div class="form-group">
-        <div class="col-xs-offset-2 col-xs-10">
+        <div class="offset-2 col-5">
             <button type="submit" class="btn btn-primary btn-sm" [disabled]="!f.form.valid || isButtonClicked">{{ "LOGIN" | translate }}</button>
         </div>
     </div>
