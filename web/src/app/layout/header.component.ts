@@ -19,6 +19,6 @@ export class HeaderComponent {
 	 * @param authService 認証サービス。※テンプレート内で参照
 	 */
 	constructor(
-		private authService: AuthService
+		public authService: AuthService
 	) { }
 }

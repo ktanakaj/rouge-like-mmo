@@ -1,13 +1,18 @@
-<nav class="navbar navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-dark navbar-expand-sm bg-dark fixed-top">
+    <!-- FIXME: 構文ミス？により現状ナビのcollapseが機能しない。しかしcollapse用のクラスを指定しないとドロップダウンの表示が崩れるので動かない状態で残している -->
     <a class="navbar-brand" routerLink="/">{{ "APP_NAME" | translate }}</a>
-    <div id="navbar">
-        <ul class="nav navbar-nav navbar-right">
-            <li *ngIf="authService.user" dropdown triggers="mouseover" #dropdown="bs-dropdown" (mouseleave)="dropdown.hide()">
-                <a href id="basic-link" dropdownToggle (click)="false" aria-controls="basic-link-dropdown">{{ authService.user.name }}</a>
-                <ul id="basic-link-dropdown" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="basic-link">
-                    <li><a class="dropdown-item" routerLink="/password">{{ "PASSWORD_CHANGE_PAGE.LINK" | translate  }}</a></li>
-                    <li><a class="dropdown-item" routerLink="/logout">{{ "LOGOUT" | translate  }}</a></li>
-                </ul>
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto"></ul>
+        <ul class="navbar-nav">
+            <li *ngIf="authService.user" class="nav-item dropdown" dropdown>
+                <a href class="nav-link dropdown-toggle" id="basic-link" dropdownToggle (click)="false" aria-controls="basic-link-dropdown">{{ authService.user.name }}</a>
+                <div id="basic-link-dropdown" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="basic-link">
+                    <a class="dropdown-item" routerLink="/password">{{ "PASSWORD_CHANGE_PAGE.LINK" | translate  }}</a>
+                    <a class="dropdown-item" routerLink="/logout">{{ "LOGOUT" | translate  }}</a>
+                </div>
             </li>
         </ul>
     </div>

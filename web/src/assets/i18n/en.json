@@ -84,7 +84,8 @@
 	},
 	"MASTER_VIEWER_PAGE": {
 		"TITLE": "Master List",
-		"LINK": "Master Viewer"
+		"LINK": "Master Viewer",
+		"NAME": "Name"
 	},
 	"ADMINISTRATOR_PAGE": {
 		"TITLE": "Administrator List",

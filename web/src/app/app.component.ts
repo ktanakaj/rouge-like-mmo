@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
 	 */
 	constructor(
 		private translate: TranslateService,
-		private authService: AuthService) { }
+		public authService: AuthService) { }
 
 	/**
 	 * コンポーネント起動時の処理。

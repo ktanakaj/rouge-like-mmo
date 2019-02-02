@@ -58,6 +58,7 @@ export class AuthService {
 			return true;
 		} catch (e) {
 			if (e instanceof HttpErrorResponse && e.status === 401) {
+				this.user = null;
 				return false;
 			}
 			throw e;

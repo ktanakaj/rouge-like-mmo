@@ -47,7 +47,7 @@ const appRoutes: Routes = [
  * デフォルトのエラーハンドラー。
  */
 @Injectable()
-class DefaultErrorHandler implements ErrorHandler {
+export class DefaultErrorHandler implements ErrorHandler {
 	/** HttpErrorとメッセージの対応表 */
 	msgIdByStatus = {
 		400: 'ERROR.BAD_REQUEST',
