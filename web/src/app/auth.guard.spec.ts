@@ -18,37 +18,25 @@ describe('AuthGuard', () => {
 		expect(guard).toBeTruthy();
 	}));
 
-	it('should check authorization success by the `me` API', async () => {
-		const guard = new AuthGuard(<any>{
-			navigate: () => { },
-		}, <any>{
-			checkSession: () => true,
-		});
-
-		const result = await guard.canActivate(<any>{}, <any>{});
-		expect(result).toEqual(true);
-	});
-
-	it('should check authorization failed by the `me` API', async () => {
-		const guard = new AuthGuard(<any>{
-			navigate: () => { },
-		}, <any>{
-			checkSession: () => false,
-		});
-
-		const result = await guard.canActivate(<any>{}, <any>{});
-		expect(result).toEqual(false);
-	});
-
-	it('should check authorization success by cache', async () => {
+	it('should check authorization success', async () => {
 		const guard = new AuthGuard(<any>{
 			navigate: () => { },
 		}, <any>{
 			user: {},
-			checkSession: () => false,
 		});
 
 		const result = await guard.canActivate(<any>{}, <any>{});
 		expect(result).toEqual(true);
+	});
+
+	it('should check authorization failed', async () => {
+		const guard = new AuthGuard(<any>{
+			navigate: () => { },
+		}, <any>{
+			user: null,
+		});
+
+		const result = await guard.canActivate(<any>{}, <any>{});
+		expect(result).toEqual(false);
 	});
 });

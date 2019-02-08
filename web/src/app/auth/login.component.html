@@ -1,21 +1,27 @@
-<h1>{{ "LOGIN_PAGE.TITLE" | translate }}</h1>
-<form #f="ngForm" (ngSubmit)="submit()" novalidate>
-    <div class="form-group row">
-        <label for="name" class="col-form-label col-2">{{ "ADMINISTRATOR.NAME" | translate }}:</label>
-        <div class="col-5">
-            <input type="text" id="name" class="form-control" name="name" [(ngModel)]="user.name" #name="ngModel" required>
+<ng-template *ngIf="initialized; then thenBlock; else elseBlock"></ng-template>
+<ng-template #thenBlock>
+    <h1>{{ "LOGIN_PAGE.TITLE" | translate }}</h1>
+    <form #f="ngForm" (ngSubmit)="submit()" novalidate>
+        <div class="form-group row">
+            <label for="name" class="col-form-label col-2">{{ "ADMINISTRATOR.NAME" | translate }}:</label>
+            <div class="col-5">
+                <input type="text" id="name" class="form-control" name="name" [(ngModel)]="user.name" #name="ngModel" required>
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="password" class="col-form-label col-2">{{ "ADMINISTRATOR.PASSWORD" | translate }}:</label>
-        <div class="col-5">
-            <input type="password" id="password" class="form-control" name="password" [(ngModel)]="user.password" #password="ngModel" required>
+        <div class="form-group row">
+            <label for="password" class="col-form-label col-2">{{ "ADMINISTRATOR.PASSWORD" | translate }}:</label>
+            <div class="col-5">
+                <input type="password" id="password" class="form-control" name="password" [(ngModel)]="user.password" #password="ngModel" required>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <div class="offset-2 col-5">
-            <button type="submit" class="btn btn-primary btn-sm" [disabled]="!f.form.valid || isButtonClicked">{{ "LOGIN" | translate }}</button>
+        <div class="form-group">
+            <div class="offset-2 col-5">
+                <button type="submit" class="btn btn-primary btn-sm" [disabled]="!f.form.valid || isButtonClicked">{{ "LOGIN" | translate }}</button>
+            </div>
         </div>
-    </div>
-</form>
-<div class="alert alert-warning" role="alert" *ngIf="error">{{ error | translate }}</div>
+    </form>
+    <div class="alert alert-warning" role="alert" *ngIf="error">{{ error | translate }}</div>
+</ng-template>
+<ng-template #elseBlock>
+    <div>{{ "LOADING" | translate }}</div>
+</ng-template>

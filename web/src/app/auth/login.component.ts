@@ -2,7 +2,7 @@
  * 管理者認証ページコンポーネント。
  * @module app/auth/login.component
  */
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
@@ -14,7 +14,9 @@ import { AuthService } from './auth.service';
 	templateUrl: './login.component.html',
 	styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+	/** 初期化処理済か？ */
+	initialized = false;
 	/** 認証情報 */
 	user = { name: '', password: '' };
 	/** エラーメッセージ */
@@ -33,6 +35,19 @@ export class LoginComponent {
 	}
 
 	/**
+	 * コンポーネント起動時の処理。
+	 * @returns 処理状態。
+	 */
+	async ngOnInit(): Promise<void> {
+		// 認証可能な状態でアクセスされた場合は画面遷移
+		const authed = await this.authService.checkSession();
+		if (authed) {
+			this.forwardAuthedPage();
+		}
+		this.initialized = true;
+	}
+
+	/**
 	 * 管理者認証を行う。
 	 * @returns 処理状態。
 	 */
@@ -42,7 +57,7 @@ export class LoginComponent {
 		this.error = '';
 		try {
 			await this.authService.login(this.user.name, this.user.password);
-			this.router.navigate([this.authService.backupUrl || '/']);
+			this.forwardAuthedPage();
 		} catch (e) {
 			if (!(e instanceof HttpErrorResponse) || e.status !== 400) {
 				throw e;
@@ -51,5 +66,14 @@ export class LoginComponent {
 		} finally {
 			this.isButtonClicked = false;
 		}
+	}
+
+	/**
+	 * ログイン後の画面に遷移する。
+	 */
+	private forwardAuthedPage(): void {
+		const url = this.authService.backupUrl || '/';
+		this.authService.backupUrl = null;
+		this.router.navigate([url]);
 	}
 }

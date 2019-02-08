@@ -11,6 +11,7 @@
 	"BACK_TO_TOP": "TOPに戻る",
 	"BACK_TO_LIST": "一覧に戻る",
 	"BACK_TO_DETAIL": "詳細に戻る",
+	"LOADING": "読み込み中...",
 	"LOGIN": "ログイン",
 	"LOGOUT": "ログアウト",
 	"ERROR": {
