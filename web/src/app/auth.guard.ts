@@ -15,7 +15,7 @@ import { AuthService } from './auth/auth.service';
 export class AuthGuard implements CanActivate {
 	/**
 	 * サービスをDIしてコンポーネントを生成する。
-	 * @param route ルート情報。
+	 * @param router ルーター。
 	 * @param authService 認証サービス。
 	 */
 	constructor(
@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
 
 	/**
 	 * 認証チェック処理。
-	 * @param route 現在のルート情報。
+	 * @param next 現在のルート情報。
 	 * @param state 遷移先のルート情報。
 	 * @return チェックOKの場合true。
 	 */

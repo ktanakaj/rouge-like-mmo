@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
 
 	/**
 	 * サービスをDIしてコンポーネントを生成する。
-	 * @param route ルート情報。
+	 * @param router ルーター。
 	 * @param authService 管理者認証関連サービス。
 	 */
 	constructor(

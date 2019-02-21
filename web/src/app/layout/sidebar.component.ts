@@ -1,6 +1,6 @@
 /**
  * サイドバーコンポーネント。
- * @module ./app/layout/header.component
+ * @module ./app/layout/sidebar.component
  */
 import { filter } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';

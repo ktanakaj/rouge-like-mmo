@@ -71,6 +71,7 @@ export class MasterVersionComponent implements OnInit {
 	 * マスタバージョンの状態を変更する。
 	 * @param id マスタバージョンID。
 	 * @param status 新しい状態。
+	 * @returns 処理状態。
 	 */
 	async changeStatus(id: number, status: string): Promise<void> {
 		this.isButtonClicked = true;

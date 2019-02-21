@@ -11,7 +11,7 @@ export interface Administrator {
 	id?: number;
 	/** 管理者名 */
 	name: string;
-	/** ロール */
+	/** 権限 */
 	role: string;
 	/** パスワード */
 	password?: string;
@@ -19,7 +19,7 @@ export interface Administrator {
 	note?: string;
 	/** 登録日時 */
 	createdAt?: string;
-	/** 最終更新日時 */
+	/** 更新日時 */
 	updatedAt?: string;
 	/** 削除日時 */
 	deletedAt?: string;
