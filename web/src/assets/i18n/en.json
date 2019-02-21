@@ -20,7 +20,10 @@
 		"UNAUTHORIZED": "Unauthorized.",
 		"FORBIDDEN": "Forbidden.",
 		"NOT_FOUND": "Sorry. This resource is not found.",
+		"REQUEST_TIMEOUT": "Request timeouted.",
 		"CONFLICT": "Conflict.",
+		"TOO_MANY_REQUESTS": "Too many requests.",
+		"SERVICE_UNAVAILABLE": "Service unavailable.",
 		"FATAL": "Fatal Error. Please refresh the page and retry."
 	},
 	"VALIDATE": {

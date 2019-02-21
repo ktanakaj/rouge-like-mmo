@@ -54,7 +54,10 @@ export class DefaultErrorHandler implements ErrorHandler {
 		401: 'ERROR.UNAUTHORIZED',
 		403: 'ERROR.FORBIDDEN',
 		404: 'ERROR.NOT_FOUND',
+		408: 'ERROR.REQUEST_TIMEOUT',
 		409: 'ERROR.CONFLICT',
+		429: 'ERROR.TOO_MANY_REQUESTS',
+		503: 'ERROR.SERVICE_UNAVAILABLE',
 	};
 
 	/**

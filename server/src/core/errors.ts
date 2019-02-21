@@ -73,15 +73,39 @@ export class AppError extends Error {
 			case 400:
 				return new BadRequestError(msg, err);
 			case 401:
-				const newErr1 = new UnauthorizedError(msg);
-				newErr1.cause = err;
-				return newErr1;
+				const newErr401 = new UnauthorizedError(msg);
+				newErr401.cause = err;
+				return newErr401;
 			case 403:
-				const newErr2 = new ForbiddenError(msg);
-				newErr2.cause = err;
-				return newErr2;
+				const newErr403 = new ForbiddenError(msg);
+				newErr403.cause = err;
+				return newErr403;
 			case 404:
 				return new BadRequestError(msg, err);
+			case 405:
+				const newErr405 = new AppError(msg, 'METHOD_NOT_ALLOWED');
+				newErr405.cause = err;
+				return newErr405;
+			case 408:
+				const newErr408 = new AppError(msg, 'REQUEST_TIMEOUT');
+				newErr408.cause = err;
+				return newErr408;
+			case 409:
+				const newErr409 = new ConflictError(msg);
+				newErr409.cause = err;
+				return newErr409;
+			case 429:
+				const newErr429 = new AppError(msg, 'TOO_MANY_REQUESTS');
+				newErr429.cause = err;
+				return newErr429;
+			case 501:
+				const newErr501 = new AppError(msg, 'NOT_IMPLEMENTED');
+				newErr501.cause = err;
+				return newErr501;
+			case 503:
+				const newErr503 = new AppError(msg, 'SERVICE_UNAVAILABLE');
+				newErr503.cause = err;
+				return newErr503;
 			default:
 				return new InternalServerError(msg, err);
 		}

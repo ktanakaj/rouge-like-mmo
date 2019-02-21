@@ -1,7 +1,13 @@
 ﻿Id,Response Code,Error Code,Description,Log Level
-1,500,INTERNAL_SERVER_ERROR,サーバー内部でのエラー,error
-2,400,BAD_REQUEST,リクエスト不正,debug
-3,401,UNAUTHORIZED,未認証,debug
-4,403,FORBIDDEN,権限無し,debug
-5,404,NOT_FOUND,データ無し,debug
-6,409,CONFLICT,データが既に存在,debug
+400,400,BAD_REQUEST,リクエスト不正,debug
+401,401,UNAUTHORIZED,未認証,debug
+403,403,FORBIDDEN,権限無し,debug
+404,404,NOT_FOUND,データ無し,debug
+405,405,METHOD_NOT_ALLOWED,不正なHTTPメソッド,debug
+408,408,REQUEST_TIMEOUT,リクエストタイムアウト,debug
+409,409,CONFLICT,データが既に存在,debug
+429,429,TOO_MANY_REQUESTS,アクセス超過,info
+500,500,INTERNAL_SERVER_ERROR,サーバー内部でのエラー,error
+501,501,NOT_IMPLEMENTED,サーバー機能未対応,error
+503,503,SERVICE_UNAVAILABLE,サーバーの一時的エラー,error
+1001,503,MAINTENANCE_MODE,メンテナンス中,debug
