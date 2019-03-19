@@ -1,14 +1,80 @@
-.sidebar {
+/* 参考: https://github.com/ravishankarsrrav/bootstrap4-responsive-sidebar */
+
+#sidebar {
+    width: 250px;
     position: fixed;
-    top: 51px;
-    bottom: 0;
     left: 0;
-    z-index: 1000;
+    height: 100vh;
+    z-index: 999;
+    background: #f5f5f5;
+    color: #fff;
+    transition: all 0.3s;
+    padding: 10px 0px;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+
+#sidebar ul {
+    margin-bottom: 0rem;
+}
+
+#sidebar ul li a {
+    padding: 10px 20px;
     display: block;
-    padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    /* Scrollable contents if viewport is shorter than content. */
-    background-color: #f5f5f5;
-    border-right: 1px solid #eee;
+}
+
+#sidebar ul li a:hover {
+    color: white;
+    background: #0092D1;
+}
+
+#sidebar ul li.active>a {
+    color: #fff;
+    background: #0092D1;
+}
+
+#sidebar a[data-toggle="collapse"] {
+    position: relative;
+}
+
+#sidebar .dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+#sidebar ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #f5f5f5;
+}
+
+.sidebartoggle {
+    display: none;
+}
+
+.sidebartoggle .btn {
+    width: 2rem;
+    height: 2rem;
+    color: #fff;
+    margin: 1rem;
+}
+
+
+/* 画面が小さい場合に、サイドバーをデフォルト非表示にする */
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+    .sidebartoggle {
+        display: block;
+    }
 }

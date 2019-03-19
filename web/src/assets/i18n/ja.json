@@ -75,6 +75,9 @@
 		"TITLE": "ローグ風オンラインゲームGM Toolログイン",
 		"FAILED": "管理者名またはパスワードが確認できません。"
 	},
+	"MASTER_PAGE": {
+		"LINK": "マスタ管理"
+	},
 	"MASTER_VERSION_PAGE": {
 		"TITLE": "マスタバージョン一覧",
 		"LINK": "マスタバージョン情報",

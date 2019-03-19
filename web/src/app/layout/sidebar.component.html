@@ -1,5 +1,17 @@
-<nav class="sidebar">
-    <ul *ngFor="let subnavi of navi" class="nav flex-column">
-        <li *ngFor="let n of subnavi" class="nav-item"><a class="nav-link{{ n.active ? ' active' : '' }}" routerLink="{{ n.path }}">{{ n.title | translate }}</a></li>
+<nav id="sidebar">
+    <!--TODO: 仮。ここだけjQuery下手書きなのでデザイン含め整理する-->
+    <div class="sidebartoggle"><a onclick="$('#sidebar').toggleClass('active')" class="btn btn-info rounded-circle p-0" role="button">-</a></div>
+    <ul *ngFor="let itemOrGroup of navi; let i = index" class="list-unstyled components">
+        <li *ngIf="!itemOrGroup.items" class="{{ itemOrGroup.active ? 'active' : '' }}">
+            <a routerLink="{{ itemOrGroup.path }}">{{ itemOrGroup.title | translate }}</a>
+        </li>
+        <li *ngIf="itemOrGroup.items">
+            <a href="#sidebarsubmenu{{i}}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">{{ itemOrGroup.title | translate }}</a>
+            <ul class="collapse list-unstyled" id="sidebarsubmenu{{i}}">
+                <li *ngFor="let item of itemOrGroup.items" class="{{ item.active ? 'active' : '' }}"><a routerLink="{{ item.path }}">{{ item.title | translate }}</a></li>
+            </ul>
+        </li>
     </ul>
 </nav>
+<!--TODO: 仮。ここだけjQuery下手書きなのでデザイン含め整理する-->
+<div class="sidebartoggle"><a onclick="$('#sidebar').toggleClass('active')" class="btn btn-info rounded-circle p-0" role="button">+</a></div>

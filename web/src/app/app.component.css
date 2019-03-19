@@ -2,8 +2,19 @@
     padding: 2rem;
 }
 
-.footer {
+#maincontent {
+    padding: 2rem;
     position: absolute;
+    width: calc(100% - 250px);
+    right: 0;
+}
+
+#maincontent.active {
+    width: 100%;
+}
+
+.footer {
+    position: fixed;
     bottom: 0;
     width: 100%;
     /* Set the fixed height of the footer here */
@@ -11,4 +22,17 @@
     background-color: #f5f5f5;
     text-align: center;
     line-height: 2rem;
+    z-index: 1000;
+}
+
+
+/* 画面が小さい場合、サイドバーやフッターは非表示 */
+
+@media (max-width: 768px) {
+    #maincontent {
+        width: 100%;
+    }
+    .footer {
+        display: none;
+    }
 }
