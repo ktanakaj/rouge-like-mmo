@@ -13,6 +13,6 @@ describe('GM Tool', () => {
 
 	it('should display top page', () => {
 		page.navigateTo();
-		expect(page.getHeaderTitle()).toEqual('ローグ風オンラインゲーム');
+		expect(page.getHeaderTitle()).toEqual('Rouge-like MMO');
 	});
 });

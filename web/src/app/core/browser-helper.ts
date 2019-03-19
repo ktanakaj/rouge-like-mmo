@@ -25,16 +25,7 @@ function redirect(url: string): void {
 	window.location.href = url;
 }
 
-/**
- * ページを再読み込みする。
- */
-function reload(): void {
-	// ※ ブラウザの素の再読み込み。Angularのルートは呼ばれない
-	window.location.reload(true);
-}
-
 export default {
 	getLocale,
 	redirect,
-	reload,
 };
