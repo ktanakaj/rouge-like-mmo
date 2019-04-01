@@ -3,6 +3,7 @@
  * @module ./batch/master-import
  */
 import './core';
+import { ExitCode } from './core/exit-code';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as _ from 'lodash';
@@ -18,18 +19,18 @@ const argv = minimist(process.argv.slice(2), { boolean: true });
 let dir = argv._.shift();
 if (!dir) {
 	logger.warn('Usage: npm run master-import -- directory [--publish]');
-	process.exit(64);
+	process.exit(ExitCode.Usage);
 }
 if (!path.isAbsolute(dir)) {
 	dir = path.resolve(dir);
 }
 if (!fs.existsSync(dir)) {
 	logger.warn(`"${dir}" is not found.`);
-	process.exit(128);
+	process.exit(ExitCode.DataErr);
 }
 if (!fs.lstatSync(dir).isDirectory()) {
 	logger.warn(`"${dir}" is not directory.`);
-	process.exit(128);
+	process.exit(ExitCode.DataErr);
 }
 
 // マスタファイル一覧を取得
@@ -41,7 +42,7 @@ fileUtils.directoryWalkSync(dir, (f) => {
 });
 if (files.length === 0) {
 	logger.warn(`"${dir}" is empty.`);
-	process.exit(128);
+	process.exit(ExitCode.DataErr);
 }
 
 // インポート実施

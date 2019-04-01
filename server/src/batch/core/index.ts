@@ -4,6 +4,7 @@
  */
 import * as config from 'config';
 import * as log4js from 'log4js';
+import { ExitCode } from './exit-code';
 
 // log4jsの初期化
 log4js.configure(config['log4js']);
@@ -24,9 +25,9 @@ process.on('exit', (code) => {
 });
 process.on('uncaughtException', (err) => {
 	log4js.getLogger('error').error(err);
-	process.exit(1);
+	process.exit(ExitCode.Failure);
 });
 process.on('unhandledRejection', (reason, p) => {
 	log4js.getLogger('error').error(reason);
-	process.exit(1);
+	process.exit(ExitCode.Failure);
 });

@@ -3,6 +3,7 @@
  * @module ./batch/db-migrate
  */
 import './core';
+import { ExitCode } from './core/exit-code';
 import * as fs from 'fs';
 import * as child_process from 'child_process';
 import * as config from 'config';
@@ -23,11 +24,11 @@ const toscript = argv['to'];
 if ((dbname !== undefined && dbname === '')
 	|| (toscript !== undefined && toscript === '')) {
 	logger.warn('Usage: npm run db-migrate -- [--undo] [--all] [--db=dbname] [--to=scriptname]');
-	process.exit(64);
+	process.exit(ExitCode.Usage);
 }
 if (dbname && !config['databases'][dbname]) {
 	logger.warn(`"${dbname}" is not found.`);
-	process.exit(128);
+	process.exit(ExitCode.DataErr);
 }
 
 async function bootstrap() {
