@@ -4,14 +4,16 @@
  */
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler, Injectable, LOCALE_ID } from '@angular/core';
-import { HttpClientModule, HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HttpErrorResponse, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BsDropdownModule, CollapseModule, ModalModule, PaginationModule } from 'ngx-bootstrap';
 
+import { environment } from '../environments/environment';
 import localeHelper from './core/locale-helper';
+import { RequestInterceptor } from './core/request-interceptor';
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth.guard';
 import { IfRoleDirective } from './shared/if-role.directive';
@@ -81,8 +83,11 @@ export class DefaultErrorHandler implements ErrorHandler {
 			msgId = this.msgIdByStatus[error.status];
 		}
 		console.error(error);
-		this.translate.get(msgId || 'ERROR.FATAL').subscribe((res: string) => {
-			window.alert(res);
+		this.translate.get(msgId || 'ERROR.FATAL').subscribe((msg: string) => {
+			if (!environment.production && !msgId && error.message) {
+				msg += `\n\n(${error.message})`;
+			}
+			window.alert(msg);
 		});
 	}
 }
@@ -127,6 +132,7 @@ export class DefaultErrorHandler implements ErrorHandler {
 	providers: [
 		{ provide: LOCALE_ID, useValue: localeHelper.getLocale() },
 		{ provide: ErrorHandler, useClass: DefaultErrorHandler },
+		{ provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
 		AuthService,
 		AuthGuard,
 	],

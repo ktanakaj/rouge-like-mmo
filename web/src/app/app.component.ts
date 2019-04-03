@@ -30,7 +30,12 @@ export class AppComponent implements OnInit {
 	 */
 	ngOnInit(): void {
 		// アプリで使用する言語を設定
+		// ※ 本当は未対応の言語も設定してよいはずだが、TranslateHttpLoaderの404エラーが出てしまうため、
+		//    とりあえず対応している言語のみ許可。
+		const lang = localeHelper.getLanguage();
 		this.translate.setDefaultLang('ja');
-		this.translate.use(localeHelper.getLanguage());
+		if (['en', 'ja'].includes(lang)) {
+			this.translate.use(lang);
+		}
 	}
 }

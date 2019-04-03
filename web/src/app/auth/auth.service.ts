@@ -15,7 +15,7 @@ import { Administrator } from '../administrator/administrator.model';
 export class AuthService {
 	/** 認証中の自分自身の情報 */
 	user: Administrator;
-	/** 認証後の遷移先URL。 */
+	/** 認証後の遷移先URL */
 	backupUrl: string;
 
 	/**
