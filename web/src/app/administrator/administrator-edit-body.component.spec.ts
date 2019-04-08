@@ -1,28 +1,24 @@
 /**
- * 管理者ページコンポーネントのテスト。
- * @module ./app/administrator/administrator.component.spec
+ * 管理者編集本体部コンポーネントのテスト。
+ * @module ./app/administrator/administrator-edit-body.component.spec
  */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import testHelper from '../../test-helper';
 
-import { AdministratorComponent } from './administrator.component';
 import { AdministratorEditBodyComponent } from './administrator-edit-body.component';
 
 describe('AdministratorComponent', () => {
-	let component: AdministratorComponent;
-	let fixture: ComponentFixture<AdministratorComponent>;
+	let component: AdministratorEditBodyComponent;
+	let fixture: ComponentFixture<AdministratorEditBodyComponent>;
 
 	beforeEach(async(() => {
 		testHelper.configureTestingModule({
-			declarations: [
-				AdministratorComponent,
-				AdministratorEditBodyComponent,
-			],
+			declarations: [AdministratorEditBodyComponent],
 		}).compileComponents();
 	}));
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(AdministratorComponent);
+		fixture = TestBed.createComponent(AdministratorEditBodyComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

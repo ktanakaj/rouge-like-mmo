@@ -1,0 +1,52 @@
+<form #f="ngForm" (ngSubmit)="submit()" novalidate>
+    <div class="form-group row">
+        <label for="admin.name" class="col-form-label col-3">{{ "ADMINISTRATOR.NAME" | translate }}:</label>
+        <div class="col-9">
+            <input type="text" id="admin.name" class="form-control" name="name" [(ngModel)]="admin.name" #name="ngModel" required>
+            <div class="warning" *ngIf="name.errors">
+                <div [hidden]="!name.errors.required">{{ "VALIDATE.REQUIRED" | translate }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <label class="col-form-label col-3">{{ "ADMINISTRATOR.ROLE" | translate }}:</label>
+        <div class="col-9">
+            <div class="form-check form-check-inline">
+                <input type="radio" id="admin.role.admin" class="form-check-input" name="role" [(ngModel)]="admin.role" value="admin"><label class="form-check-label" for="admin.role.admin">{{ "ADMINISTRATOR.ROLE_ADMIN" | translate }}</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" id="admin.role.writable" class="form-check-input" name="role" [(ngModel)]="admin.role" value="writable"><label class="form-check-label" for="admin.role.writable">{{ "ADMINISTRATOR.ROLE_WRITABLE" | translate }}</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" id="admin.role.readonly" class="form-check-input" name="role" [(ngModel)]="admin.role" value="readonly"><label class="form-check-label" for="admin.role.readonly">{{ "ADMINISTRATOR.ROLE_READONLY" | translate }}</label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="admin.note" class="col-form-label col-3">{{ "ADMINISTRATOR.NOTE" | translate }}:</label>
+        <div class="col-9">
+            <textarea id="admin.note" class="form-control" name="note" [(ngModel)]="admin.note" #note="ngModel"></textarea>
+        </div>
+    </div>
+    <div class="form-group row" *ngIf="admin.createdAt">
+        <label class="col-3">{{ "ADMINISTRATOR.CREATED_AT" | translate }}:</label>
+        <div class="col-9">{{ admin.createdAt | date:'short' }}</div>
+    </div>
+    <div class="form-group row" *ngIf="admin.updatedAt">
+        <label class="col-3">{{ "ADMINISTRATOR.UPDATED_AT" | translate }}:</label>
+        <div class="col-9">{{ admin.updatedAt | date:'short' }}</div>
+    </div>
+    <div class="form-group row" *ngIf="admin.deletedAt">
+        <label class="col-3">{{ "ADMINISTRATOR.DELETED_AT" | translate }}:</label>
+        <div class="col-9">{{ admin.deletedAt | date:'short' }}</div>
+    </div>
+    <div class="form-group">
+        <div class="offset-2 col-10">
+            <button type="submit" class="btn btn-primary btn-sm" [disabled]="!f.form.valid || isButtonClicked">{{ "SUBMIT" | translate }}</button>
+            <button *ngIf="admin.id" type="button" class="btn btn-warning btn-sm" (click)="resetPassword()" [disabled]="isButtonClicked">{{ "ADMINISTRATOR_PAGE.PASSWORD_RESET" | translate }}</button>
+            <button *ngIf="admin.id" type="button" class="btn btn-danger btn-sm" (click)="delete()" [disabled]="isButtonClicked">{{ "DELETE" | translate }}</button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="cancel()">{{ "CANCEL" | translate }}</button>
+        </div>
+    </div>
+    <div class="alert alert-warning" role="alert" *ngIf="error">{{ error | translate }}</div>
+</form>
