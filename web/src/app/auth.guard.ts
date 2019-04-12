@@ -4,7 +4,7 @@
  */
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { AuthService } from './auth/auth.service';
+import { AuthInfo } from './shared/common.model';
 
 /**
  * 認証アクセス制御クラス。
@@ -14,13 +14,13 @@ import { AuthService } from './auth/auth.service';
 })
 export class AuthGuard implements CanActivate {
 	/**
-	 * サービスをDIしてコンポーネントを生成する。
+	 * サービス等をDIしてコンポーネントを生成する。
 	 * @param router ルーター。
-	 * @param authService 認証サービス。
+	 * @param auth 認証情報。
 	 */
 	constructor(
 		private router: Router,
-		private authService: AuthService) {
+		private auth: AuthInfo) {
 	}
 
 	/**
@@ -30,12 +30,12 @@ export class AuthGuard implements CanActivate {
 	 * @return チェックOKの場合true。
 	 */
 	canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-		// 管理者として認証済みならOK
-		if (this.authService.user) {
+		// 認証済みならOK
+		if (this.auth.isAuthed()) {
 			return true;
 		}
 		// 未認証は遷移先をバックアップしてログイン画面に転送
-		this.authService.backupUrl = state.url;
+		this.auth.backupUrl = state.url;
 		this.router.navigate(['/login']);
 		return false;
 	}

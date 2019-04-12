@@ -12,9 +12,9 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BsDropdownModule, CollapseModule, ModalModule, PaginationModule } from 'ngx-bootstrap';
 
 import { environment } from '../environments/environment';
+import { AuthInfo } from './shared/common.model';
 import localeHelper from './core/locale-helper';
 import { RequestInterceptor } from './core/request-interceptor';
-import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth.guard';
 import { IfRoleDirective } from './shared/if-role.directive';
 import { AppComponent } from './app.component';
@@ -135,7 +135,7 @@ export class DefaultErrorHandler implements ErrorHandler {
 		{ provide: LOCALE_ID, useValue: localeHelper.getLocale() },
 		{ provide: ErrorHandler, useClass: DefaultErrorHandler },
 		{ provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
-		AuthService,
+		{ provide: AuthInfo, useValue: new AuthInfo() },
 		AuthGuard,
 	],
 	bootstrap: [AppComponent]

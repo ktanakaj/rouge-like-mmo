@@ -9,9 +9,7 @@ import { MasterVersion } from './master-version.model';
 /**
  * マスタ関連サービスクラス。
  */
-@Injectable({
-	providedIn: 'root'
-})
+@Injectable()
 export class MasterService {
 	/**
 	 * モジュールをDIしてコンポーネントを生成する。

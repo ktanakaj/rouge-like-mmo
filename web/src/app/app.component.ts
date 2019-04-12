@@ -5,7 +5,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import localeHelper from './core/locale-helper';
-import { AuthService } from './auth/auth.service';
+import { AuthInfo } from './shared/common.model';
 
 /**
  * アプリのルートコンポーネントクラス。
@@ -19,11 +19,11 @@ export class AppComponent implements OnInit {
 	/**
 	 * サービスをDIしてコンポーネントを生成する。
 	 * @param translate 国際化サービス。
-	 * @param authService 認証サービス。※テンプレート内で参照
+	 * @param auth 認証情報。※テンプレート内で参照
 	 */
 	constructor(
 		private translate: TranslateService,
-		public authService: AuthService) { }
+		public auth: AuthInfo) { }
 
 	/**
 	 * コンポーネント起動時の処理。

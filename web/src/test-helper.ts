@@ -7,9 +7,9 @@ import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule } from '@angular/forms';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { BsDropdownModule, CollapseModule, ModalModule, PaginationModule } from 'ngx-bootstrap';
-import { AuthService } from './app/auth/auth.service';
+import { AuthInfo } from './app/shared/common.model';
 import { IfRoleDirective } from './app/shared/if-role.directive';
 import { AdminRoleComponent } from './app/shared/admin-role.component';
 import { MasterStatusComponent } from './app/shared/master-status.component';
@@ -40,8 +40,7 @@ const commonModuleDef = {
 		PaginationModule.forRoot(),
 	],
 	providers: [
-		TranslateService,
-		AuthService,
+		{ provide: AuthInfo, useValue: new AuthInfo() },
 	],
 	declarations: [
 		IfRoleDirective,

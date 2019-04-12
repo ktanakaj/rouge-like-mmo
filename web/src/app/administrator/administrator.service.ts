@@ -10,9 +10,7 @@ import { Administrator } from './administrator.model';
 /**
  * 管理者関連サービスクラス。
  */
-@Injectable({
-	providedIn: 'root'
-})
+@Injectable()
 export class AdministratorService {
 	/**
 	 * モジュールをDIしてコンポーネントを生成する。

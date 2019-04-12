@@ -4,37 +4,33 @@
  */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Administrator } from '../administrator/administrator.model';
+import { AuthInfo } from '../shared/common.model';
 
 /**
  * 管理者認証関連サービスクラス。
  */
-@Injectable({
-	providedIn: 'root'
-})
+@Injectable()
 export class AuthService {
-	/** 認証中の自分自身の情報 */
-	user: Administrator;
-	/** 認証後の遷移先URL */
-	backupUrl: string;
-
 	/**
 	 * モジュールをDIしてコンポーネントを生成する。
 	 * @param http HTTPモジュール。
+	 * @param authInfo 認証情報。
 	 */
-	constructor(private http: HttpClient) { }
+	constructor(
+		private http: HttpClient,
+		private authInfo: AuthInfo) { }
 
 	/**
 	 * 管理者としてログインする。
 	 * @param username 管理者名。
 	 * @param password パスワード。
-	 * @returns ログイン成功の場合、管理者情報。
+	 * @returns ログイン成功の場合、認証情報。
 	 * @throws ログイン失敗や通信エラーの場合。
 	 */
-	async login(username: string, password: string): Promise<Administrator> {
-		const admin = await this.http.post<Administrator>('/api/admin/administrators/login', { username, password }).toPromise();
-		this.user = admin;
-		return admin;
+	async login(username: string, password: string): Promise<AuthInfo> {
+		const user = await this.http.post('/api/admin/administrators/login', { username, password }).toPromise();
+		Object.assign(this.authInfo, this.administratorToAuthInfo(user));
+		return this.authInfo;
 	}
 
 	/**
@@ -44,22 +40,25 @@ export class AuthService {
 	 */
 	async logout(): Promise<void> {
 		await this.http.post('/api/admin/administrators/logout', {}).toPromise();
-		this.user = null;
+		this.authInfo.clear();
 	}
 
 	/**
 	 * 認証情報の復元。
-	 * @returns 認証中の場合true、それ以外はfalse。
+	 * @returns 認証中の場合認証情報、それ以外はnull。
 	 */
-	async checkSession(): Promise<boolean> {
+	async checkSession(): Promise<AuthInfo> {
 		// 認証しているかチェックのため自分を読み込み
 		try {
-			this.user = await this.findMe();
-			return true;
+			const user = await this.findMe();
+			if (user) {
+				Object.assign(this.authInfo, user);
+			}
+			return this.authInfo;
 		} catch (e) {
 			if (e instanceof HttpErrorResponse && e.status === 401) {
-				this.user = null;
-				return false;
+				this.authInfo.clear();
+				return null;
 			}
 			throw e;
 		}
@@ -67,19 +66,33 @@ export class AuthService {
 
 	/**
 	 * 自分自身の情報を取得する。
-	 * @returns 検索結果。
+	 * @returns 取得結果。
 	 * @throws 未認証状態、または通信エラーの場合。
 	 */
-	findMe(): Promise<Administrator> {
-		return this.http.get<Administrator>('/api/admin/administrators/me').toPromise();
+	async findMe(): Promise<AuthInfo> {
+		const user = await this.http.get('/api/admin/administrators/me').toPromise();
+		return this.administratorToAuthInfo(user);
 	}
 
 	/**
 	 * 自分自身のパスワードを変更する。
 	 * @param password 新しいパスワード。
-	 * @returns 更新した管理者情報。
+	 * @returns 処理状態。
 	 */
-	changePassword(password: string): Promise<Administrator> {
-		return this.http.put<Administrator>('/api/admin/administrators/me', { password }).toPromise();
+	async changePassword(password: string): Promise<void> {
+		await this.http.put('/api/admin/administrators/me', { password }).toPromise();
+	}
+
+	/**
+	 * 管理者情報を認証情報に変換する。
+	 * @param json 管理者情報のJSON。
+	 * @returns 認証情報。
+	 */
+	private administratorToAuthInfo(json: object): AuthInfo {
+		const info = new AuthInfo();
+		for (const key of ['id', 'name', 'role']) {
+			info[key] = json[key];
+		}
+		return info;
 	}
 }

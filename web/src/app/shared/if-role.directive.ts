@@ -3,7 +3,7 @@
  * @module ./app/shared/if-role.directive
  */
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
+import { AuthInfo } from './common.model';
 
 /**
  * ロール表示制限部品ディレクティブクラス。
@@ -19,12 +19,12 @@ export class IfRoleDirective {
 	 * モジュールをDIしてディレクティブを生成する。
 	 * @param templateRef テンプレート参照。
 	 * @param viewContainer ビューコンテナ。
-	 * @param authService 認証関連サービス。
+	 * @param auth 認証情報。
 	 */
 	constructor(
 		private templateRef: TemplateRef<any>,
 		private viewContainer: ViewContainerRef,
-		private authService: AuthService) { }
+		private auth: AuthInfo) { }
 
 	/**
 	 * 認証中ユーザーのロールに応じた表示制限を行う。
@@ -32,7 +32,7 @@ export class IfRoleDirective {
 	 */
 	@Input() set appIfRole(roles: string | string[]) {
 		const roleArary = Array.isArray(roles) ? roles : [roles];
-		if (this.authService.user && roleArary.includes(this.authService.user.role) && !this.hasView) {
+		if (this.auth.isAuthed() && roleArary.includes(this.auth.role) && !this.hasView) {
 			this.viewContainer.createEmbeddedView(this.templateRef);
 			this.hasView = true;
 		} else if (this.hasView) {

@@ -11,6 +11,9 @@ import { AuthService } from './auth.service';
  */
 @Component({
 	template: '',
+	providers: [
+		AuthService,
+	],
 })
 export class LogoutComponent implements OnInit {
 	/**

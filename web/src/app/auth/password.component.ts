@@ -11,7 +11,10 @@ import { AuthService } from './auth.service';
  */
 @Component({
 	templateUrl: './password.component.html',
-	styleUrls: ['./password.component.css']
+	styleUrls: ['./password.component.css'],
+	providers: [
+		AuthService,
+	],
 })
 export class PasswordComponent {
 	/** パスワード情報 */
@@ -47,7 +50,7 @@ export class PasswordComponent {
 
 			// 変更成功の場合画面遷移する
 			await this.authService.changePassword(this.user.password);
-			this.router.navigate([this.authService.backupUrl || '/']);
+			this.router.navigate(['/']);
 		} finally {
 			this.isButtonClicked = false;
 		}

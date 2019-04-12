@@ -9,9 +9,7 @@ import { Player } from './player.model';
 /**
  * プレイヤー関連サービスクラス。
  */
-@Injectable({
-	providedIn: 'root'
-})
+@Injectable()
 export class PlayerService {
 	/**
 	 * モジュールをDIしてコンポーネントを生成する。

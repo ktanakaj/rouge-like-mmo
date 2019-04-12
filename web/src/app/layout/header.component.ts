@@ -3,7 +3,7 @@
  * @module ./app/layout/header.component
  */
 import { Component } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
+import { AuthInfo } from '../shared/common.model';
 
 /**
  * ヘッダーコンポーネントクラス。
@@ -16,9 +16,9 @@ import { AuthService } from '../auth/auth.service';
 export class HeaderComponent {
 	/**
 	 * サービスをDIしてコンポーネントを生成する。
-	 * @param authService 認証サービス。※テンプレート内で参照
+	 * @param auth 認証情報。※テンプレート内で参照
 	 */
 	constructor(
-		public authService: AuthService
+		public auth: AuthInfo
 	) { }
 }

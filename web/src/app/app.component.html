@@ -2,7 +2,7 @@
     <app-header></app-header>
 </header>
 <div class="container-fluid">
-    <div *ngIf="authService.user">
+    <div *ngIf="auth.isAuthed()">
         <app-sidebar></app-sidebar>
     </div>
     <div id="maincontent">
