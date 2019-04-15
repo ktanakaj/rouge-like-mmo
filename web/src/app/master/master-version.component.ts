@@ -22,7 +22,7 @@ export class MasterVersionComponent implements OnInit {
 	/** マスタバージョン総数 */
 	count: number;
 	/** マスタバージョン一覧 */
-	rows: MasterVersion[];
+	rows: MasterVersion[] = null;
 	/** 選択中のページ */
 	currentPage = 1;
 	/** 1ページの表示件数 */

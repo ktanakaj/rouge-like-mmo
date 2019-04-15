@@ -2,38 +2,44 @@
 <ng-template #thenBlock>
     <h1>{{ name }}</h1>
 
-    <div class="table-responsive">
-        <table class="table table-sm table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th *ngFor="let column of columns">{{ column }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let row of rows">
-                    <td *ngFor="let column of columns">{{ row[column] }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <div *ngIf="rows !== null">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th *ngFor="let column of columns">{{ column }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of rows">
+                        <td *ngFor="let column of columns">{{ row[column] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <footer class="content-footer"><a routerLink="/masters/latest/{{ table }}">{{ "BACK_TO_LIST" | translate }}</a></footer>
+        <footer><a routerLink="/masters/latest/{{ table }}">{{ "BACK_TO_LIST" | translate }}</a></footer>
+    </div>
+    <div *ngIf="rows === null">{{ "LOADING" | translate }}</div>
 </ng-template>
 <ng-template #elseBlock>
     <h1>{{ "MASTER_VIEWER_PAGE.TITLE" | translate }}</h1>
 
-    <div class="table-responsive">
-        <table class="table table-sm table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th>{{ "MASTER_VIEWER_PAGE.NAME" | translate }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let table of tables">
-                    <td><a routerLink="/masters/latest/{{ table }}">{{ table }}</a></td>
-                </tr>
-            </tbody>
-        </table>
+    <div *ngIf="tables !== null">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>{{ "MASTER_VIEWER_PAGE.NAME" | translate }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let table of tables">
+                        <td><a routerLink="/masters/latest/{{ table }}">{{ table }}</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+    <div *ngIf="tables === null">{{ "LOADING" | translate }}</div>
 </ng-template>

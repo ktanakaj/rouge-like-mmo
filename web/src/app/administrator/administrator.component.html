@@ -5,40 +5,43 @@
     <button *appIfRole="'admin'" type="button" class="btn btn-warning btn-sm" (click)="openEdit()">{{ "NEW" | translate }}</button>
 </form>
 
-<pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" (pageChanged)="load($event.page)" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+<div *ngIf="rows !== null">
+    <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" (pageChanged)="load($event.page)" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
 
-<div class="table-responsive">
-    <table class="table table-sm table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>{{ "ADMINISTRATOR.ID" | translate }}</th>
-                <th>{{ "ADMINISTRATOR.NAME" | translate }}</th>
-                <th>{{ "ADMINISTRATOR.ROLE" | translate }}</th>
-                <th>{{ "ADMINISTRATOR.NOTE" | translate }}</th>
-                <th>{{ "ADMINISTRATOR.CREATED_AT" | translate }}</th>
-                <th>{{ "ADMINISTRATOR.DELETED_AT" | translate }}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let row of rows" [class]="row.deletedAt ? 'disabled' : ''">
-                <td>{{ row.id }}</td>
-                <td>{{ row.name }}</td>
-                <td>
-                    <app-admin-role [role]="row.role"></app-admin-role>
-                </td>
-                <td class="multiline">{{ row.note }}</td>
-                <td>{{ row.createdAt | date:'short' }}</td>
-                <td>{{ row.deletedAt | date:'short' }}</td>
-                <td>
-                    <button *appIfRole="'admin'" type="button" class="btn btn-warning btn-sm" (click)="openEdit(row)" [disabled]="!!row.deletedAt">{{ "EDIT" | translate }}</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>{{ "ADMINISTRATOR.ID" | translate }}</th>
+                    <th>{{ "ADMINISTRATOR.NAME" | translate }}</th>
+                    <th>{{ "ADMINISTRATOR.ROLE" | translate }}</th>
+                    <th>{{ "ADMINISTRATOR.NOTE" | translate }}</th>
+                    <th>{{ "ADMINISTRATOR.CREATED_AT" | translate }}</th>
+                    <th>{{ "ADMINISTRATOR.DELETED_AT" | translate }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of rows" [class]="row.deletedAt ? 'disabled' : ''">
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>
+                        <app-admin-role [role]="row.role"></app-admin-role>
+                    </td>
+                    <td class="multiline">{{ row.note }}</td>
+                    <td>{{ row.createdAt | date:'short' }}</td>
+                    <td>{{ row.deletedAt | date:'short' }}</td>
+                    <td>
+                        <button *appIfRole="'admin'" type="button" class="btn btn-warning btn-sm" (click)="openEdit(row)" [disabled]="!!row.deletedAt">{{ "EDIT" | translate }}</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
 </div>
-
-<pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+<div *ngIf="rows === null">{{ "LOADING" | translate }}</div>
 
 <div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="administratorEditModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

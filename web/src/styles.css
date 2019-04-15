@@ -10,20 +10,12 @@ body {
     margin-bottom: 2rem;
 }
 
-fieldset {
-    margin-bottom: 0.85em;
-}
-
 form .ng-invalid {
     background-color: #FFDAB9;
 }
 
 form .ng-valid {
     background-color: #E5FFCC;
-}
-
-.content-footer {
-    margin-top: 0.85em;
 }
 
 .warning {

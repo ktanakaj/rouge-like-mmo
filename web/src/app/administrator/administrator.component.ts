@@ -21,7 +21,7 @@ export class AdministratorComponent implements OnInit {
 	/** 管理者総数 */
 	count: number;
 	/** 管理者一覧 */
-	rows: Administrator[];
+	rows: Administrator[] = null;
 	/** 選択中のページ */
 	currentPage = 1;
 	/** 1ページの表示件数 */

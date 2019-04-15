@@ -18,13 +18,13 @@ import { MasterService } from './master.service';
 })
 export class MasterViewerComponent implements OnInit {
 	/** マスタ名一覧 */
-	tables: string[];
+	tables: string[] = null;
 	/** マスタ名 */
 	name = '';
 	/** マスタ列名 */
 	columns: string[];
 	/** マスタデータ一覧 */
-	rows: object[];
+	rows: object[] = null;
 
 	/**
 	 * サービスをDIしてコンポーネントを生成する。

@@ -20,7 +20,7 @@ export class PlayerComponent implements OnInit {
 	/** プレイヤー総数 */
 	count: number;
 	/** プレイヤー一覧 */
-	rows: Player[];
+	rows: Player[] = null;
 	/** 選択中のページ */
 	currentPage = 1;
 	/** 1ページの表示件数 */

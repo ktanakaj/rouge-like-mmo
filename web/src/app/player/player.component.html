@@ -4,31 +4,34 @@
     <button type="submit" class="btn btn-primary btn-sm">{{ "UPDATE" | translate }}</button>
 </form>
 
-<pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" (pageChanged)="load($event.page)" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+<div *ngIf="rows !== null">
+    <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" (pageChanged)="load($event.page)" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
 
-<div class="table-responsive">
-    <table class="table table-sm table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>{{ "PLAYER.ID" | translate }}</th>
-                <th>{{ "PLAYER.LEVEL" | translate }}</th>
-                <th>{{ "PLAYER.GAME_COINS" | translate }}</th>
-                <th>{{ "PLAYER.LAST_LOGIN" | translate }}</th>
-                <th>{{ "PLAYER.CREATED_AT" | translate }}</th>
-                <th>{{ "PLAYER.UPDATED_AT" | translate }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let row of rows">
-                <td>{{ row.id }}</td>
-                <td>{{ row.level }}</td>
-                <td>{{ row.gameCoins }}</td>
-                <td>{{ row.lastLogin | date:'short' }}</td>
-                <td>{{ row.createdAt | date:'short' }}</td>
-                <td>{{ row.updatedAt | date:'short' }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>{{ "PLAYER.ID" | translate }}</th>
+                    <th>{{ "PLAYER.LEVEL" | translate }}</th>
+                    <th>{{ "PLAYER.GAME_COINS" | translate }}</th>
+                    <th>{{ "PLAYER.LAST_LOGIN" | translate }}</th>
+                    <th>{{ "PLAYER.CREATED_AT" | translate }}</th>
+                    <th>{{ "PLAYER.UPDATED_AT" | translate }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of rows">
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.level }}</td>
+                    <td>{{ row.gameCoins }}</td>
+                    <td>{{ row.lastLogin | date:'short' }}</td>
+                    <td>{{ row.createdAt | date:'short' }}</td>
+                    <td>{{ row.updatedAt | date:'short' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
 </div>
-
-<pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+<div *ngIf="rows === null">{{ "LOADING" | translate }}</div>

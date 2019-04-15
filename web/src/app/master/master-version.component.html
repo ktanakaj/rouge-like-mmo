@@ -6,40 +6,43 @@
 
 <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" (pageChanged)="load($event.page)" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
 
-<div class="table-responsive">
-    <table class="table table-sm table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>{{ "MASTER_VERSION.ID" | translate }}</th>
-                <th>{{ "MASTER_VERSION.STATUS" | translate }}</th>
-                <th>{{ "MASTER_VERSION.NOTE" | translate }}</th>
-                <th>{{ "MASTER_VERSION.CREATED_AT" | translate }}</th>
-                <th>{{ "MASTER_VERSION.UPDATED_AT" | translate }}</th>
-                <th *appIfRole="['admin', 'writable']"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let row of rows">
-                <td>{{ row.id }}</td>
-                <td>
-                    <app-master-status [status]="row.status"></app-master-status>
-                </td>
-                <td class="multiline">{{ row.note }}</td>
-                <td>{{ row.createdAt | date:'short' }}</td>
-                <td>{{ row.updatedAt | date:'short' }}</td>
-                <td *appIfRole="['admin', 'writable']">
-                    <button *ngIf="row.status ==='readied'" type="button" class="btn btn-danger btn-sm" (click)="changeStatus(row.id, 'published')" [disabled]="isButtonClicked">{{ "MASTER_VERSION_PAGE.CHANGE_PUBLISHED" | translate }}</button>
-                    <button *ngIf="row.status ==='published'" type="button" class="btn btn-warning btn-sm" (click)="changeStatus(row.id, 'readied')" [disabled]="isButtonClicked">{{ "MASTER_VERSION_PAGE.CHANGE_READIED" | translate }}</button>
-                    <button type="button" class="btn btn-secondary btn-sm" (click)="openNote(row)">{{ "MASTER_VERSION_PAGE.ADD_NOTE" | translate }}</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<div *ngIf="rows !== null">
+    <div class="table-responsive">
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>{{ "MASTER_VERSION.ID" | translate }}</th>
+                    <th>{{ "MASTER_VERSION.STATUS" | translate }}</th>
+                    <th>{{ "MASTER_VERSION.NOTE" | translate }}</th>
+                    <th>{{ "MASTER_VERSION.CREATED_AT" | translate }}</th>
+                    <th>{{ "MASTER_VERSION.UPDATED_AT" | translate }}</th>
+                    <th *appIfRole="['admin', 'writable']"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of rows">
+                    <td>{{ row.id }}</td>
+                    <td>
+                        <app-master-status [status]="row.status"></app-master-status>
+                    </td>
+                    <td class="multiline">{{ row.note }}</td>
+                    <td>{{ row.createdAt | date:'short' }}</td>
+                    <td>{{ row.updatedAt | date:'short' }}</td>
+                    <td *appIfRole="['admin', 'writable']">
+                        <button *ngIf="row.status ==='readied'" type="button" class="btn btn-danger btn-sm" (click)="changeStatus(row.id, 'published')" [disabled]="isButtonClicked">{{ "MASTER_VERSION_PAGE.CHANGE_PUBLISHED" | translate }}</button>
+                        <button *ngIf="row.status ==='published'" type="button" class="btn btn-warning btn-sm" (click)="changeStatus(row.id, 'readied')" [disabled]="isButtonClicked">{{ "MASTER_VERSION_PAGE.CHANGE_READIED" | translate }}</button>
+                        <button type="button" class="btn btn-secondary btn-sm" (click)="openNote(row)">{{ "MASTER_VERSION_PAGE.ADD_NOTE" | translate }}</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+
+    <footer><small class="form-text text-muted">{{ "MASTER_VERSION_PAGE.ATTENTION" | translate }}</small></footer>
 </div>
-
-<pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
-
-<footer class="content-footer"><small class="form-text text-muted">{{ "MASTER_VERSION_PAGE.ATTENTION" | translate }}</small></footer>
+<div *ngIf="rows === null">{{ "LOADING" | translate }}</div>
 
 <div bsModal #noteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="masterVersionNoteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
