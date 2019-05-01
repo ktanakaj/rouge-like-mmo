@@ -11,6 +11,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { BsDropdownModule, CollapseModule, ModalModule, PaginationModule } from 'ngx-bootstrap';
 import { AuthInfo } from './app/shared/common.model';
 import { IfRoleDirective } from './app/shared/if-role.directive';
+import { LoadingComponent } from './app/shared/loading.component';
 import { AdminRoleComponent } from './app/shared/admin-role.component';
 import { MasterStatusComponent } from './app/shared/master-status.component';
 
@@ -44,6 +45,7 @@ const commonModuleDef = {
 	],
 	declarations: [
 		IfRoleDirective,
+		LoadingComponent,
 		AdminRoleComponent,
 		MasterStatusComponent,
 	],

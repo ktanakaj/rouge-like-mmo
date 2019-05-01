@@ -34,4 +34,4 @@
 
     <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
 </div>
-<div *ngIf="rows === null">{{ "LOADING" | translate }}</div>
+<app-loading *ngIf="rows === null"></app-loading>

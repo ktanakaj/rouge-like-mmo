@@ -42,7 +42,7 @@
 
     <footer><small class="form-text text-muted">{{ "MASTER_VERSION_PAGE.ATTENTION" | translate }}</small></footer>
 </div>
-<div *ngIf="rows === null">{{ "LOADING" | translate }}</div>
+<app-loading *ngIf="rows === null"></app-loading>
 
 <div bsModal #noteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="masterVersionNoteModalLabel" aria-hidden="true">
     <div class="modal-dialog">

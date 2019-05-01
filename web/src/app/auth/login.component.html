@@ -1,5 +1,4 @@
-<ng-template *ngIf="initialized; then thenBlock; else elseBlock"></ng-template>
-<ng-template #thenBlock>
+<ng-container *ngIf="initialized">
     <h1>{{ "LOGIN_PAGE.TITLE" | translate }}</h1>
     <form #f="ngForm" (ngSubmit)="submit()" novalidate>
         <div class="form-group row">
@@ -21,7 +20,5 @@
         </div>
     </form>
     <div class="alert alert-warning" role="alert" *ngIf="error">{{ error | translate }}</div>
-</ng-template>
-<ng-template #elseBlock>
-    <div>{{ "LOADING" | translate }}</div>
-</ng-template>
+</ng-container>
+<app-loading *ngIf="!initialized"></app-loading>
