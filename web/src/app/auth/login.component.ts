@@ -3,8 +3,8 @@
  * @module app/auth/login.component
  */
 import { Component, OnInit } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AppError } from '../core/app-error';
 import { AuthInfo } from '../shared/common.model';
 import { AuthService } from './auth.service';
 
@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
 		try {
 			return await this.authService.login(this.user.name, this.user.password);
 		} catch (e) {
-			if (!(e instanceof HttpErrorResponse) || e.status !== 400) {
+			if (!(e instanceof AppError) || e.status !== 400) {
 				throw e;
 			}
 			this.error = 'LOGIN_PAGE.FAILED';

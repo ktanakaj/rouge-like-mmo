@@ -5,7 +5,8 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 import { Observable, throwError, timer } from 'rxjs';
-import { mergeMap, retryWhen } from 'rxjs/operators';
+import { mergeMap, retryWhen, catchError } from 'rxjs/operators';
+import { AppError } from './app-error';
 
 /**
  * 汎用のリトライストラテジー。
@@ -50,6 +51,7 @@ export class RequestInterceptor implements HttpInterceptor {
 		return next.handle(req)
 			.pipe(retryWhen(genericRetryStrategy({
 				excludedStatusCodes: [400, 401, 403, 404, 409, 422]
-			})));
+			})))
+			.pipe(catchError(res => throwError(AppError.parse(res) || res)));
 	}
 }

@@ -3,8 +3,8 @@
  * @module app/administrator/administrator-edit-body.component
  */
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
+import { AppError } from '../core/app-error';
 import { Administrator } from './administrator.model';
 import { AdministratorService } from './administrator.service';
 
@@ -88,7 +88,7 @@ export class AdministratorEditBodyComponent {
 			}
 			this.completed.emit(true);
 		} catch (e) {
-			if (!(e instanceof HttpErrorResponse) || e.status !== 409) {
+			if (!(e instanceof AppError) || e.status !== 409) {
 				throw e;
 			}
 			this.error = 'VALIDATE.DUPLICATED';

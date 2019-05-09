@@ -3,7 +3,8 @@
  * @module app/auth/auth.service
  */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { AppError } from '../core/app-error';
 import { AuthInfo } from '../shared/common.model';
 
 /**
@@ -56,7 +57,7 @@ export class AuthService {
 			}
 			return this.authInfo;
 		} catch (e) {
-			if (e instanceof HttpErrorResponse && e.status === 401) {
+			if (e instanceof AppError && e.status === 401) {
 				this.authInfo.clear();
 				return null;
 			}

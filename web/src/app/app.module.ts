@@ -13,6 +13,7 @@ import { BsDropdownModule, CollapseModule, ModalModule, PaginationModule } from 
 
 import { environment } from '../environments/environment';
 import { AuthInfo } from './shared/common.model';
+import { AppError } from './core/app-error';
 import localeHelper from './core/locale-helper';
 import { RequestInterceptor } from './core/request-interceptor';
 import { AuthGuard } from './auth.guard';
@@ -81,7 +82,7 @@ export class DefaultErrorHandler implements ErrorHandler {
 		}
 		// 404等のエラーの場合、専用のエラーメッセージを表示。それ以外はデフォルトのエラー
 		let msgId;
-		if (error instanceof HttpErrorResponse) {
+		if (error instanceof AppError || error instanceof HttpErrorResponse) {
 			msgId = this.msgIdByStatus[error.status];
 		}
 		console.error(error);
