@@ -8,7 +8,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule } from '@angular/forms';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { BsDropdownModule, CollapseModule, ModalModule, PaginationModule } from 'ngx-bootstrap';
+import { AlertModule, BsDropdownModule, CollapseModule, ModalModule, PaginationModule } from 'ngx-bootstrap';
 import { AuthInfo } from './app/shared/common.model';
 import { IfRoleDirective } from './app/shared/if-role.directive';
 import { LoadingComponent } from './app/shared/loading.component';
@@ -35,6 +35,7 @@ const commonModuleDef = {
 				useClass: JsonTranslationLoader,
 			}
 		}),
+		AlertModule.forRoot(),
 		BsDropdownModule.forRoot(),
 		CollapseModule.forRoot(),
 		ModalModule.forRoot(),

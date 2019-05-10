@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { BsDropdownModule, CollapseModule, ModalModule, PaginationModule } from 'ngx-bootstrap';
+import { AlertModule, BsDropdownModule, CollapseModule, ModalModule, PaginationModule } from 'ngx-bootstrap';
 
 import { environment } from '../environments/environment';
 import { AuthInfo } from './shared/common.model';
@@ -129,6 +129,7 @@ export class DefaultErrorHandler implements ErrorHandler {
 				deps: [HttpClient]
 			}
 		}),
+		AlertModule.forRoot(),
 		BsDropdownModule.forRoot(),
 		CollapseModule.forRoot(),
 		PaginationModule.forRoot(),

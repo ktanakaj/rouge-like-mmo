@@ -48,5 +48,5 @@
             <button type="button" class="btn btn-secondary btn-sm" (click)="cancel()">{{ "CANCEL" | translate }}</button>
         </div>
     </div>
-    <div class="alert alert-warning" role="alert" *ngIf="error">{{ error | translate }}</div>
+    <alert *ngIf="error">{{ error | translate }}</alert>
 </form>
