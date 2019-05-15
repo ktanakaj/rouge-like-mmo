@@ -2,10 +2,8 @@
     <div class="form-group row">
         <label for="admin.name" class="col-form-label col-3">{{ "ADMINISTRATOR.NAME" | translate }}:</label>
         <div class="col-9">
-            <input type="text" id="admin.name" class="form-control" name="name" [(ngModel)]="admin.name" #name="ngModel" required>
-            <div class="warning" *ngIf="name.errors">
-                <div [hidden]="!name.errors.required">{{ "VALIDATE.REQUIRED" | translate }}</div>
-            </div>
+            <input type="text" id="admin.name" class="form-control" name="name" [(ngModel)]="admin.name" #nameModel="ngModel" required>
+            <app-validation-error [value]="nameModel"></app-validation-error>
         </div>
     </div>
     <div class="row">
@@ -25,7 +23,7 @@
     <div class="form-group row">
         <label for="admin.note" class="col-form-label col-3">{{ "ADMINISTRATOR.NOTE" | translate }}:</label>
         <div class="col-9">
-            <textarea id="admin.note" class="form-control" name="note" [(ngModel)]="admin.note" #note="ngModel"></textarea>
+            <textarea id="admin.note" class="form-control" name="note" [(ngModel)]="admin.note"></textarea>
         </div>
     </div>
     <div class="form-group row" *ngIf="admin.createdAt">

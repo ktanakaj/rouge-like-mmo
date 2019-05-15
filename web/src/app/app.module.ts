@@ -23,6 +23,7 @@ import { TopComponent } from './top/top.component';
 import { HeaderComponent } from './layout/header.component';
 import { SidebarComponent } from './layout/sidebar.component';
 import { LoadingComponent } from './shared/loading.component';
+import { ValidationErrorComponent } from './shared/validation-error.component';
 import { AdminRoleComponent } from './shared/admin-role.component';
 import { MasterStatusComponent } from './shared/master-status.component';
 import { LoginComponent } from './auth/login.component';
@@ -108,6 +109,7 @@ export class DefaultErrorHandler implements ErrorHandler {
 		HeaderComponent,
 		SidebarComponent,
 		LoadingComponent,
+		ValidationErrorComponent,
 		AdminRoleComponent,
 		MasterStatusComponent,
 		TopComponent,

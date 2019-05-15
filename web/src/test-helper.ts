@@ -12,6 +12,7 @@ import { AlertModule, BsDropdownModule, CollapseModule, ModalModule, PaginationM
 import { AuthInfo } from './app/shared/common.model';
 import { IfRoleDirective } from './app/shared/if-role.directive';
 import { LoadingComponent } from './app/shared/loading.component';
+import { ValidationErrorComponent } from './app/shared/validation-error.component';
 import { AdminRoleComponent } from './app/shared/admin-role.component';
 import { MasterStatusComponent } from './app/shared/master-status.component';
 
@@ -47,6 +48,7 @@ const commonModuleDef = {
 	declarations: [
 		IfRoleDirective,
 		LoadingComponent,
+		ValidationErrorComponent,
 		AdminRoleComponent,
 		MasterStatusComponent,
 	],
