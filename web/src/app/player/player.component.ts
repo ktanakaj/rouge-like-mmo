@@ -28,6 +28,8 @@ export class PlayerComponent implements OnInit {
 	/** ページングのページ数の表示最大値 */
 	maxSize = 10;
 
+	// TODO: 検索機能とかも含めて大改修する
+
 	/**
 	 * サービスをDIしてコンポーネントを生成する。
 	 * @param playerService プレイヤー関連サービス。

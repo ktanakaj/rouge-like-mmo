@@ -19,8 +19,8 @@ import { AuthService } from './auth.service';
 export class PasswordComponent {
 	/** パスワード情報 */
 	user = { password: '', repeatPassword: '' };
-	/** ダブルクリック抑止 */
-	isButtonClicked = false;
+	/** 画面ロック中か？ */
+	isLocked = false;
 	/** エラーメッセージ */
 	error = '';
 
@@ -39,7 +39,7 @@ export class PasswordComponent {
 	 * @returns 処理状態。
 	 */
 	async submit(): Promise<void> {
-		this.isButtonClicked = true;
+		this.isLocked = true;
 		this.error = '';
 		try {
 			// このタイミングでパスワード一致チェック実施
@@ -52,7 +52,7 @@ export class PasswordComponent {
 			await this.authService.changePassword(this.user.password);
 			this.router.navigate(['/']);
 		} finally {
-			this.isButtonClicked = false;
+			this.isLocked = false;
 		}
 	}
 }

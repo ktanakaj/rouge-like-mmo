@@ -25,8 +25,8 @@ export class LoginComponent implements OnInit {
 	user = { name: '', password: '' };
 	/** エラーメッセージ */
 	error = '';
-	/** ダブルクリック抑止 */
-	isButtonClicked = false;
+	/** 画面ロック中か？ */
+	isLocked = false;
 
 	/**
 	 * サービスをDIしてコンポーネントを生成する。
@@ -57,14 +57,14 @@ export class LoginComponent implements OnInit {
 	 */
 	async submit(): Promise<void> {
 		// 認証を行う。認証OKの場合画面遷移する
-		this.isButtonClicked = true;
+		this.isLocked = true;
 		try {
 			const authed = await this.login();
 			if (authed) {
 				await this.forwardAuthedPage(authed);
 			}
 		} finally {
-			this.isButtonClicked = false;
+			this.isLocked = false;
 		}
 	}
 

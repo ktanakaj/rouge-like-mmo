@@ -10,8 +10,8 @@
                 <a href class="nav-link dropdown-toggle" id="basic-link" dropdownToggle (click)="false" aria-controls="basic-link-dropdown">{{ auth.name }}</a>
                 <div id="basic-link-dropdown" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="basic-link">
                     <span class="dropdown-item">{{ "ADMINISTRATOR.ROLE" | translate }}: <app-admin-role [role]="auth.role"></app-admin-role></span>
-                    <a class="dropdown-item" routerLink="/password">{{ "PASSWORD_CHANGE_PAGE.LINK" | translate  }}</a>
-                    <a class="dropdown-item" routerLink="/logout">{{ "LOGOUT" | translate  }}</a>
+                    <a class="dropdown-item" routerLink="/password">{{ "PASSWORD_CHANGE_PAGE.LINK" | translate }}</a>
+                    <a class="dropdown-item" routerLink="/logout">{{ "LOGOUT" | translate }}</a>
                 </div>
             </li>
         </ul>

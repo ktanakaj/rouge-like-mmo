@@ -52,7 +52,7 @@ export class SidebarComponent implements OnInit {
 	];
 
 	/**
-	 * サービスをDIしてコンポーネントを生成する。
+	 * サービス等をDIしてコンポーネントを生成する。
 	 * @param router ルーター。
 	 */
 	constructor(

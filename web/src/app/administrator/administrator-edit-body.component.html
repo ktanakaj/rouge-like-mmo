@@ -40,9 +40,11 @@
     </div>
     <div class="form-group">
         <div class="offset-2 col-10">
-            <button type="submit" class="btn btn-primary btn-sm" [disabled]="!f.form.valid || isButtonClicked">{{ "SUBMIT" | translate }}</button>
-            <button *ngIf="admin.id" type="button" class="btn btn-warning btn-sm" (click)="resetPassword()" [disabled]="isButtonClicked">{{ "ADMINISTRATOR_PAGE.PASSWORD_RESET" | translate }}</button>
-            <button *ngIf="admin.id" type="button" class="btn btn-danger btn-sm" (click)="delete()" [disabled]="isButtonClicked">{{ "DELETE" | translate }}</button>
+            <button type="submit" class="btn btn-primary btn-sm" [disabled]="!f.form.valid || isLocked">{{ "SUBMIT" | translate }}</button>
+            <span *ngIf="admin.id">
+                <button type="button" class="btn btn-warning btn-sm" (click)="resetPassword()" [disabled]="isLocked">{{ "ADMINISTRATOR_PAGE.PASSWORD_RESET" | translate }}</button>
+                <button type="button" class="btn btn-danger btn-sm" (click)="delete()" [disabled]="isLocked">{{ "DELETE" | translate }}</button>
+            </span>
             <button type="button" class="btn btn-secondary btn-sm" (click)="cancel()">{{ "CANCEL" | translate }}</button>
         </div>
     </div>

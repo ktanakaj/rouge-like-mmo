@@ -1,12 +1,13 @@
 <h1>{{ "ADMINISTRATOR_PAGE.TITLE" | translate }}</h1>
 
-<form #f="ngForm" (ngSubmit)="load(currentPage)" class="mb-3" novalidate>
-    <button type="submit" class="btn btn-primary btn-sm">{{ "UPDATE" | translate }}</button>
-    <button *appIfRole="'admin'" type="button" class="btn btn-warning btn-sm" (click)="openEdit()">{{ "NEW" | translate }}</button>
+<form #f="ngForm" (ngSubmit)="load()" class="mb-3" novalidate>
+    <button type="submit" class="btn btn-primary btn-sm" [disabled]="isLocked">{{ "UPDATE" | translate }}</button>
+    <button *appIfRole="'admin'" type="button" class="btn btn-warning btn-sm" (click)="showEdit()" [disabled]="isLocked">{{ "NEW" | translate }}</button>
 </form>
 
 <div *ngIf="rows !== null">
-    <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" (pageChanged)="load($event.page)" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+    <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" (pageChanged)="onPageChanged($event.page)" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
+        lastText="&raquo;" [disabled]="isLocked"></pagination>
 
     <div class="table-responsive">
         <table class="table table-sm table-striped table-bordered">
@@ -32,28 +33,28 @@
                     <td>{{ row.createdAt | date:'short' }}</td>
                     <td>{{ row.deletedAt | date:'short' }}</td>
                     <td>
-                        <button *appIfRole="'admin'" type="button" class="btn btn-warning btn-sm" (click)="openEdit(row)" [disabled]="!!row.deletedAt">{{ "EDIT" | translate }}</button>
+                        <button *appIfRole="'admin'" type="button" class="btn btn-warning btn-sm" (click)="showEdit(row)" [disabled]="!!row.deletedAt || isLocked">{{ "EDIT" | translate }}</button>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+    <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;" [disabled]="isLocked"></pagination>
 </div>
 <app-loading *ngIf="rows === null"></app-loading>
 
-<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="administratorEditModalLabel" aria-hidden="true">
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="administratorEditModalLabel" (onHide)="onHide()">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title float-left">{{ "ADMINISTRATOR_PAGE.EDIT_TITLE" | translate }}</h4>
-                <button type="button" class="close float-right" aria-label="Close" (click)="closeEdit()">
+                <button type="button" class="close float-right" aria-label="Close" (click)="editModal.hide()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" *ngIf="editEnable">
-                <app-administrator-edit-body [admin]="admin" (completed)="closeEdit($event)"></app-administrator-edit-body>
+            <div class="modal-body">
+                <app-administrator-edit-body [admin]="admin" (completed)="onCompleted($event)"></app-administrator-edit-body>
             </div>
         </div>
     </div>

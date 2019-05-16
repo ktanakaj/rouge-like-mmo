@@ -54,8 +54,8 @@ export class AdministratorEditBodyComponent {
 	/** 編集終了通知用のイベント */
 	@Output() completed = new EventEmitter<boolean>();
 
-	/** ダブルクリック抑止 */
-	isButtonClicked = false;
+	/** 画面ロック中か？ */
+	isLocked = false;
 	/** エラーメッセージ */
 	error = '';
 	/** 編集中の管理者情報 */
@@ -76,13 +76,14 @@ export class AdministratorEditBodyComponent {
 	 * @returns 処理状態。
 	 */
 	async submit(): Promise<void> {
-		this.isButtonClicked = true;
+		this.isLocked = true;
 		this.error = '';
+		const form = this.admin;
 		try {
-			const admin = await this.administratorService.save(this.admin);
+			const admin = await this.administratorService.save(form);
 			// 新規アカウントの場合、パスワードを通知
 			// TODO: できればメール送信などにしたい
-			if (!this.admin.id) {
+			if (!form.id) {
 				const msg = await this.translate.get('ADMINISTRATOR_PAGE.REGISTERED', admin).toPromise();
 				window.alert(msg);
 			}
@@ -93,7 +94,7 @@ export class AdministratorEditBodyComponent {
 			}
 			this.error = 'VALIDATE.DUPLICATED';
 		} finally {
-			this.isButtonClicked = false;
+			this.isLocked = false;
 		}
 	}
 
@@ -102,15 +103,16 @@ export class AdministratorEditBodyComponent {
 	 * @returns 処理状態。
 	 */
 	async delete(): Promise<void> {
-		this.isButtonClicked = true;
+		this.isLocked = true;
+		const id = this.admin.id;
 		try {
 			const confirm = await this.translate.get('DELETE_CONFIRMING.BODY').toPromise();
 			if (window.confirm(confirm)) {
-				await this.administratorService.delete(this.admin.id);
+				await this.administratorService.delete(id);
 				this.completed.emit(true);
 			}
 		} finally {
-			this.isButtonClicked = false;
+			this.isLocked = false;
 		}
 	}
 
@@ -119,17 +121,18 @@ export class AdministratorEditBodyComponent {
 	 * @returns 処理状態。
 	 */
 	async resetPassword(): Promise<void> {
-		this.isButtonClicked = true;
+		this.isLocked = true;
+		const id = this.admin.id;
 		try {
 			// TODO: できれば自分でリセットしてメール送信するようにしたい
 			const confirm = await this.translate.get('ADMINISTRATOR_PAGE.PASSWORD_RESET_BODY').toPromise();
 			if (window.confirm(confirm)) {
-				const admin = await this.administratorService.resetPassword(this.admin.id);
+				const admin = await this.administratorService.resetPassword(id);
 				const msg = await this.translate.get('ADMINISTRATOR_PAGE.PASSWORD_RESETED', admin).toPromise();
 				window.alert(msg);
 			}
 		} finally {
-			this.isButtonClicked = false;
+			this.isLocked = false;
 		}
 	}
 

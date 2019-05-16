@@ -29,8 +29,8 @@ export class MasterVersionComponent implements OnInit {
 	pageMax = 30;
 	/** ページングのページ数の表示最大値 */
 	maxSize = 10;
-	/** ダブルクリック抑止 */
-	isButtonClicked = false;
+	/** 画面ロック中か？ */
+	isLocked = false;
 	/** 選択／編集中のマスタバージョン情報 */
 	version: MasterVersion;
 
@@ -52,16 +52,29 @@ export class MasterVersionComponent implements OnInit {
 	 * @returns 処理状態。
 	 */
 	async ngOnInit(): Promise<void> {
-		// マスタバージョン一覧を読み込む
-		await this.load(this.currentPage);
+		await this.load();
 	}
 
 	/**
-	 * マスタバージョン一覧を検索する。
+	 * マスタバージョン一覧を読み込む。
+	 * @returns 処理状態。
+	 */
+	async load(): Promise<void> {
+		this.isLocked = true;
+		try {
+			await this.onPageChanged(this.currentPage);
+		} finally {
+			this.isLocked = false;
+		}
+	}
+
+	/**
+	 * マスタバージョン一覧のページを更新する。
 	 * @param page ページ番号。
 	 * @returns 処理状態。
 	 */
-	async load(page: number): Promise<void> {
+	async onPageChanged(page: number): Promise<void> {
+		// ※ ここでisLockedするとExpressionChangedAfterItHasBeenCheckedErrorになる
 		const info = await this.masterService.findAndCountVersions(page, this.pageMax);
 		this.count = info.count;
 		this.rows = info.rows;
@@ -74,15 +87,15 @@ export class MasterVersionComponent implements OnInit {
 	 * @returns 処理状態。
 	 */
 	async changeStatus(id: number, status: string): Promise<void> {
-		this.isButtonClicked = true;
+		this.isLocked = true;
 		try {
 			const confirm = await this.translate.get('MASTER_VERSION_PAGE.CHANGE_' + status.toUpperCase() + '_BODY', { id }).toPromise();
 			if (window.confirm(confirm)) {
 				await this.masterService.changeStatus(id, status);
-				await this.load(this.currentPage);
+				await this.load();
 			}
 		} finally {
-			this.isButtonClicked = false;
+			this.isLocked = false;
 		}
 	}
 
@@ -90,16 +103,15 @@ export class MasterVersionComponent implements OnInit {
 	 * コメント追記を開く。
 	 * @param row 編集するマスタバージョン。
 	 */
-	openNote(row: MasterVersion): void {
+	showNote(row: MasterVersion): void {
 		this.version = Object.assign({}, row);
 		this.noteModal.show();
 	}
 
 	/**
-	 * コメント追記を閉じる。
+	 * コメント追記クローズイベント。
 	 */
-	closeNote(): void {
-		this.noteModal.hide();
+	onHide(): void {
 		this.version = null;
 	}
 
@@ -108,13 +120,13 @@ export class MasterVersionComponent implements OnInit {
 	 * @returns 処理状態。
 	 */
 	async addNote(): Promise<void> {
-		this.isButtonClicked = true;
+		this.isLocked = true;
 		try {
 			await this.masterService.addNote(this.version.id, this.version.note);
-			await this.load(this.currentPage);
-			this.closeNote();
+			await this.load();
+			this.noteModal.hide();
 		} finally {
-			this.isButtonClicked = false;
+			this.isLocked = false;
 		}
 	}
 }
