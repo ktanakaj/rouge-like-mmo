@@ -10,7 +10,6 @@ import {
 	platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
 
-import 'rxjs/add/operator/retry';
 import { registerLocaleData } from '@angular/common';
 import localeJa from '@angular/common/locales/ja';
 registerLocaleData(localeJa, 'ja');

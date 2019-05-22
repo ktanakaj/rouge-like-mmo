@@ -3,6 +3,7 @@
  * @module ./app/app.module
  */
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, ErrorHandler, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClientModule, HttpClient, HttpErrorResponse, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -121,6 +122,7 @@ export class DefaultErrorHandler implements ErrorHandler {
 	],
 	imports: [
 		BrowserModule,
+		BrowserAnimationsModule,
 		FormsModule,
 		HttpClientModule,
 		RouterModule.forRoot(appRoutes),
