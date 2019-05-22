@@ -1,6 +1,7 @@
+<!-- ※ モバイル端末でのサイドバーの表示制御は、AngularではなくCSSとjQueryで行っている。 -->
+<div id="sidebartoggle"><a onclick="$('#sidebar, #sidebartoggle').toggleClass('active')" class="btn btn-info rounded-circle p-0" role="button"><span class="openBtn">&gt;</span><span class="closeBtn">&lt;</span></a></div>
+
 <nav id="sidebar">
-    <!--TODO: 仮。ここだけjQuery下手書きなのでデザイン含め整理する-->
-    <div class="sidebartoggle"><a onclick="$('#sidebar').toggleClass('active')" class="btn btn-info rounded-circle p-0" role="button">-</a></div>
     <ul *ngFor="let itemOrGroup of navi; let i = index" class="list-unstyled components">
         <li *ngIf="!itemOrGroup.items" class="{{ itemOrGroup.active ? 'active' : '' }}">
             <a routerLink="{{ itemOrGroup.path }}">{{ itemOrGroup.title | translate }}</a>
@@ -13,5 +14,3 @@
         </li>
     </ul>
 </nav>
-<!--TODO: 仮。ここだけjQuery下手書きなのでデザイン含め整理する-->
-<div class="sidebartoggle"><a onclick="$('#sidebar').toggleClass('active')" class="btn btn-info rounded-circle p-0" role="button">+</a></div>

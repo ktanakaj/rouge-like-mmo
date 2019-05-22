@@ -62,8 +62,8 @@ export class SidebarComponent implements OnInit {
 	 * コンポーネント起動時の処理。
 	 */
 	ngOnInit(): void {
-		// 画面移動に応じて現在値選択
-		// TODO: URL直打ち時に、初期画面が選択中にならない？
+		// 初回表示時のナビを選択中にし、以後画面移動に応じて切り替え
+		this.activateNavi(this.router.url);
 		this.router.events.pipe(filter(ev => ev instanceof NavigationEnd)).subscribe((ev: NavigationEnd) => {
 			this.activateNavi(ev.url);
 		});

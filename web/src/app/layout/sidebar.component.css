@@ -10,10 +10,7 @@
     color: #fff;
     transition: all 0.3s;
     padding: 10px 0px;
-}
-
-#sidebar.active {
-    margin-left: -250px;
+    overflow-y: auto;
 }
 
 #sidebar ul {
@@ -53,15 +50,23 @@
     background: #f5f5f5;
 }
 
-.sidebartoggle {
+#sidebartoggle {
     display: none;
+    position: absolute;
+    z-index: 1000;
+    margin-top: 10px;
+    margin-left: -6px;
+    transition: all 0.3s;
 }
 
-.sidebartoggle .btn {
+#sidebartoggle .btn {
     width: 2rem;
     height: 2rem;
     color: #fff;
-    margin: 1rem;
+}
+
+#sidebartoggle .closeBtn {
+    display: none;
 }
 
 
@@ -74,7 +79,16 @@
     #sidebar.active {
         margin-left: 0;
     }
-    .sidebartoggle {
+    #sidebartoggle {
         display: block;
+    }
+    #sidebartoggle.active {
+        margin-left: 218px;
+    }
+    #sidebartoggle.active .openBtn {
+        display: none;
+    }
+    #sidebartoggle.active .closeBtn {
+        display: inline;
     }
 }
