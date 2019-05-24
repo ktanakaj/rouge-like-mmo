@@ -5,28 +5,22 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, ErrorHandler, Injectable, LOCALE_ID } from '@angular/core';
-import { HttpClientModule, HttpClient, HttpErrorResponse, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HttpErrorResponse, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateService } from '@ngx-translate/core';
 import { AlertModule, BsDropdownModule, CollapseModule, ModalModule, PaginationModule } from 'ngx-bootstrap';
 
 import { environment } from '../environments/environment';
-import { AuthInfo } from './shared/common.model';
+import { SharedModule } from './shared/shared.module';
 import { AppError } from './core/app-error';
 import localeHelper from './core/locale-helper';
 import { RequestInterceptor } from './core/request-interceptor';
 import { AuthGuard } from './auth.guard';
-import { IfRoleDirective } from './shared/if-role.directive';
 import { AppComponent } from './app.component';
 import { TopComponent } from './top/top.component';
 import { HeaderComponent } from './layout/header.component';
 import { SidebarComponent } from './layout/sidebar.component';
-import { LoadingComponent } from './shared/loading.component';
-import { ValidationErrorComponent } from './shared/validation-error.component';
-import { AdminRoleComponent } from './shared/admin-role.component';
-import { MasterStatusComponent } from './shared/master-status.component';
 import { LoginComponent } from './auth/login.component';
 import { LogoutComponent } from './auth/logout.component';
 import { PasswordComponent } from './auth/password.component';
@@ -103,16 +97,11 @@ export class DefaultErrorHandler implements ErrorHandler {
 @NgModule({
 	declarations: [
 		AppComponent,
-		IfRoleDirective,
 		LoginComponent,
 		LogoutComponent,
 		PasswordComponent,
 		HeaderComponent,
 		SidebarComponent,
-		LoadingComponent,
-		ValidationErrorComponent,
-		AdminRoleComponent,
-		MasterStatusComponent,
 		TopComponent,
 		AdministratorComponent,
 		AdministratorEditBodyComponent,
@@ -126,24 +115,17 @@ export class DefaultErrorHandler implements ErrorHandler {
 		FormsModule,
 		HttpClientModule,
 		RouterModule.forRoot(appRoutes),
-		TranslateModule.forRoot({
-			loader: {
-				provide: TranslateLoader,
-				useFactory: (http: HttpClient) => new TranslateHttpLoader(http, './assets/i18n/'),
-				deps: [HttpClient]
-			}
-		}),
 		AlertModule.forRoot(),
 		BsDropdownModule.forRoot(),
 		CollapseModule.forRoot(),
 		PaginationModule.forRoot(),
 		ModalModule.forRoot(),
+		SharedModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: localeHelper.getLocale() },
 		{ provide: ErrorHandler, useClass: DefaultErrorHandler },
 		{ provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
-		{ provide: AuthInfo, useValue: new AuthInfo() },
 		AuthGuard,
 	],
 	bootstrap: [AppComponent]
