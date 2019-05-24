@@ -29,14 +29,14 @@ export class AuthGuard implements CanActivate {
 	 * @param state 遷移先のルート情報。
 	 * @return チェックOKの場合true。
 	 */
-	canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+	async canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
 		// 認証済みならOK
 		if (this.auth.isAuthed()) {
 			return true;
 		}
 		// 未認証は遷移先をバックアップしてログイン画面に転送
 		this.auth.backupUrl = state.url;
-		this.router.navigate(['/login']);
+		await this.router.navigate(['/login']);
 		return false;
 	}
 }

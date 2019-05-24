@@ -92,6 +92,6 @@ export class LoginComponent implements OnInit {
 	private forwardAuthedPage(auth: AuthInfo): void {
 		const url = auth.backupUrl || '/';
 		auth.backupUrl = null;
-		this.router.navigate([url]);
+		this.router.navigateByUrl(url);
 	}
 }

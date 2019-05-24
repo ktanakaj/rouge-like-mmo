@@ -50,7 +50,7 @@ export class PasswordComponent {
 
 			// 変更成功の場合画面遷移する
 			await this.authService.changePassword(this.user.password);
-			this.router.navigate(['/']);
+			await this.router.navigate(['/']);
 		} finally {
 			this.isLocked = false;
 		}

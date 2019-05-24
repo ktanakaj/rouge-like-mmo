@@ -3,7 +3,9 @@
  * @module app/administrator/administrator.component
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import routingHelper from '../core/routing-helper';
 import { Administrator } from './administrator.model';
 import { AdministratorService } from './administrator.service';
 
@@ -22,12 +24,10 @@ export class AdministratorComponent implements OnInit {
 	count: number;
 	/** 管理者一覧 */
 	rows: Administrator[] = null;
-	/** 選択中のページ */
-	currentPage = 1;
-	/** 1ページの表示件数 */
-	pageMax = 50;
 	/** ページングのページ数の表示最大値 */
 	maxSize = 10;
+	/** 現在の検索条件 */
+	current: { page: number, max: number } = { page: 1, max: 40 };
 	/** 画面ロック中か？ */
 	isLocked = true;
 	/** 選択／編集中の管理者情報 */
@@ -38,18 +38,25 @@ export class AdministratorComponent implements OnInit {
 
 	/**
 	 * サービスをDIしてコンポーネントを生成する。
+	 * @param route ルート情報。
+	 * @param router ルーター。
 	 * @param administratorService 管理者関連サービス。
 	 */
 	constructor(
+		private route: ActivatedRoute,
+		private router: Router,
 		private administratorService: AdministratorService) {
 	}
 
 	/**
 	 * コンポーネント起動時の処理。
-	 * @returns 処理状態。
 	 */
-	async ngOnInit(): Promise<void> {
-		await this.load();
+	ngOnInit(): void {
+		// クエリーパラメータを条件として画面を読み込む
+		this.route.queryParamMap.subscribe(async (params: ParamMap) => {
+			this.current.page = routingHelper.getQueryParamAsNumber(params, 'page', 1);
+			await this.load();
+		});
 	}
 
 	/**
@@ -59,7 +66,9 @@ export class AdministratorComponent implements OnInit {
 	async load(): Promise<void> {
 		this.isLocked = true;
 		try {
-			await this.onPageChanged(this.currentPage);
+			const info = await this.administratorService.findAndCount(this.current.page, this.current.max);
+			this.count = info.count;
+			this.rows = info.rows;
 		} finally {
 			this.isLocked = false;
 		}
@@ -71,10 +80,8 @@ export class AdministratorComponent implements OnInit {
 	 * @returns 処理状態。
 	 */
 	async onPageChanged(page: number): Promise<void> {
-		// ※ ここでisLockedするとExpressionChangedAfterItHasBeenCheckedErrorになる
-		const info = await this.administratorService.findAndCount(page, this.pageMax);
-		this.count = info.count;
-		this.rows = info.rows;
+		// クエリーパラメータを更新して再読み込みさせる
+		await this.router.navigate([], { queryParams: { page }, queryParamsHandling: 'merge' });
 	}
 
 	/**

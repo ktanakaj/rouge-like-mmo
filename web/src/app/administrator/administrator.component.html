@@ -6,7 +6,7 @@
 </form>
 
 <div *ngIf="rows !== null">
-    <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" (pageChanged)="onPageChanged($event.page)" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
+    <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="current.page" [maxSize]="maxSize" [itemsPerPage]="current.max" (pageChanged)="onPageChanged($event.page)" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
         lastText="&raquo;" [disabled]="isLocked"></pagination>
 
     <div class="table-responsive">
@@ -40,7 +40,7 @@
         </table>
     </div>
 
-    <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="currentPage" [maxSize]="maxSize" [itemsPerPage]="pageMax" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;" [disabled]="isLocked"></pagination>
+    <pagination [boundaryLinks]="true" [totalItems]="count" [(ngModel)]="current.page" [maxSize]="maxSize" [itemsPerPage]="current.max" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;" [disabled]="isLocked"></pagination>
 </div>
 <app-loading *ngIf="rows === null"></app-loading>
 
