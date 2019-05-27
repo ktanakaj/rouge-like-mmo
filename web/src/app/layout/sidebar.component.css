@@ -4,7 +4,10 @@
     width: 250px;
     position: fixed;
     left: 0;
-    height: 100vh;
+    /* top by header height */
+    top: 56px;
+    /* bottom by footer height */
+    bottom: 2rem;
     z-index: 999;
     background: #f5f5f5;
     color: #fff;
@@ -52,7 +55,7 @@
 
 #sidebartoggle {
     display: none;
-    position: absolute;
+    position: fixed;
     z-index: 1000;
     margin-top: 10px;
     margin-left: -6px;
@@ -70,11 +73,15 @@
 }
 
 
-/* 画面が小さい場合に、サイドバーをデフォルト非表示にする */
+/*
+ * 画面が小さい場合に、サイドバーをデフォルト非表示にする。
+ * フッターも表示されないので、フッター分のサイズも戻す。
+ */
 
 @media (max-width: 768px) {
     #sidebar {
         margin-left: -250px;
+        bottom: 0px;
     }
     #sidebar.active {
         margin-left: 0;
