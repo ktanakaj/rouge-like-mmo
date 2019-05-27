@@ -7,11 +7,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, ErrorHandler, Injectable, LOCALE_ID } from '@angular/core';
 import { HttpClientModule, HttpErrorResponse, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertModule, BsDropdownModule, CollapseModule, ModalModule, PaginationModule } from 'ngx-bootstrap';
 
 import { environment } from '../environments/environment';
+import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { AppError } from './core/app-error';
 import localeHelper from './core/locale-helper';
@@ -29,20 +29,6 @@ import { AdministratorEditBodyComponent } from './administrator/administrator-ed
 import { MasterVersionComponent } from './master/master-version.component';
 import { MasterViewerComponent } from './master/master-viewer.component';
 import { PlayerComponent } from './player/player.component';
-
-/** ルート定義 */
-const appRoutes: Routes = [
-	{ path: '', pathMatch: 'full', component: TopComponent, canActivate: [AuthGuard] },
-	{ path: 'login', component: LoginComponent },
-	{ path: 'logout', component: LogoutComponent },
-	{ path: 'password', component: PasswordComponent, canActivate: [AuthGuard] },
-	{ path: 'admin', component: AdministratorComponent, canActivate: [AuthGuard] },
-	{ path: 'masters', component: MasterVersionComponent, canActivate: [AuthGuard] },
-	{ path: 'masters/latest', component: MasterViewerComponent, canActivate: [AuthGuard] },
-	{ path: 'masters/latest/:name', component: MasterViewerComponent, canActivate: [AuthGuard] },
-	{ path: 'players', component: PlayerComponent, canActivate: [AuthGuard] },
-	{ path: '**', redirectTo: '/' }
-];
 
 /**
  * デフォルトのエラーハンドラー。
@@ -114,12 +100,12 @@ export class DefaultErrorHandler implements ErrorHandler {
 		BrowserAnimationsModule,
 		FormsModule,
 		HttpClientModule,
-		RouterModule.forRoot(appRoutes),
 		AlertModule.forRoot(),
 		BsDropdownModule.forRoot(),
 		CollapseModule.forRoot(),
 		PaginationModule.forRoot(),
 		ModalModule.forRoot(),
+		AppRoutingModule,
 		SharedModule,
 	],
 	providers: [
