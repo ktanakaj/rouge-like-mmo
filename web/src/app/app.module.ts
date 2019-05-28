@@ -20,6 +20,7 @@ import { AuthGuard } from './auth.guard';
 import { AppComponent } from './app.component';
 import { TopComponent } from './top/top.component';
 import { HeaderComponent } from './layout/header.component';
+import { FooterComponent } from './layout/footer.component';
 import { SidebarComponent } from './layout/sidebar.component';
 import { LoginComponent } from './auth/login.component';
 import { LogoutComponent } from './auth/logout.component';
@@ -87,6 +88,7 @@ export class DefaultErrorHandler implements ErrorHandler {
 		LogoutComponent,
 		PasswordComponent,
 		HeaderComponent,
+		FooterComponent,
 		SidebarComponent,
 		TopComponent,
 		AdministratorComponent,

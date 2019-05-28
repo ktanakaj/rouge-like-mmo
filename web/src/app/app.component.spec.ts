@@ -6,6 +6,7 @@ import { TestBed, async } from '@angular/core/testing';
 import testHelper from '../test-helper';
 import { TranslateService } from '@ngx-translate/core';
 import { HeaderComponent } from './layout/header.component';
+import { FooterComponent } from './layout/footer.component';
 import { SidebarComponent } from './layout/sidebar.component';
 import { AppComponent } from './app.component';
 
@@ -16,6 +17,7 @@ describe('AppComponent', () => {
 		testHelper.configureTestingModule({
 			declarations: [
 				HeaderComponent,
+				FooterComponent,
 				SidebarComponent,
 				AppComponent
 			],
@@ -36,7 +38,7 @@ describe('AppComponent', () => {
 		const compiled = fixture.debugElement.nativeElement;
 		translate.get('COPYRIGHT').toPromise()
 			.then((copyright) => {
-				expect(compiled.querySelector('footer.footer').textContent).toContain(copyright);
+				expect(compiled.querySelector('#footer').textContent).toContain(copyright);
 			});
 	}));
 });

@@ -1,7 +1,3 @@
-.main {
-    padding: 2rem;
-}
-
 #maincontent {
     padding: 2rem;
     position: absolute;
@@ -13,7 +9,7 @@
     width: 100%;
 }
 
-.footer {
+#footer {
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -26,13 +22,13 @@
 }
 
 
-/* 画面が小さい場合、サイドバーやフッターは非表示 */
+/* 画面が小さい場合、サイドバーは開閉式、フッターは非表示になる */
 
 @media (max-width: 768px) {
     #maincontent {
         width: 100%;
     }
-    .footer {
+    #footer {
         display: none;
     }
 }
