@@ -3,6 +3,7 @@
  * @module ./app/layout/footer.component
  */
 import { Component } from '@angular/core';
+import { environment } from '../../environments/environment';
 import localeHelper from '../core/locale-helper';
 
 /**
@@ -14,8 +15,12 @@ import localeHelper from '../core/locale-helper';
 	styleUrls: ['./footer.component.css']
 })
 export class FooterComponent {
-	/** アプリの現在の言語 */
-	get lang() {
+	/** アプリの対応言語 */
+	get languages() {
+		return environment.languages;
+	}
+	/** ユーザーの現在の言語 */
+	get userlang() {
 		return localeHelper.getLanguage();
 	}
 }

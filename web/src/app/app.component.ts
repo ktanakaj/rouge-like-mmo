@@ -4,6 +4,7 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { environment } from '../environments/environment';
 import localeHelper from './core/locale-helper';
 import { AuthInfo } from './shared/common.model';
 
@@ -30,12 +31,7 @@ export class AppComponent implements OnInit {
 	 */
 	ngOnInit(): void {
 		// アプリで使用する言語を設定
-		// ※ 本当は未対応の言語も設定してよいはずだが、TranslateHttpLoaderの404エラーが出てしまうため、
-		//    とりあえず対応している言語のみ許可。
-		const lang = localeHelper.getLanguage();
-		this.translate.setDefaultLang('ja');
-		if (['en', 'ja'].includes(lang)) {
-			this.translate.use(lang);
-		}
+		this.translate.setDefaultLang(environment.languages[0] || 'en');
+		this.translate.use(localeHelper.getLanguage());
 	}
 }

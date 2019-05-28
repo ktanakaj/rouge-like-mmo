@@ -3,8 +3,10 @@
  * @module ./app/core/locale-helper
  */
 import browserHelper from './browser-helper';
+import { environment } from '../../environments/environment';
 
-// ※ 以下Angular内でやっていないのは、Angular初期化のタイミングなどでも使いたかったため
+// ※ 以下Angular内でやっていないのは、Angular初期化のタイミングなどでも使いたかったため。
+// ※ 一部のライブラリは、想定していない言語が来るとエラーを投げるので、ここで対応する言語のみに絞り込む。
 
 /**
  * アプリの言語設定を取得する。
@@ -20,9 +22,15 @@ function getLanguage(): string {
 	if (lang) {
 		// Cookieに言語設定を保存or延長する
 		setLanguageToCookie(lang);
+	} else {
+		lang = browserHelper.getLocale().substr(0, 2);
+	}
+	// 取得した言語がアプリで対応しているかをチェックして返す
+	// （許可されていない場合は、許可リストの先頭をデフォルトとして返す）
+	if (environment.languages.includes(lang)) {
 		return lang;
 	}
-	return browserHelper.getLocale().substr(0, 2);
+	return environment.languages[0] || 'en';
 }
 
 /**
@@ -56,8 +64,13 @@ function setLanguageToCookie(lang: string): void {
  * @returns ロケールコード。
  */
 function getLocale(): string {
-	// ※ 現状はアプリのロケール=ブラウザのロケール
-	return browserHelper.getLocale();
+	// ブラウザのロケールを元に、アプリで許可されているロケールを返す
+	// （許可されていない場合は、許可リストの先頭をデフォルトとして返す）
+	const locale = browserHelper.getLocale();
+	if (environment.locales.includes(locale)) {
+		return locale;
+	}
+	return environment.locales[0] || 'en-US';
 }
 
 export default {
