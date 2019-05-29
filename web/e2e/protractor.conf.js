@@ -9,9 +9,10 @@ exports.config = {
     './src/**/*.e2e-spec.ts'
   ],
   capabilities: {
-    'browserName': 'chrome',
-    'chromeOptions': {
-      'args': ['--headless', '--disable-gpu', '--window-size=800,600']
+    browserName: 'chrome',
+    chromeOptions: {
+      args: ['lang=ja-JP', '--headless', '--disable-gpu', '--window-size=800,600', '--incognito'],
+      prefs: { accept_languages: ['ja-JP'] },
     }
   },
   directConnect: true,

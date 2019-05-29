@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
 		// 認証可能な状態でアクセスされた場合は画面遷移
 		const authed = await this.authService.checkSession();
 		if (authed) {
-			this.forwardAuthedPage(authed);
+			await this.forwardAuthedPage(authed);
 		}
 		this.initialized = true;
 	}
@@ -88,10 +88,11 @@ export class LoginComponent implements OnInit {
 	/**
 	 * ログイン後の画面に遷移する。
 	 * @param auth 認証情報。
+	 * @returns 処理状態。
 	 */
-	private forwardAuthedPage(auth: AuthInfo): void {
+	private async forwardAuthedPage(auth: AuthInfo): Promise<void> {
 		const url = auth.backupUrl || '/';
 		auth.backupUrl = null;
-		this.router.navigateByUrl(url);
+		await this.router.navigateByUrl(url);
 	}
 }
