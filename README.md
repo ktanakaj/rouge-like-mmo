@@ -26,9 +26,8 @@ WebSocketを使ったオンラインゲームのネットワークやDB周りの
 * &gt;= Google Chrome Ver69.0.3497.100
 
 ### 開発環境
-* Vagrant 2.1.x - 仮想環境管理
-    * VirtualBox 5.2.x - 仮想環境
-    * vagrant-vbguest - Vagrantプラグイン
+* Vagrant 2.2.4 - 仮想環境管理
+    * Hyper-V (Windows 10 Pro) - 仮想環境
 * Visual Studio Code - アプリ開発用エディター
 * MySQL Workbench 6.x - DB管理・EL図作成用ツール
 * Unity 2018.3.0 - インゲーム部分開発用
@@ -51,9 +50,9 @@ WebSocketを使ったオンラインゲームのネットワークやDB周りの
 ### 起動方法
 アプリはVM起動時に自動的に立ち上がります。
 
-デフォルトのVMでは http://[DHCPで振られたIP]/ または http://localhost/ でアクセス可能です。
+デフォルトのVMでは http://[DHCPで振られたIP]/ でアクセス可能です。
 
-※ Microsoft EdgeだとプライベートIP（前者）はアクセスできない場合あり。  
+※ Microsoft EdgeだとプライベートIPはアクセスできない場合あり。  
 ※ 自動的に立ち上がらない場合は、後述のサーバーコマンドで起動してください。
 
 ## サーバーコマンド
@@ -81,7 +80,7 @@ Webアプリの操作用に、以下のようなサーバーコマンドを用�
 
 VMのDBを参照する場合は、MySQL Workbench等でMySQLの標準ポートに接続してください（接続情報は `default.yaml` 参照）。
 
-また開発環境ではSwaggerのAPIデバッグページがあります。 http://localhost/swagger/ でアクセス可能です。
+また開発環境ではSwaggerのAPIデバッグページがあります。 http://[DHCPで振られたIP]/swagger/ でアクセス可能です。
 
 ## ライセンス
 [MIT](https://github.com/ktanakaj/rouge-like-mmo/blob/master/LICENSE)
