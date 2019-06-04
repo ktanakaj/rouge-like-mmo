@@ -11,14 +11,14 @@ import { NgModel } from '@angular/forms';
 @Component({
 	selector: 'app-validation-error',
 	template: '<div class="warning" *ngIf="value && value.errors">'
-		+ '<div [hidden]="!value.errors.required">{{ "VALIDATE.REQUIRED" | translate }}</div>'
-		+ '<div [hidden]="!value.errors.min">{{ "VALIDATE.MIN" | translate:{ min: value.errors.min?.value } }}</div>'
-		+ '<div [hidden]="!value.errors.max">{{ "VALIDATE.MAX" | translate:{ max: value.errors.max?.value } }}</div>'
+		+ '<div *ngIf="value.errors.required">{{ "VALIDATE.REQUIRED" | translate }}</div>'
+		+ '<div *ngIf="value.errors.min">{{ "VALIDATE.MIN" | translate:{ min: value.errors.min?.value } }}</div>'
+		+ '<div *ngIf="value.errors.max">{{ "VALIDATE.MAX" | translate:{ max: value.errors.max?.value } }}</div>'
 		+ '<ng-container *ngIf="value.errors.bsDate">'
-		+ '<div [hidden]="!value.errors.bsDate.hasOwnProperty(\'invalid\')">{{ "VALIDATE.DATETIME" | translate }}</div>'
-		+ '<div [hidden]="!value.errors.bsDate.minDate">'
+		+ '<div *ngIf="value.errors.bsDate.hasOwnProperty(\'invalid\')">{{ "VALIDATE.DATETIME" | translate }}</div>'
+		+ '<div *ngIf="value.errors.bsDate.minDate">'
 		+ '{{ "VALIDATE.MINDATE" | translate:{minDate: value.errors.bsDate.minDate | date:\'short\'} }}</div>'
-		+ '<div [hidden]="!value.errors.bsDate.maxDate">'
+		+ '<div *ngIf="value.errors.bsDate.maxDate">'
 		+ '{{ "VALIDATE.MAXDATE" | translate:{maxDate: value.errors.bsDate.maxDate | date:\'short\'} }}</div>'
 		+ '</ng-container>'
 		+ '</div>',

@@ -2,42 +2,29 @@
  * ヘッダーコンポーネントのテスト。
  * @module ./app/layout/header.component.spec
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateService } from '@ngx-translate/core';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import testHelper from '../../test-helper';
 
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
-	let component: HeaderComponent;
 	let fixture: ComponentFixture<HeaderComponent>;
-	let translate: TranslateService;
+	let element: DebugElement;
 
 	beforeEach(async(() => {
 		testHelper.configureTestingModule({
 			declarations: [HeaderComponent],
 		}).compileComponents();
 
-		translate = TestBed.get(TranslateService);
+		fixture = TestBed.createComponent(HeaderComponent);
+		element = fixture.debugElement;
+
+		fixture.detectChanges();
 	}));
 
-	beforeEach(() => {
-		fixture = TestBed.createComponent(HeaderComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
+	it('should render navi', () => {
+		expect(element.query(By.css('.navbar-brand')).nativeElement.textContent).toContain('APP_NAME');
 	});
-
-	it('should create', () => {
-		expect(component).toBeTruthy();
-	});
-
-	it('should render navi', async(() => {
-		fixture = TestBed.createComponent(HeaderComponent);
-		fixture.detectChanges();
-		const compiled = fixture.debugElement.nativeElement;
-		translate.get('APP_NAME').toPromise()
-			.then((appName) => {
-				expect(compiled.querySelector('.navbar-brand').textContent).toEqual(appName);
-			});
-	}));
 });

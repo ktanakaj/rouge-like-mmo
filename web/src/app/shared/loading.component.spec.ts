@@ -2,28 +2,27 @@
  * 読み込み中部品コンポーネントのテスト。
  * @module ./app/shared/loading.component.spec
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture, } from '@angular/core/testing';
+import { DebugElement } from '@angular/core';
 import testHelper from '../../test-helper';
 
 import { LoadingComponent } from './loading.component';
 
 describe('LoadingComponent', () => {
-	let component: LoadingComponent;
 	let fixture: ComponentFixture<LoadingComponent>;
+	let element: DebugElement;
 
 	beforeEach(async(() => {
 		testHelper.configureTestingModule({
 			declarations: [LoadingComponent]
 		}).compileComponents();
+
+		fixture = TestBed.createComponent(LoadingComponent);
+		element = fixture.debugElement;
+		fixture.detectChanges();
 	}));
 
-	beforeEach(() => {
-		fixture = TestBed.createComponent(LoadingComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
-	});
-
-	it('should create', () => {
-		expect(component).toBeTruthy();
+	it('should render loading', () => {
+		expect(element.nativeElement.textContent).toEqual('LOADING');
 	});
 });

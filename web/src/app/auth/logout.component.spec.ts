@@ -2,28 +2,38 @@
  * 管理者ログアウトコンポーネントのテスト。
  * @module ./app/auth/logout.component.spec
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import testHelper from '../../test-helper';
 
 import { LogoutComponent } from './logout.component';
+import { AuthService } from './auth.service';
 
 describe('LogoutComponent', () => {
-	let component: LogoutComponent;
 	let fixture: ComponentFixture<LogoutComponent>;
 
 	beforeEach(async(() => {
+		const authServiceSpy = jasmine.createSpyObj<AuthService>('AuthService', ['logout']);
+		authServiceSpy.logout.and.returnValue(Promise.resolve());
+
 		testHelper.configureTestingModule({
-			declarations: [LogoutComponent]
+			declarations: [LogoutComponent],
+		}).overrideComponent(LogoutComponent, {
+			set: {
+				providers: [
+					{ provide: AuthService, useValue: authServiceSpy },
+				],
+			}
 		}).compileComponents();
+
+		fixture = TestBed.createComponent(LogoutComponent);
 	}));
 
-	beforeEach(() => {
-		fixture = TestBed.createComponent(LogoutComponent);
-		component = fixture.componentInstance;
+	it('should succeed logout', async () => {
+		const routerSpy = spyOn(TestBed.get(Router), 'navigate');
 		fixture.detectChanges();
-	});
-
-	it('should create', () => {
-		expect(component).toBeTruthy();
+		await fixture.whenStable();
+		fixture.detectChanges();
+		expect(routerSpy).toHaveBeenCalledWith(['/']);
 	});
 });

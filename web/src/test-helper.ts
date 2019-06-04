@@ -60,11 +60,15 @@ const commonModuleDef = {
  * @returns configureTestingModuleの戻り値。
  */
 function configureTestingModule(moduleDef: TestModuleMetadata): typeof TestBed {
+	// 渡されたパラメータに上述の共通モジュール群をマージする
 	for (const key of ['imports', 'providers', 'declarations']) {
 		moduleDef[key] = moduleDef[key] || [];
 		for (const o of commonModuleDef[key]) {
+			// 同じ値が渡されたときは設定しない。
+			// ただし、provideなどの場合同じか判断できないので、配列の先に追加する。
+			// （Angularは後の方を優先する模様。）
 			if (!moduleDef[key].includes(o)) {
-				moduleDef[key].push(o);
+				moduleDef[key].unshift(o);
 			}
 		}
 	}

@@ -2,28 +2,29 @@
  * サイドバーコンポーネントのテスト。
  * @module ./app/layout/sidebar.component.spec
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import testHelper from '../../test-helper';
 
 import { SidebarComponent } from './sidebar.component';
 
 describe('SidebarComponent', () => {
-	let component: SidebarComponent;
 	let fixture: ComponentFixture<SidebarComponent>;
+	let element: DebugElement;
 
 	beforeEach(async(() => {
 		testHelper.configureTestingModule({
 			declarations: [SidebarComponent],
 		}).compileComponents();
+
+		fixture = TestBed.createComponent(SidebarComponent);
+		element = fixture.debugElement;
+
+		fixture.detectChanges();
 	}));
 
-	beforeEach(() => {
-		fixture = TestBed.createComponent(SidebarComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
-	});
-
-	it('should create', () => {
-		expect(component).toBeTruthy();
+	it('should render sidebar', () => {
+		expect(element.queryAll(By.css('#sidebar a'))[0].nativeElement.textContent).toEqual('PLAYER_PAGE.LINK');
 	});
 });
