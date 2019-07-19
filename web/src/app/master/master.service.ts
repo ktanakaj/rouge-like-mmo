@@ -4,6 +4,7 @@
  */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { PagingResult } from '../shared/common.model';
 import { MasterVersion } from './master-version.model';
 
 /**
@@ -40,11 +41,11 @@ export class MasterService {
 	 * @param max 1ページ辺りの最大件数。
 	 * @returns マスタバージョン一覧。
 	 */
-	findAndCountVersions(page: number, max: number): Promise<{ rows: MasterVersion[], count: number }> {
+	findAndCountVersions(page: number, max: number): Promise<PagingResult<MasterVersion>> {
 		const params = new HttpParams()
 			.set('page', String(page))
 			.set('max', String(max));
-		return this.http.get<{ rows: MasterVersion[], count: number }>('/api/admin/masters/', { params }).toPromise();
+		return this.http.get<PagingResult<MasterVersion>>('/api/admin/masters/', { params }).toPromise();
 	}
 
 	/**

@@ -7,6 +7,11 @@ import { NgModel } from '@angular/forms';
 
 /**
  * バリデーションエラー部品コンポーネントクラス。
+ *
+ * 渡されたバリデーションエラーを元にメッセージを表示する。
+ *
+ * 例）
+ * <app-validation-error [value]="nameBox"></app-validation-error>
  */
 @Component({
 	selector: 'app-validation-error',

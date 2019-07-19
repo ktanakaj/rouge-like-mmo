@@ -2,28 +2,44 @@
  * マスタ閲覧ページコンポーネントのテスト。
  * @module ./app/master/master-viewer.component.spec
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import testHelper from '../../test-helper';
 
 import { MasterViewerComponent } from './master-viewer.component';
+import { MasterService } from './master.service';
 
 describe('MasterViewerComponent', () => {
-	let component: MasterViewerComponent;
 	let fixture: ComponentFixture<MasterViewerComponent>;
+	let element: DebugElement;
 
-	beforeEach(async(() => {
+	beforeEach(async(async () => {
+		const masterServiceSpy = jasmine.createSpyObj<MasterService>('MasterService', ['findLatestMasters', 'findLatestMaster']);
+		masterServiceSpy.findLatestMasters.and.returnValue(Promise.resolve(['ErrorCodes']));
+		masterServiceSpy.findLatestMaster.and.returnValue(Promise.resolve([]));
+
 		testHelper.configureTestingModule({
-			declarations: [MasterViewerComponent]
+			declarations: [MasterViewerComponent],
+		}).overrideComponent(MasterViewerComponent, {
+			set: {
+				providers: [
+					{ provide: MasterService, useValue: masterServiceSpy },
+				],
+			},
 		}).compileComponents();
+
+		fixture = TestBed.createComponent(MasterViewerComponent);
+		element = fixture.debugElement;
+
+		fixture.detectChanges();
+		await fixture.whenStable();
+		fixture.detectChanges();
 	}));
 
-	beforeEach(() => {
-		fixture = TestBed.createComponent(MasterViewerComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
-	});
-
-	it('should create', () => {
-		expect(component).toBeTruthy();
+	it('should render rows', () => {
+		// モックのデータが表示されていること
+		const row = element.queryAll(By.css('table tbody tr'))[0].queryAll(By.css('td'));
+		expect(row[0].nativeElement.textContent).toEqual('ErrorCodes');
 	});
 });

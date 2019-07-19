@@ -10,9 +10,9 @@ export interface Player {
 	/** プレイヤーID */
 	id: number;
 	/** プレイヤーレベル */
-	level: string;
+	level: number;
 	/** プレイヤー所持金 */
-	gameCoins: string;
+	gameCoins: number;
 	/** 最終ログイン日時 */
 	lastLogin: string;
 	/** 登録日時 */

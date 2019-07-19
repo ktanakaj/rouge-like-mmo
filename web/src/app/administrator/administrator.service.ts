@@ -5,6 +5,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
+import { PagingResult } from '../shared/common.model';
 import { Administrator } from './administrator.model';
 
 /**
@@ -24,11 +25,11 @@ export class AdministratorService {
 	 * @param max 1ページ辺りの最大件数。
 	 * @returns 管理者一覧。
 	 */
-	findAndCount(page: number, max: number): Promise<{ rows: Administrator[], count: number }> {
+	findAndCount(page: number, max: number): Promise<PagingResult<Administrator>> {
 		const params = new HttpParams()
 			.set('page', String(page))
 			.set('max', String(max));
-		return this.http.get<{ rows: Administrator[], count: number }>('/api/admin/administrators/', { params }).toPromise();
+		return this.http.get<PagingResult<Administrator>>('/api/admin/administrators/', { params }).toPromise();
 	}
 
 	/**

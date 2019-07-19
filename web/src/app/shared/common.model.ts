@@ -34,3 +34,13 @@ export class AuthInfo {
 		this.backupUrl = null;
 	}
 }
+
+/**
+ * ページング系API共通の戻り値。
+ */
+export interface PagingResult<T> {
+	/** データ配列 */
+	rows: T[];
+	/** データ総件数 */
+	count: number;
+}

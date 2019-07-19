@@ -6,6 +6,11 @@ import { Component, Input } from '@angular/core';
 
 /**
  * 管理者ロール部品コンポーネントクラス。
+ *
+ * 管理者ロールを定数値に応じた表示名で表示する。
+ *
+ * 例）
+ * <app-admin-role [role]="admin.role"></app-admin-role>
  */
 @Component({
 	selector: 'app-admin-role',

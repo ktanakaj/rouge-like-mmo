@@ -6,6 +6,11 @@ import { Component } from '@angular/core';
 
 /**
  * 読み込み中部品コンポーネントクラス。
+ *
+ * ローディング中のアニメーションとメッセージを表示する。
+ *
+ * 例）
+ * <app-loading *ngIf="rows === null"></app-loading>
  */
 @Component({
 	selector: 'app-loading',

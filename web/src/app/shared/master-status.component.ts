@@ -6,6 +6,11 @@ import { Component, Input } from '@angular/core';
 
 /**
  * マスタ状態部品コンポーネントクラス。
+ *
+ * マスタの状態を定数値に応じた表示名で表示する。
+ *
+ * 例）
+ * <app-master-status [status]="row.status"></app-master-status>
  */
 @Component({
 	selector: 'app-master-status',

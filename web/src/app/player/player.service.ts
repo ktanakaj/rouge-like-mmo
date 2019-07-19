@@ -4,6 +4,7 @@
  */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { PagingResult } from '../shared/common.model';
 import { Player } from './player.model';
 
 /**
@@ -23,10 +24,10 @@ export class PlayerService {
 	 * @param max 1ページ辺りの最大件数。
 	 * @returns プレイヤー一覧。
 	 */
-	findAndCountPlayers(page: number, max: number): Promise<{ rows: Player[], count: number }> {
+	findAndCountPlayers(page: number, max: number): Promise<PagingResult<Player>> {
 		const params = new HttpParams()
 			.set('page', String(page))
 			.set('max', String(max));
-		return this.http.get<{ rows: Player[], count: number }>('/api/admin/players/', { params }).toPromise();
+		return this.http.get<PagingResult<Player>>('/api/admin/players/', { params }).toPromise();
 	}
 }

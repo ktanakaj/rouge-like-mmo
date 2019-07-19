@@ -12,7 +12,10 @@ import {
 
 import { registerLocaleData } from '@angular/common';
 import localeJa from '@angular/common/locales/ja';
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { jaLocale } from 'ngx-bootstrap/locale';
 registerLocaleData(localeJa, 'ja');
+defineLocale('ja', jaLocale);
 
 declare const require: any;
 
