@@ -12,6 +12,8 @@ namespace Honememo.RougeLikeMmo.Gateways
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.IO.Compression;
     using System.Net;
     using System.Text.RegularExpressions;
     using MiniJSON;
@@ -120,7 +122,9 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <returns>ヘッダー。</returns>
         protected virtual Dictionary<string, string> MakeDefaultHeaders()
         {
+            // Gzip圧縮とCookieを設定する
             var headers = new Dictionary<string, string>();
+            headers["Accept-Encoding"] = "gzip";
             if (this.sessionId != null)
             {
                 // ※ Cookieは上書きされてしまう？が、一旦許容する
@@ -211,20 +215,15 @@ namespace Honememo.RougeLikeMmo.Gateways
         private IObservable<string> ResponseFilter(IObservable<WWW> observable)
         {
             // WWWを貰って、レスポンスヘッダーなどを処理した上で、textを返す。
-            // 現状では、レスポンスにCookieがある場合は、セッションIDを取り出して保存している。
-            // （WWWのCookieはシーン切り替えで消滅するため。）
-            // TODO: 本当はセッションID決め打ちじゃなくCookieを保持するようにしたい。
-            //     （ちゃんと実装するのが大変なので暫定的にセッションだけ対応している。）
-            if (string.IsNullOrEmpty(this.SessionKey))
-            {
-                return observable.Select((www) => www.text);
-            }
-
             return observable
                 .Select((www) =>
                 {
+                    // セッションの処理。レスポンスにCookieがある場合、セッションIDを取り出して保存する
+                    // （WWW標準のCookieはシーン切り替えで消滅するため。）
+                    // TODO: 本当はセッションID決め打ちじゃなくCookieを保持するようにしたい。
+                    //     （ちゃんと実装するのが大変なので暫定的にセッションだけ対応している。）
                     string header;
-                    if (www.responseHeaders.TryGetValue("Set-Cookie", out header))
+                    if (!string.IsNullOrEmpty(this.SessionKey) && www.responseHeaders.TryGetValue("Set-Cookie", out header))
                     {
                         // ※ PathとかHttpOnlyとかも無視している。サーバーが信用できなくなる場合注意
                         var m = Regex.Match(header, this.SessionKey + "=(.+?);");
@@ -234,7 +233,18 @@ namespace Honememo.RougeLikeMmo.Gateways
                         }
                     }
 
-                    return www.text;
+                    // レスポンスがGzip圧縮されている場合伸長する
+                    if (www.responseHeaders.TryGetValue("Content-Encoding", out header) && header == "gzip")
+                    {
+                        using (var sr = new StreamReader(new GZipStream(new MemoryStream(www.bytes), CompressionMode.Decompress)))
+                        {
+                            return sr.ReadToEnd();
+                        }
+                    }
+                    else
+                    {
+                        return www.text;
+                    }
                 });
         }
 
