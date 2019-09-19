@@ -35,7 +35,7 @@ export class MasterVersionComponent implements OnInit {
 	version: MasterVersion;
 
 	/** コメント追記モーダル */
-	@ViewChild('noteModal') public noteModal: ModalDirective;
+	@ViewChild('noteModal', { static: false }) public noteModal: ModalDirective;
 
 	/**
 	 * サービスをDIしてコンポーネントを生成する。

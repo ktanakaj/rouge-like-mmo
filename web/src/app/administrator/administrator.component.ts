@@ -34,7 +34,7 @@ export class AdministratorComponent implements OnInit {
 	admin: Administrator;
 
 	/** 管理者編集モーダル */
-	@ViewChild('editModal') public editModal: ModalDirective;
+	@ViewChild('editModal', { static: false }) public editModal: ModalDirective;
 
 	/**
 	 * サービスをDIしてコンポーネントを生成する。
