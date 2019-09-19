@@ -2,7 +2,7 @@
  * パスワード変更コンポーネントのテスト。
  * @module ./app/auth/password.component.spec
  */
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import testHelper from '../../test-helper';
 
@@ -13,7 +13,7 @@ describe('PasswordComponent', () => {
 	let component: PasswordComponent;
 	let fixture: ComponentFixture<PasswordComponent>;
 
-	beforeEach(async(async () => {
+	beforeEach(fakeAsync(() => {
 		const authServiceSpy = jasmine.createSpyObj<AuthService>('AuthService', ['changePassword']);
 		authServiceSpy.changePassword.and.returnValue(Promise.resolve({ isAuthed: true } as any));
 
@@ -30,8 +30,6 @@ describe('PasswordComponent', () => {
 		fixture = TestBed.createComponent(PasswordComponent);
 		component = fixture.componentInstance;
 
-		fixture.detectChanges();
-		await fixture.whenStable();
 		fixture.detectChanges();
 	}));
 

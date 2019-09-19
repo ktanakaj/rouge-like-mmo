@@ -76,13 +76,13 @@ export class SidebarComponent implements OnInit {
 	activateNavi(path: string): void {
 		// ※ さらにIDなどが付くことがあるので前方一致で比較。
 		// TODO: マスタ系ページが正しく判定できないので要改善。
-		for (let i = 0; i < this.navi.length; i++) {
-			if (Array.isArray(this.navi[i]['items'])) {
-				for (let j = 0; j < this.navi[i]['items'].length; j++) {
-					this.navi[i]['items'][j].active = path.startsWith(this.navi[i]['items'][j].path);
+		for (const navi of this.navi) {
+			if (Array.isArray(navi['items'])) {
+				for (const subnavi of navi['items']) {
+					subnavi.active = path.startsWith(subnavi.path);
 				}
 			} else {
-				this.navi[i]['active'] = path.startsWith(this.navi[i]['path']);
+				navi['active'] = path.startsWith(navi['path']);
 			}
 		}
 	}

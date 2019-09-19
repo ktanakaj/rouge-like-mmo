@@ -28,6 +28,8 @@ module.exports = function(config) {
 		usePolling: true,
 		browsers: ['ChromiumHeadless'],
 		singleRun: true, // FIXME: VMだとautoWatchが動作しない（？）ため、一旦singleRunで運用
-		restartOnFileChange: true
+		restartOnFileChange: true,
+		browserDisconnectTimeout: 10000,
+		browserNoActivityTimeout: 60000
 	});
 };

@@ -2,7 +2,7 @@
  * プレイヤーページコンポーネントのテスト。
  * @module ./app/player/player.component.spec
  */
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import testHelper from '../../test-helper';
@@ -14,7 +14,7 @@ describe('PlayerComponent', () => {
 	let fixture: ComponentFixture<PlayerComponent>;
 	let element: DebugElement;
 
-	beforeEach(async(async () => {
+	beforeEach(fakeAsync(() => {
 		const playerServiceSpy = jasmine.createSpyObj<PlayerService>('PlayerService', ['findAndCountPlayers']);
 		playerServiceSpy.findAndCountPlayers.and.returnValue(Promise.resolve({
 			rows: [
@@ -40,7 +40,7 @@ describe('PlayerComponent', () => {
 		element = fixture.debugElement;
 
 		fixture.detectChanges();
-		await fixture.whenStable();
+		tick();
 		fixture.detectChanges();
 	}));
 

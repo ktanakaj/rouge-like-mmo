@@ -20,10 +20,10 @@ WebSocketを使ったオンラインゲームのネットワークやDB周りの
     * Sequelize-typescript 0.6.x
     * Node-config 2.x
     * Log4js 3.x
-* Angular 7.x
+* Angular 8.x
 
 ### 動作確認ブラウザ
-* &gt;= Google Chrome Ver69.0.3497.100
+* &gt;= Google Chrome Ver77
 
 ### 開発環境
 * Vagrant 2.2.4 - 仮想環境管理

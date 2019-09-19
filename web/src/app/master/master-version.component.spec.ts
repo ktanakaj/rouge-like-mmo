@@ -2,7 +2,7 @@
  * マスタバージョンページコンポーネントのテスト。
  * @module ./app/master/master-version.component.spec
  */
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import testHelper from '../../test-helper';
@@ -14,7 +14,7 @@ describe('MasterVersionComponent', () => {
 	let fixture: ComponentFixture<MasterVersionComponent>;
 	let element: DebugElement;
 
-	beforeEach(async(async () => {
+	beforeEach(fakeAsync(() => {
 		const masterServiceSpy = jasmine.createSpyObj<MasterService>('MasterService', ['findAndCountVersions']);
 		masterServiceSpy.findAndCountVersions.and.returnValue(Promise.resolve({
 			rows: [{ id: 1, status: 'readied', note: '', createdAt: '2019-07-18T15:10:10Z', updatedAt: '2019-07-18T16:10:10Z' }],
@@ -37,7 +37,7 @@ describe('MasterVersionComponent', () => {
 		element = fixture.debugElement;
 
 		fixture.detectChanges();
-		await fixture.whenStable();
+		tick();
 		fixture.detectChanges();
 	}));
 

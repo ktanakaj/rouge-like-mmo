@@ -2,7 +2,7 @@
  * 管理者ページコンポーネントのテスト。
  * @module ./app/administrator/administrator.component.spec
  */
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import testHelper from '../../test-helper';
@@ -16,7 +16,7 @@ describe('AdministratorComponent', () => {
 	let fixture: ComponentFixture<AdministratorComponent>;
 	let element: DebugElement;
 
-	beforeEach(async(async () => {
+	beforeEach(fakeAsync(() => {
 		const administratorServiceSpy = jasmine.createSpyObj<AdministratorService>('AdministratorService', ['findAndCount']);
 		administratorServiceSpy.findAndCount.and.returnValue(Promise.resolve({ rows: [{ id: 1, name: 'admin', role: 'admin' }], count: 1 }));
 
@@ -38,7 +38,7 @@ describe('AdministratorComponent', () => {
 		element = fixture.debugElement;
 
 		fixture.detectChanges();
-		await fixture.whenStable();
+		tick();
 		fixture.detectChanges();
 	}));
 

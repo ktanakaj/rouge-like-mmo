@@ -2,7 +2,7 @@
  * 読み込み中部品コンポーネントのテスト。
  * @module ./app/shared/loading.component.spec
  */
-import { TestBed, async, ComponentFixture, } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import testHelper from '../../test-helper';
 
@@ -12,7 +12,7 @@ describe('LoadingComponent', () => {
 	let fixture: ComponentFixture<LoadingComponent>;
 	let element: DebugElement;
 
-	beforeEach(async(() => {
+	beforeEach(fakeAsync(() => {
 		testHelper.configureTestingModule({
 			declarations: [LoadingComponent]
 		}).compileComponents();

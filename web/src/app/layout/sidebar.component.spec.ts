@@ -2,7 +2,7 @@
  * サイドバーコンポーネントのテスト。
  * @module ./app/layout/sidebar.component.spec
  */
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import testHelper from '../../test-helper';
@@ -13,7 +13,7 @@ describe('SidebarComponent', () => {
 	let fixture: ComponentFixture<SidebarComponent>;
 	let element: DebugElement;
 
-	beforeEach(async(() => {
+	beforeEach(fakeAsync(() => {
 		testHelper.configureTestingModule({
 			declarations: [SidebarComponent],
 		}).compileComponents();
@@ -22,6 +22,7 @@ describe('SidebarComponent', () => {
 		element = fixture.debugElement;
 
 		fixture.detectChanges();
+		tick();
 	}));
 
 	it('should render sidebar', () => {

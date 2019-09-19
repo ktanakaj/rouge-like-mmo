@@ -2,7 +2,7 @@
  * 管理者ログアウトコンポーネントのテスト。
  * @module ./app/auth/logout.component.spec
  */
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import testHelper from '../../test-helper';
 
@@ -12,7 +12,7 @@ import { AuthService } from './auth.service';
 describe('LogoutComponent', () => {
 	let fixture: ComponentFixture<LogoutComponent>;
 
-	beforeEach(async(() => {
+	beforeEach(() => {
 		const authServiceSpy = jasmine.createSpyObj<AuthService>('AuthService', ['logout']);
 		authServiceSpy.logout.and.returnValue(Promise.resolve());
 
@@ -27,13 +27,13 @@ describe('LogoutComponent', () => {
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(LogoutComponent);
-	}));
+	});
 
-	it('should succeed logout', async () => {
+	it('should succeed logout', fakeAsync(() => {
 		const routerSpy = spyOn(TestBed.get(Router), 'navigate');
 		fixture.detectChanges();
-		await fixture.whenStable();
+		tick();
 		fixture.detectChanges();
 		expect(routerSpy).toHaveBeenCalledWith(['/']);
-	});
+	}));
 });

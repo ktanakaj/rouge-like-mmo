@@ -2,7 +2,7 @@
  * フッターコンポーネントのテスト。
  * @module ./app/layout/footer.component.spec
  */
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import testHelper from '../../test-helper';
@@ -13,7 +13,7 @@ describe('FooterComponent', () => {
 	let fixture: ComponentFixture<FooterComponent>;
 	let element: DebugElement;
 
-	beforeEach(async(() => {
+	beforeEach(fakeAsync(() => {
 		testHelper.configureTestingModule({
 			declarations: [FooterComponent],
 		}).compileComponents();

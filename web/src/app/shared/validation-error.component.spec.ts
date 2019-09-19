@@ -2,7 +2,7 @@
  * バリデーションエラー部品コンポーネントのテスト。
  * @module ./app/shared/validation-error.component.spec
  */
-import { TestBed, async, ComponentFixture, } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import testHelper from '../../test-helper';
 
@@ -13,7 +13,7 @@ describe('ValidationErrorComponent', () => {
 	let fixture: ComponentFixture<ValidationErrorComponent>;
 	let element: DebugElement;
 
-	beforeEach(async(() => {
+	beforeEach(fakeAsync(() => {
 		testHelper.configureTestingModule({
 			declarations: [ValidationErrorComponent],
 		}).compileComponents();
@@ -24,7 +24,7 @@ describe('ValidationErrorComponent', () => {
 		fixture.detectChanges();
 	}));
 
-	it('should render validation message', () => {
+	it('should render validation message', fakeAsync(() => {
 		// 入力値に応じてエラーメッセージが表示されること
 		expect(element.nativeElement.textContent).toEqual('');
 
@@ -55,5 +55,5 @@ describe('ValidationErrorComponent', () => {
 		component.value = { errors: { bsDate: { maxDate: new Date() } } } as any;
 		fixture.detectChanges();
 		expect(element.nativeElement.textContent).toEqual('VALIDATE.MAXDATE');
-	});
+	}));
 });

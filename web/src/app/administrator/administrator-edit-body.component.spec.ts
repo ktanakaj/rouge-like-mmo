@@ -2,7 +2,7 @@
  * 管理者編集本体部コンポーネントのテスト。
  * @module ./app/administrator/administrator-edit-body.component.spec
  */
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import testHelper from '../../test-helper';
@@ -15,7 +15,7 @@ describe('AdministratorEditBodyComponent', () => {
 	let fixture: ComponentFixture<AdministratorEditBodyComponent>;
 	let element: DebugElement;
 
-	beforeEach(async(() => {
+	beforeEach(fakeAsync(() => {
 		const administratorServiceSpy = jasmine.createSpyObj<AdministratorService>('AdministratorService', ['save', 'delete', 'resetPassword']);
 		administratorServiceSpy.save.and.returnValue(Promise.resolve({} as any));
 
@@ -42,14 +42,14 @@ describe('AdministratorEditBodyComponent', () => {
 		expect(nameBox.nativeElement.value).toEqual('');
 	});
 
-	it('should render edit page', async () => {
+	it('should render edit page', fakeAsync(() => {
 		// データがある場合は、編集ページが表示されていること
 		component.adminInput = { id: 1, name: 'UNIT TEST', role: 'admin' };
 		fixture.detectChanges();
-		await fixture.whenStable();
+		tick();
 		const nameBox = element.query(By.css('form input[name="name"]'));
 		expect(nameBox.nativeElement.value).toEqual('UNIT TEST');
-	});
+	}));
 
 	it('should work submit button', async () => {
 		// submitボタンが押せること

@@ -1,3 +1,3 @@
 ---
-- name: Install the latest version of Chromium
-  yum: name=chromium state=latest
+- name: Install Chromium 75
+  yum: name=chromium-75.0.3770.100 state=latest

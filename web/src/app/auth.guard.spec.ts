@@ -9,20 +9,20 @@ describe('AuthGuard', () => {
 	it('should check authorization success', async () => {
 		const auth = new AuthInfo();
 		auth.id = 1;
-		const guard = new AuthGuard(<any>{
+		const guard = new AuthGuard({
 			navigate: () => Promise.resolve(),
-		}, auth);
+		} as any, auth);
 
-		const result = await guard.canActivate(<any>{}, <any>{});
+		const result = await guard.canActivate({} as any, {} as any);
 		expect(result).toEqual(true);
 	});
 
 	it('should check authorization failed', async () => {
-		const guard = new AuthGuard(<any>{
+		const guard = new AuthGuard({
 			navigate: () => Promise.resolve(),
-		}, new AuthInfo());
+		} as any, new AuthInfo());
 
-		const result = await guard.canActivate(<any>{}, <any>{});
+		const result = await guard.canActivate({} as any, {} as any);
 		expect(result).toEqual(false);
 	});
 });
