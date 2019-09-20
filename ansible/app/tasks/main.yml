@@ -34,7 +34,7 @@
     shell: yarn install --no-bin-links chdir={{ app_svr_dir }}
     retries: 2
   - name: Install node.js package for the web application
-    shell: yarn install --no-bin-links chdir={{ app_web_dir }}
+    shell: npm install --no-bin-links chdir={{ app_web_dir }}
     retries: 2
   - name: Build the server application
     shell: npm run build chdir={{ app_svr_dir }}
