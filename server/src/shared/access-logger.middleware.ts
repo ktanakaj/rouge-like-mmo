@@ -2,7 +2,7 @@
  * アクセスログを出力するNestミドルウェア。
  * @module ./shared/access-logger.middleware
  */
-import { Injectable, NestMiddleware, MiddlewareFunction } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import * as express from 'express';
 import * as config from 'config';
 import * as log4js from 'log4js';
@@ -15,7 +15,20 @@ const logger = log4js.getLogger('access');
  */
 @Injectable()
 export class AccessLoggerMiddleware implements NestMiddleware {
-	resolve(): MiddlewareFunction {
+	use(req: express.Request, res: express.Response, next: express.NextFunction) {
+		responseBodyCollector(req, res, (err) => {
+			if (err) {
+				return next(err);
+			}
+			this.connectLogger()(req, res, next);
+		});
+	}
+
+	/**
+	 * ロガーを生成する。
+	 * @returns ロガー。
+	 */
+	connectLogger(): any {
 		// ※ 現状フォーマットはほぼデフォルトのため、必要に応じて変更してください
 		const option = {
 			level: 'auto',
@@ -29,21 +42,11 @@ export class AccessLoggerMiddleware implements NestMiddleware {
 		option['format'] = (req: express.Request, res: express.Response, format: (str: string) => string) => {
 			const reqBody = this.hidePasswordLog(JSON.stringify(req.body));
 			const resBody = this.hidePasswordLog((res as any)._getData());
-			const id = req['user'] ? req['user']['id'] : '';
-			return format(':remote-addr - - ":method :url HTTP/:http-version" :status :content-length ":referrer" ":user-agent"')
-				+ ' id=' + id + ' req=' + reqBody + ' res=' + resBody;
+			const id = req['user'] ? req['user']['id'] : '-';
+			return format(':remote-addr - ' + id + ' ":method :url HTTP/:http-version" :status :content-length ":referrer" ":user-agent"')
+				+ ' req=' + reqBody + ' res=' + resBody;
 		};
-		const loggerHandler = log4js.connectLogger(logger, option);
-
-		// レスポンス保存用ミドルウェアでラップする
-		return (req, res, next) => {
-			responseBodyCollector(req, res, (err) => {
-				if (err) {
-					return next(err);
-				}
-				loggerHandler(req, res, next);
-			});
-		};
+		return log4js.connectLogger(logger, option);
 	}
 
 	/**

@@ -6,7 +6,7 @@ import { Column, DataType, Unique, AllowNull, Default, DefaultScope, BeforeCreat
 import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
 import * as crypto from 'crypto';
 import * as config from 'config';
-import * as Random from 'random-js';
+import { Random } from 'random-js';
 import { DataModel, Table } from '../../core/db';
 const random = new Random();
 

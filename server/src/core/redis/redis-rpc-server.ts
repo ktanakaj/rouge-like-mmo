@@ -6,7 +6,7 @@ import { Server, CustomTransportStrategy } from '@nestjs/microservices';
 import { ArgumentsHost } from '@nestjs/common';
 import { EventEmitter } from 'events';
 import { Observable } from 'rxjs';
-import { JsonRpcError, ErrorCode, NoResponse } from 'json-rpc2-implementer';
+import { JsonRpcError, ErrorCode } from 'json-rpc2-implementer';
 import { IRedisConfig, getClient } from './redis-helper';
 import { RedisRpcConnection } from './redis-rpc-connection';
 

@@ -17,11 +17,10 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, SwaggerDocument } from '@nestjs/swagger';
 import * as session from 'express-session';
 import * as connectRedis from 'connect-redis';
-import { startMonitoring } from './core/redis';
 import { AllExceptionsFilter } from './shared/all-exceptions.filter';
 import { DebugLoggerService } from './shared/debug-logger.service';
+import { RedisRpcServer, createClient, startMonitoring } from './core/redis';
 import { WebSocketRpcServer } from './core/ws';
-import { RedisRpcServer } from './core/redis';
 import { invokeContextWsRpcHandler, invokeContextRedisRpcHandler } from './shared/invoke-context.middleware';
 import { AppModule } from './app.module';
 const RedisStore = connectRedis(session);
@@ -45,7 +44,7 @@ async function bootstrap(): Promise<void> {
 	});
 
 	// グローバルミドルウェアの登録
-	app.use(session(Object.assign({ store: new RedisStore(config['redis']['session']) }, config['session'])));
+	app.use(session(Object.assign({ store: new RedisStore({ client: createClient(config['redis']['session']) as any }) }, config['session'])));
 
 	// 本番環境等以外では、Swagger-UIも出力
 	if (config['debug']['apidocs']) {

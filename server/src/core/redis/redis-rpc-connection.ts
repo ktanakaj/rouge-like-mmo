@@ -2,7 +2,7 @@
  * Redisのpub/sub上のJSON-RPC2コネクションクラスのモジュール。
  * @module ./core/redis/redis-rpc-connection
  */
-import * as Random from 'random-js';
+import { Random } from 'random-js';
 import { JsonRpc2Implementer } from 'json-rpc2-implementer';
 import { IRedisConfig } from './redis-helper';
 import { RedisConnection, RedisConnectionOptions } from './redis-connection';

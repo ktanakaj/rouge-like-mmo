@@ -6,7 +6,7 @@
  */
 import { EventEmitter } from 'events';
 import * as WebSocket from 'ws';
-import * as Random from 'random-js';
+import { Random } from 'random-js';
 const random = new Random();
 
 /**

@@ -57,7 +57,7 @@ export class RedisRpcClient extends ClientProxy {
 			// pub/subなのでサーバー用のリクエストが届いてしまう場合があるが、クライアント用の接続なので無視する
 			methodHandler: () => NoResponse,
 		}, options));
-		conn.on('error', (err) => this.emit('error', err));
+		conn.on('error', (err) => this.ev.emit('error', err));
 		this.connection = conn;
 	}
 
@@ -73,10 +73,12 @@ export class RedisRpcClient extends ClientProxy {
 	 * パケットを送信する。
 	 * @param packet 送信パケット。
 	 * @param callback レスポンスを受け取るコールバック。
+	 * @return callback完了後に呼ばれるメソッド。エラー時はnull。
 	 */
-	protected publish(packet: ReadPacket, callback: (packet: WritePacket) => void): void {
+	protected publish(packet: ReadPacket, callback: (packet: WritePacket) => void): Function {
 		if (!this.connection) {
-			return callback({ err: new Error('Connection is closed') });
+			callback({ err: new Error('Connection is closed') });
+			return null;
 		}
 		try {
 			this.connection.call(this.patternToString(packet.pattern), packet.data)
@@ -88,22 +90,23 @@ export class RedisRpcClient extends ClientProxy {
 					callback({ isDisposed: true });
 				})
 				.catch((err) => callback({ err }));
+			return () => { };
 		} catch (err) {
 			callback({ err });
+			return null;
 		}
 	}
 
 	/**
-	 * JSON-RPC2通知リクエストを送信する。
-	 * @param method メソッド名。
-	 * @param params 引数。
+	 * パケットをイベントとして送信する。
+	 * @param packet 送信パケット。
 	 * @return 処理状態。
 	 */
-	public async notice(pattern: any, data: any): Promise<void> {
+	protected async dispatchEvent(packet: ReadPacket): Promise<any> {
 		if (!this.connection) {
 			throw new Error('Connection is closed');
 		}
-		await this.connection.notice(this.patternToString(pattern), data);
+		await this.connection.notice(this.patternToString(packet.pattern), packet.data);
 	}
 
 	/**
@@ -123,10 +126,5 @@ export class RedisRpcClient extends ClientProxy {
 	public on(event: string | symbol, listener: (...args: any[]) => void): this {
 		this.ev.on(event, listener);
 		return this;
-	}
-
-	private emit(event: 'error', err: Error): boolean;
-	private emit(event: string | symbol, ...args: any[]): boolean {
-		return this.ev.emit(event, ...args);
 	}
 }

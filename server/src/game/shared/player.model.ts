@@ -6,7 +6,7 @@ import { Column, DataType, AllowNull, Default, IsDate, DefaultScope, BeforeCreat
 import { ApiModelProperty } from '@nestjs/swagger';
 import * as crypto from 'crypto';
 import * as config from 'config';
-import * as Random from 'random-js';
+import { Random } from 'random-js';
 import * as Bluebird from 'bluebird';
 import { ShardableModel, Table } from '../../core/db';
 import Sequence from '../../shared/sequence.model';

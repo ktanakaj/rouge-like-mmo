@@ -17,7 +17,7 @@ export default function (req: express.Request, res: express.Response, next: expr
 
 	// 通常の write や end にフックする
 	function applyWithPushChunk(f: Function) {
-		return function (chunk: string | Buffer, encoding?: string) {
+		return function (chunk: string | Buffer, encoding?: BufferEncoding) {
 			if (chunk !== undefined && chunk !== null && chunk !== '') {
 				if (typeof chunk === 'string') {
 					chunks.push(Buffer.from(chunk, encoding));
