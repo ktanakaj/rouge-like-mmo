@@ -2,7 +2,8 @@
  * マスタバージョンモデルモジュール。
  * @module ./shared/master-version.model
  */
-import { Model, Column, DataType, AllowNull, Default, DefaultScope, IFindOptions } from 'sequelize-typescript';
+import { Model, Column, DataType, AllowNull, Default, DefaultScope } from 'sequelize-typescript';
+import { FindOptions } from 'sequelize';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { NotFoundError } from '../core/errors';
 import { Table } from '../core/db';
@@ -66,8 +67,8 @@ export default class MasterVersion extends Model<MasterVersion> {
 	 * @returns マスタバージョン。
 	 * @throws NotFoundError マスタバージョンが存在しない場合。
 	 */
-	static async findOrFail(id: number, options?: IFindOptions<MasterVersion>): Promise<MasterVersion> {
-		const instance = await this.findById(id, options);
+	static async findOrFail(id: number, options?: FindOptions): Promise<MasterVersion> {
+		const instance = await this.findByPk(id, options);
 		if (!instance) {
 			throw new NotFoundError(this.name, id);
 		}

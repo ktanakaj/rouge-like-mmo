@@ -3,7 +3,7 @@
  * @module ./core/models/shardable-sequelize
  */
 import 'reflect-metadata';
-import { Sequelize, ISequelizeConfig, ISequelizeUriConfig, ISequelizeValidationOnlyConfig } from 'sequelize-typescript';
+import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
 import { SyncOptions, DropOptions } from 'sequelize';
 import { fileUtils } from '../../core/utils';
 import ShardableModel from './shardable-model';
@@ -13,7 +13,7 @@ interface ShardableSequelizeConfig {
 	// 本来のSequelizeのoptionsのうち、DB固有のものは配列で、それ以外は直接指定するイメージ
 	// ※ 型定義上は databases の中にも modelPaths を指定できますが、使用しない想定です。
 	// ※ modelPaths以外については、マージされるのでここに無いパラメータでも使用可能です。
-	databases: (ISequelizeConfig | ISequelizeUriConfig | ISequelizeValidationOnlyConfig)[];
+	databases: SequelizeOptions[];
 	modelPaths?: string[];
 	logging?: boolean | Function;
 	benchmark?: boolean;
@@ -94,7 +94,7 @@ export class ShardableSequelize {
 			for (const m of subclasses) {
 				m.sequelizes = [];
 			}
-			s.addModels(subclasses);
+			s.addModels(subclasses as any);
 		}
 		// 全シェードのSequelizeインスタンスをモデルクラスに紐づける
 		for (const m of models) {

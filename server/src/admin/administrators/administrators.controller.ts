@@ -76,7 +76,7 @@ export class AdministratorsController {
 	@Get()
 	async findAndCountAdministrators(@Query() query: PagingQuery): Promise<FindAndCountAdministratorsResult> {
 		// ※ 削除済みの管理者も返している
-		return await Administrator.findAndCount({ limit: query.max, offset: (query.page - 1) * query.max, paranoid: false });
+		return await Administrator.findAndCountAll({ limit: query.max, offset: (query.page - 1) * query.max, paranoid: false });
 	}
 
 	@ApiOperation({ title: '管理者登録', description: '管理者を新規登録する。' })
@@ -92,7 +92,7 @@ export class AdministratorsController {
 		const admin = await Administrator.create(Object.assign(body, { password }));
 		// ※ 自動生成したパスワードを返す
 		// TODO: 本当はメール送信とかにしたい
-		return Object.assign(admin.toJSON(), { password });
+		return Object.assign(admin.toJSON(), { password }) as Administrator;
 	}
 
 	@ApiOperation({ title: '管理者更新', description: '管理者を変更する。' })
@@ -138,7 +138,7 @@ export class AdministratorsController {
 		admin = await admin.save();
 		// ※ 自動生成したパスワードを返す
 		// TODO: 本当はメール送信とかにしたい。メール送信にするなら、自分でリセットするAPIに変える
-		return Object.assign(admin.toJSON(), { password });
+		return Object.assign(admin.toJSON(), { password }) as Administrator;
 	}
 
 	@ApiOperation({ title: '管理者ログイン', description: '管理者名とパスワードで認証を行う。' })

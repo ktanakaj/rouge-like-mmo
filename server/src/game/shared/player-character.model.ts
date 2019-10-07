@@ -2,7 +2,8 @@
  * プレイヤーキャラクターモデルモジュール。
  * @module ./game/shared/player-character.model
  */
-import { Column, DataType, AllowNull, Default, IsDate, ForeignKey, IFindOptions, DefaultScope } from 'sequelize-typescript';
+import { Column, DataType, AllowNull, Default, IsDate, ForeignKey, DefaultScope } from 'sequelize-typescript';
+import { FindOptions } from 'sequelize';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { ShardableModel, Table, DistributionKey } from '../../core/db';
 import { NotFoundError } from '../../core/errors';
@@ -99,8 +100,8 @@ export default class PlayerCharacter extends ShardableModel<PlayerCharacter> {
 	 * @returns レコード。
 	 * @throws NotFoundError レコードが存在しない場合。
 	 */
-	public static async findOrFail(playerId: number, pcId: number, options?: IFindOptions<PlayerCharacter>): Promise<PlayerCharacter> {
-		const instance = await this.shard(playerId).findById(pcId, options);
+	public static async findOrFail(playerId: number, pcId: number, options?: FindOptions): Promise<PlayerCharacter> {
+		const instance: PlayerCharacter = await this.shard(playerId).findByPk(pcId, options);
 		if (!instance || instance.playerId !== playerId) {
 			throw new NotFoundError(this.name, pcId);
 		}
@@ -113,7 +114,7 @@ export default class PlayerCharacter extends ShardableModel<PlayerCharacter> {
 	 * @param options 検索オプション。
 	 * @returns レコード配列。
 	 */
-	public static async findAllByPlayerId(playerId: number, options: IFindOptions<PlayerCharacter> = {}): Promise<PlayerCharacter[]> {
+	public static async findAllByPlayerId(playerId: number, options: FindOptions = {}): Promise<PlayerCharacter[]> {
 		options.where = options.where || {};
 		options.where['playerId'] = playerId;
 		return await this.findAll(options);

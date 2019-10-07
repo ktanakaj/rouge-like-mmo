@@ -2,10 +2,10 @@
  * DBマイグレーションスクリプト。
  * @module ./batch/migrations/admin/00000001-create-administrator
  */
-import { QueryInterface, SequelizeStatic } from 'sequelize';
+import { QueryInterface } from 'sequelize';
 
 module.exports = {
-	up: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+	up: async (queryInterface: QueryInterface, Sequelize) => {
 		await queryInterface.createTable('administrators', {
 			id: {
 				type: Sequelize.INTEGER,
@@ -53,7 +53,7 @@ module.exports = {
 			},
 		});
 	},
-	down: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+	down: async (queryInterface: QueryInterface, Sequelize) => {
 		await queryInterface.dropTable('administrators');
 	},
 };

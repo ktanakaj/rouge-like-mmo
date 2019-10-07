@@ -28,7 +28,7 @@ export class PlayersController {
 	async login(params: LoginBody, conn: WebSocketRpcConnection): Promise<Player> {
 		// プレイヤーIDと端末トークンでプレイヤー認証
 		// （端末トークンは自動生成のパスワードとして扱う）
-		const player = await Player.findByIdForAuth(params.id);
+		const player = await Player.findByPkForAuth(params.id);
 		if (!player || !player.compareToken(params.token)) {
 			throw new BadRequestError('id or token is incorecct');
 		}

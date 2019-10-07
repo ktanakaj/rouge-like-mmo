@@ -2,10 +2,10 @@
  * DBマイグレーションスクリプト。
  * @module ./batch/migrations/global/00000010-create-floor
  */
-import { QueryInterface, SequelizeStatic } from 'sequelize';
+import { QueryInterface } from 'sequelize';
 
 module.exports = {
-	up: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+	up: async (queryInterface: QueryInterface, Sequelize) => {
 		await queryInterface.createTable('floors', {
 			id: {
 				type: Sequelize.BIGINT,
@@ -62,7 +62,7 @@ module.exports = {
 		});
 		await queryInterface.addIndex('floors', ['dungeonId', 'no']);
 	},
-	down: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+	down: async (queryInterface: QueryInterface, Sequelize) => {
 		await queryInterface.dropTable('floors');
 	},
 };

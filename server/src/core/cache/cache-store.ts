@@ -58,7 +58,7 @@ export class CacheStore {
 
 	/**
 	 * キャッシュを削除する。
-	 * @param key キャッシュキー。まとめて消す場合は '*' が指定可（例 'findById:*'）。
+	 * @param key キャッシュキー。まとめて消す場合は '*' が指定可（例 'findByPk:*'）。
 	 * @returns 処理状態。
 	 */
 	async delete(key: string): Promise<void> {

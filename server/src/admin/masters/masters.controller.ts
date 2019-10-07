@@ -43,7 +43,7 @@ export class MastersController {
 	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
 	@Get()
 	async findAndCountVersions(@Query() query: PagingQuery): Promise<FindAndCountVersionsResult> {
-		return await MasterVersion.findAndCount({ limit: query.max, offset: (query.page - 1) * query.max });
+		return await MasterVersion.findAndCountAll({ limit: query.max, offset: (query.page - 1) * query.max });
 	}
 
 	@Roles('admin', 'writable')

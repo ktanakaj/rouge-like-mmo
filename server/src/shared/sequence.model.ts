@@ -38,7 +38,7 @@ export default class Sequence extends Model<Sequence> {
 		// ※ sequelizeで完結させているのでやや非効率かも。プロシージャとか使った方がよいか
 		return await this.sequelize.transaction(async (t) => {
 			await this.increment('no', { where: { name }, transaction: t });
-			const sequence = await this.findById(name, { transaction: t });
+			const sequence = await this.findByPk(name, { transaction: t });
 			if (!sequence) {
 				throw new NotFoundError(this.name, name);
 			}

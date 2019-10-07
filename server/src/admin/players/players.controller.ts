@@ -27,6 +27,6 @@ export class PlayersController {
 	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
 	@Get()
 	async findAndCountPlayers(@Query() query: PagingQuery): Promise<FindAndCountPlayersResult> {
-		return await Player.findAndCount({ limit: query.max, offset: (query.page - 1) * query.max });
+		return await Player.findAndCountAll({ limit: query.max, offset: (query.page - 1) * query.max });
 	}
 }

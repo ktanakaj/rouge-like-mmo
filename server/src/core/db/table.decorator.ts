@@ -3,8 +3,7 @@
  * @module ./core/db/table.decorator
  */
 import 'reflect-metadata';
-import { Table as SequelizeTable } from 'sequelize-typescript';
-import { IDefineOptions } from 'sequelize-typescript/lib/interfaces/IDefineOptions';
+import { Table as SequelizeTable, TableOptions } from 'sequelize-typescript';
 
 /** DB情報用のキー */
 export const DB_KEY = Symbol('db');
@@ -15,7 +14,7 @@ export const DB_KEY = Symbol('db');
  * @param options テーブル定義。
  * @returns デコレーターファクトリー。
  */
-export function Table(options: IDefineOptions & { db: string }): Function {
+export function Table(options: TableOptions & { db: string }): Function {
 	return (target: any) => {
 		Reflect.defineMetadata(DB_KEY, options.db, target);
 		(SequelizeTable(options) as any)(target);

@@ -2,10 +2,10 @@
  * DBマイグレーションスクリプト。
  * @module ./batch/migrations/shardable/00000001-create-player
  */
-import { QueryInterface, SequelizeStatic } from 'sequelize';
+import { QueryInterface } from 'sequelize';
 
 module.exports = {
-	up: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+	up: async (queryInterface: QueryInterface, Sequelize) => {
 		await queryInterface.createTable('players', {
 			id: {
 				type: Sequelize.INTEGER,
@@ -54,7 +54,7 @@ module.exports = {
 			},
 		});
 	},
-	down: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+	down: async (queryInterface: QueryInterface, Sequelize) => {
 		await queryInterface.dropTable('players');
 	},
 };

@@ -50,7 +50,7 @@ export class PlayersController {
 	async login(@Body() body: LoginBody, @Session() session): Promise<Player> {
 		// プレイヤーIDと端末トークンでプレイヤー認証
 		// （端末トークンは自動生成のパスワードとして扱う）
-		const player = await Player.findByIdForAuth(body.id);
+		const player = await Player.findByPkForAuth(body.id);
 		if (!player || !player.compareToken(body.token)) {
 			throw new BadRequestError('id or token is incorecct');
 		}

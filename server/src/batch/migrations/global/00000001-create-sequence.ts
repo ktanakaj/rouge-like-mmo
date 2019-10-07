@@ -2,10 +2,10 @@
  * DBマイグレーションスクリプト。
  * @module ./batch/migrations/global/00000001-create-sequence
  */
-import { QueryInterface, SequelizeStatic } from 'sequelize';
+import { QueryInterface } from 'sequelize';
 
 module.exports = {
-	up: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+	up: async (queryInterface: QueryInterface, Sequelize) => {
 		await queryInterface.createTable('sequences', {
 			name: {
 				type: Sequelize.STRING,
@@ -21,7 +21,7 @@ module.exports = {
 			},
 		});
 	},
-	down: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+	down: async (queryInterface: QueryInterface, Sequelize) => {
 		await queryInterface.dropTable('sequences');
 	},
 };

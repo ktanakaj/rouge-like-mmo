@@ -2,9 +2,8 @@
  * マスタモデル抽象クラスモジュール。
  * @module ./core/db/master-model
  */
-import { Column, Model, PrimaryKey, Comment, DefaultScope, BeforeValidate, IFindOptions } from 'sequelize-typescript';
-import { getAttributes } from 'sequelize-typescript/lib/services/models';
-import { NonAbstract } from 'sequelize-typescript/lib/utils/types';
+import { Column, Model, PrimaryKey, Comment, DefaultScope, BeforeValidate, getAttributes } from 'sequelize-typescript';
+import { FindOptions } from 'sequelize';
 import { ApiModelProperty } from '@nestjs/swagger';
 import * as Bluebird from 'bluebird';
 import * as config from 'config';
@@ -12,9 +11,6 @@ import { NotFoundError } from '../../core/errors';
 // FIXME: coreからsharedを参照するのはルール違反なので直す
 import invokeContext from '../../shared/invoke-context';
 import { getCacheStore } from '../cache';
-
-/** モデル型定義。typeof T がコンパイルエラーになるのでその代替。 */
-type NonAbstractTypeOfMasterModel<T> = (new () => T) & NonAbstract<typeof MasterModel>;
 
 /**
  * マスタモデル抽象クラス。
@@ -30,7 +26,7 @@ type NonAbstractTypeOfMasterModel<T> = (new () => T) & NonAbstract<typeof Master
 		['id', 'ASC'],
 	],
 })
-export default abstract class MasterModel<T extends MasterModel<T>> extends Model<T> {
+export default abstract class MasterModel<T extends MasterModel<T> = any> extends Model<T> {
 	/** デフォルトのキャッシュ保持期間（秒） */
 	private static readonly DEFAULT_TTL = 86400;
 
@@ -58,11 +54,14 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 		return true;
 	}
 
+	// ※ オーバーライド系メソッドなど、うまく型が取れない部分が多々ありanyで誤魔化している
+	//    このクラスは共通関数なので、使う側に影響がなければ許容する。
+
 	/**
 	 * モデルのテーブル名を取得する。
 	 * @returns テーブル名またはテーブル情報のオブジェクト。
 	 */
-	static getTableName(): string | object {
+	public static getTableName(): string | { tableName: string, schema: string, delimiter: string } {
 		// マスタバージョンに応じて動的にテーブル名を変えるためにsequelizeのModelのメソッドをオーバーライド
 		const version = invokeContext.getMasterVersion();
 		if (!version) {
@@ -84,11 +83,12 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 
 	/**
 	 * 全てのレコードを取得する。
+	 * FIXME: thisの型をModel由来のものに直したいが、コンパイルが通らないため一旦anyで騙している。要修正
 	 * @param options 検索オプション。
 	 * @returns レコード配列。※キャッシュ有
 	 */
-	public static findAll<T>(this: NonAbstractTypeOfMasterModel<T>, options?: IFindOptions<T>): Bluebird<T[]> {
-		// ※ findById, findOne 等も最終的に findAll を呼んでいるため、全てキャッシュされます
+	public static findAll(this: any, options?: FindOptions): Bluebird<any[]> {
+		// ※ findByPk, findOne 等も最終的に findAll を呼んでいるため、全てキャッシュされます
 		// ※ マスタモデルは単純な使い方しか想定していないため、複雑なoptionsを指定した場合、
 		//    キャッシュが正常に機能しない可能性があります。
 		const self: any = this;
@@ -111,14 +111,14 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 	 * @returns マスタ。
 	 * @throws NotFoundError マスタが存在しない場合。
 	 */
-	public static async findOrFail<T extends MasterModel<T>>(
-		this: NonAbstractTypeOfMasterModel<T>, identifier: number | string, options?: IFindOptions<T>): Promise<T> {
+	public static async findOrFail<M extends MasterModel>(
+		this: (new () => M) & typeof MasterModel, identifier: number | string, options?: FindOptions): Promise<M> {
 
-		const instance = await this.findById(identifier, options);
+		const instance = await this.findByPk(identifier, options);
 		if (!instance) {
 			throw new NotFoundError(this.name, identifier);
 		}
-		return instance;
+		return instance as any;
 	}
 
 	/**
@@ -126,9 +126,7 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 	 * @param options 検索オプション。
 	 * @returns レコード配列。
 	 */
-	public static async findAllWithIsActive<T extends MasterModel<T>>(
-		this: NonAbstractTypeOfMasterModel<T>, options?: IFindOptions<T>): Promise<T[]> {
-
+	public static async findAllWithIsActive<M extends MasterModel>(this: (new () => M) & typeof MasterModel, options?: FindOptions): Promise<M[]> {
 		const instances = await this.findAll(options);
 		return instances.filter((m) => m.isActive());
 	}
@@ -140,14 +138,14 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 	 * @returns マスタ。
 	 * @throws NotFoundError マスタが存在しないまたは期間外の場合。
 	 */
-	public static async findOrFailWithIsActive<T extends MasterModel<T>>(
-		this: NonAbstractTypeOfMasterModel<T>, identifier: number | string, options?: IFindOptions<T>): Promise<T> {
+	public static async findOrFailWithIsActive<M extends MasterModel>(
+		this: (new () => M) & typeof MasterModel, identifier: number | string, options?: FindOptions): Promise<M> {
 
 		const instance = await this.findOrFail(identifier, options);
 		if (!instance.isActive()) {
 			throw new NotFoundError(this.name, identifier);
 		}
-		return instance;
+		return instance as any;
 	}
 
 	/**
@@ -173,7 +171,7 @@ export default abstract class MasterModel<T extends MasterModel<T>> extends Mode
 	 * @param factory キャッシュをモデルに復元するための処理。
 	 * @returns ラップされたメソッド。
 	 */
-	static cachewarp<T>(this: NonAbstractTypeOfMasterModel<T>, name: string, factory: (json) => any): Function {
+	static cachewarp(name: string, factory: (json) => any): Function {
 		return getCacheStore(config['redis']['cache']).wrap(
 			super[name],
 			{

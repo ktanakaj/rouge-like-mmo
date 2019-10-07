@@ -2,10 +2,10 @@
  * DBマイグレーションスクリプト。
  * @module ./batch/migrations/master/00000001-create-master-version
  */
-import { QueryInterface, SequelizeStatic } from 'sequelize';
+import { QueryInterface } from 'sequelize';
 
 module.exports = {
-	up: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+	up: async (queryInterface: QueryInterface, Sequelize) => {
 		await queryInterface.createTable('masterVersions', {
 			id: {
 				type: Sequelize.INTEGER,
@@ -40,7 +40,7 @@ module.exports = {
 		});
 		await queryInterface.addIndex('masterVersions', ['status', { attribute: 'id', order: 'DESC' } as any]);
 	},
-	down: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+	down: async (queryInterface: QueryInterface, Sequelize) => {
 		await queryInterface.dropTable('masterVersions');
 	},
 };

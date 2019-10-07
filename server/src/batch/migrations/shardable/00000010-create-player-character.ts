@@ -2,10 +2,10 @@
  * DBマイグレーションスクリプト。
  * @module ./batch/migrations/shardable/00000010-create-player-character
  */
-import { QueryInterface, SequelizeStatic } from 'sequelize';
+import { QueryInterface } from 'sequelize';
 
 module.exports = {
-	up: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+	up: async (queryInterface: QueryInterface, Sequelize) => {
 		await queryInterface.createTable('playerCharacters', {
 			id: {
 				type: Sequelize.INTEGER,
@@ -80,7 +80,7 @@ module.exports = {
 		});
 		await queryInterface.addIndex('playerCharacters', ['playerId', { attribute: 'lastSelected', order: 'DESC' } as any]);
 	},
-	down: async (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+	down: async (queryInterface: QueryInterface, Sequelize) => {
 		await queryInterface.dropTable('playerCharacters');
 	},
 };

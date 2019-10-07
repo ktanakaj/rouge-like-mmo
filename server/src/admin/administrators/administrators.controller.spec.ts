@@ -188,7 +188,7 @@ describe('admin/AdministratorsController', () => {
 			const admin = testadmin1.toJSON();
 			const administrator = await controller.updateMe({ password: 'UNITTEST' }, admin);
 			assert.strictEqual(administrator.id, testadmin1.id);
-			const adminWithNewPassword = await Administrator.scope('login').findById(testadmin1.id);
+			const adminWithNewPassword = await Administrator.scope('login').findByPk(testadmin1.id);
 			assert(adminWithNewPassword.comparePassword('UNITTEST'));
 		});
 	});

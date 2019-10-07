@@ -2,15 +2,13 @@
  * sequelize-typescriptのモデルをシャーディング環境用に拡張したモデルモジュール。
  * @module ./core/models/shardable-model
  */
-import { Sequelize, Model, IFindOptions, ICountOptions, IBuildOptions, ICreateOptions } from 'sequelize-typescript';
-import { UpsertOptions, TruncateOptions, InstanceIncrementDecrementOptions } from 'sequelize';
+import { Sequelize, Model } from 'sequelize-typescript';
+import {
+	FindOptions, CountOptions, FindAndCountOptions, BuildOptions, CreateOptions, FindOrCreateOptions,
+	UpsertOptions, TruncateOptions, IncrementDecrementOptionsWithBy,
+} from 'sequelize';
 import * as _ from 'lodash';
 import * as Bluebird from 'bluebird';
-import { IFindOrInitializeOptions } from 'sequelize-typescript/lib/interfaces/IFindOrInitializeOptions';
-import { NonAbstract } from 'sequelize-typescript/lib/utils/types';
-
-/** モデル型定義。typeof T がコンパイルエラーになるのでその代替。 */
-type NonAbstractTypeOfShardableModel<T> = (new () => T) & NonAbstract<typeof ShardableModel>;
 
 /**
  * sequelize-typescriptのモデルをシャーディング環境用に拡張したモデルクラス。
@@ -24,7 +22,7 @@ type NonAbstractTypeOfShardableModel<T> = (new () => T) & NonAbstract<typeof Sha
  *    前者においては、Sequelize標準のモデルのstaticメソッドは無効化されます。
  *    このクラスで定義している互換メソッドを使用してください。
  */
-export default abstract class ShardableModel<T extends Model<T>> extends Model<T> {
+export default abstract class ShardableModel<T extends ShardableModel<T> = any> extends Model<T> {
 	/** モデルが紐づくSequelizeインスタンス */
 	public static sequelizes: Sequelize[];
 
@@ -55,12 +53,17 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 		return this.sequelizes[this.shardNo(distributionValue)];
 	}
 
+	// ※ オーバーライド系メソッドなど、うまく型が取れない部分が多々ありanyで誤魔化している
+	//    このクラスは共通関数なので、使う側に影響がなければ許容する。
+
 	/**
 	 * シャーディングキーの値から対応するsequelizeモデルクラスを取得する。
 	 * @param distributionValue シャーディングキーの値。
 	 * @returns 対応するsequelizeモデルクラス。
 	 */
-	public static shard<T>(this: NonAbstractTypeOfShardableModel<T>, distributionValue: number): NonAbstractTypeOfShardableModel<T> {
+	public static shard<M extends ShardableModel>(
+		this: (new () => M) & typeof ShardableModel, distributionValue: number): (new () => M) & typeof ShardableModel {
+
 		return this.shardDb(distributionValue).model(this.name) as any;
 	}
 
@@ -68,7 +71,7 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * 全シャードのsequelizeモデルクラスを取得する。
 	 * @returns 対応するsequelizeモデルクラス配列。
 	 */
-	public static shards<T>(this: NonAbstractTypeOfShardableModel<T>): NonAbstractTypeOfShardableModel<T>[] {
+	public static shards<M extends ShardableModel>(this: (new () => M) & typeof ShardableModel): ((new () => M) & typeof ShardableModel)[] {
 		return this.sequelizes.map((s) => s.model(this.name) as any);
 	}
 
@@ -89,17 +92,17 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @param options 検索オプション。※現状ORDER BY等シャード単位でしか機能しません
 	 * @returns レコード配列。
 	 */
-	public static findAll<T>(this: NonAbstractTypeOfShardableModel<T>, options?: IFindOptions<T>): Bluebird<T[]> {
+	public static findAll(this: any, options?: FindOptions): Bluebird<any[]> {
 		if (this.isShard()) {
 			return Model.findAll.apply(this, arguments);
 		}
 		// シャードキーが指定されている場合、そのシャードのみ検索
-		const distributionValue = (this as any).getDistributionValueFromFindOptions(options);
+		const distributionValue = this.getDistributionValueFromFindOptions(options);
 		if (distributionValue !== null) {
-			return this.shard(distributionValue).findAll(options);
+			return this.shard(distributionValue).findAll(options) as any;
 		}
 		// それ以外は、全シャードを検索して結果を合算して返す
-		return Bluebird.all(this.shards().map((m) => m.findAll(options))).then(_.flatten);
+		return Bluebird.all(this.shards().map((m) => m.findAll(options))).then(_.flatten) as any;
 	}
 
 	/**
@@ -109,16 +112,16 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @param options 検索オプション。※全シャード検索の場合rejectOnEmptyは正しく機能しません
 	 * @returns レコード、取得できない場合はnull。
 	 */
-	public static findById<T>(this: NonAbstractTypeOfShardableModel<T>, identifier?: number | string, options?: IFindOptions<T>): Bluebird<T | null> {
+	public static findByPk<M extends ShardableModel>(this: any, identifier?: number | string, options?: FindOptions): Bluebird<M | null> {
 		if (this.isShard()) {
-			return Model.findById.apply(this, arguments);
+			return Model.findByPk.apply(this, arguments);
 		}
 		// IDがシャードキーの場合そのシャードのみを、それ以外は全シャードを検索する
 		if (this.shard(0).primaryKeyAttribute !== this.distributionKey) {
-			return Bluebird.resolve((this as any).findByIdFromAllShards(identifier, options));
+			return Bluebird.resolve(this.findByPkFromAllShards(identifier, options)) as any;
 		} else {
 			// TODO: 現状stringのシャードキーには対応しないので数値のはず、対応したらキャスト外す
-			return this.shard(identifier as number).findById(identifier, options);
+			return this.shard(identifier as number).findByPk(identifier, options) as any;
 		}
 	}
 
@@ -128,13 +131,13 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @param options 検索オプション。※現状rejectOnEmptyは正しく機能しません
 	 * @returns レコード、取得できない場合はnull。
 	 */
-	private static async findByIdFromAllShards<T>(
-		this: NonAbstractTypeOfShardableModel<T>, identifier?: number | string, options?: IFindOptions<T>): Promise<T | null> {
+	private static async findByPkFromAllShards<M extends ShardableModel>(
+		this: (new () => M) & typeof ShardableModel, identifier?: number | string, options?: FindOptions): Promise<M | null> {
 
 		for (const model of this.shards()) {
-			const instance = await model.findById(identifier, options);
+			const instance = await model.findByPk(identifier, options);
 			if (instance) {
-				return instance;
+				return instance as any;
 			}
 		}
 		return null;
@@ -146,17 +149,17 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @param options 検索オプション。※全シャード検索の場合rejectOnEmptyは正しく機能しません
 	 * @returns レコード、取得できない場合はnull。
 	 */
-	public static findOne<T>(this: NonAbstractTypeOfShardableModel<T>, options?: IFindOptions<T>): Bluebird<T | null> {
+	public static findOne<M extends ShardableModel>(this: any, options?: FindOptions): Bluebird<M | null> {
 		if (this.isShard()) {
 			return Model.findOne.apply(this, arguments);
 		}
 		// シャードキーが指定されている場合、そのシャードのみ検索
-		const distributionValue = (this as any).getDistributionValueFromFindOptions(options);
+		const distributionValue = this.getDistributionValueFromFindOptions(options);
 		if (distributionValue !== null) {
-			return this.shard(distributionValue).findOne(options);
+			return this.shard(distributionValue).findOne(options) as any;
 		}
 		// それ以外は、全シャードを検索して最初に検索したレコードを返す
-		return Bluebird.resolve((this as any).findOneFromAllShards(options));
+		return Bluebird.resolve(this.findOneFromAllShards(options) as any);
 	}
 
 	/**
@@ -164,11 +167,13 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @param options 検索オプション。※現状rejectOnEmptyは正しく機能しません
 	 * @returns レコード、取得できない場合はnull。
 	 */
-	private static async findOneFromAllShards<T>(this: NonAbstractTypeOfShardableModel<T>, options?: IFindOptions<T>): Promise<T | null> {
+	private static async findOneFromAllShards<M extends ShardableModel>(
+		this: (new () => M) & typeof ShardableModel, options?: FindOptions): Promise<M | null> {
+
 		for (const model of this.shards()) {
 			const instance = await model.findOne(options);
 			if (instance) {
-				return instance;
+				return instance as any;
 			}
 		}
 		return null;
@@ -179,16 +184,17 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @param options 検索オプション。
 	 * @returns 件数。
 	 */
-	public static count<T>(this: NonAbstractTypeOfShardableModel<T>, options?: ICountOptions<T>): Bluebird<number> {
+	public static count<M extends ShardableModel>(this: (new () => M) & typeof ShardableModel, options?: CountOptions): Bluebird<any> {
 		if (this.isShard()) {
 			return Model.count.apply(this, arguments);
 		}
 		// シャードキーが指定されている場合、そのシャードのみ検索
-		const distributionValue = (this as any).getDistributionValueFromFindOptions(options);
+		const distributionValue = this.getDistributionValueFromFindOptions(options);
 		if (distributionValue !== null) {
 			return this.shard(distributionValue).count(options);
 		}
 		// それ以外は、全シャードを検索して結果を合算して返す
+		// TODO: CountWithOptions時には現状未対応（戻り値が単純な数値ではなくなる）
 		return Bluebird.all(this.shards().map((m) => m.count(options))).then(_.sum);
 	}
 
@@ -198,17 +204,17 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @param options 検索オプション。※ORDER BY等シャード単位でしか機能しません
 	 * @returns 検索結果。
 	 */
-	public static findAndCount<T>(this: NonAbstractTypeOfShardableModel<T>, options?: IFindOptions<T>): Bluebird<{ rows: T[], count: number }> {
+	public static findAndCountAll(this: any, options?: FindAndCountOptions): Bluebird<{ rows: any[], count: number }> {
 		if (this.isShard()) {
-			return Model.findAndCount.apply(this, arguments);
+			return Model.findAndCountAll.apply(this, arguments);
 		}
 		// シャードキーが指定されている場合、そのシャードのみ検索
 		const distributionValue = (this as any).getDistributionValueFromFindOptions(options);
 		if (distributionValue !== null) {
-			return this.shard(distributionValue).findAndCount(options);
+			return this.shard(distributionValue).findAndCountAll(options) as any;
 		}
 		// それ以外は、全シャードを検索して結果を合算して返す
-		return Bluebird.resolve((this as any).findAndCountFromAllShards(options));
+		return Bluebird.resolve(this.findAndCountAllFromAllShards(options)) as any;
 	}
 
 	/**
@@ -217,13 +223,13 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @param options 検索オプション。※ORDER BY等シャード単位でしか機能しません
 	 * @returns 検索結果。
 	 */
-	private static async findAndCountFromAllShards<T>(
-		this: NonAbstractTypeOfShardableModel<T>, options?: IFindOptions<T>): Promise<{ rows: T[], count: number }> {
+	private static async findAndCountAllFromAllShards<M extends ShardableModel>(
+		this: (new () => M) & typeof ShardableModel, options?: FindAndCountOptions): Promise<{ rows: M[], count: number }> {
 
 		// FIXME: findAndCountはORDER BYやLIMITを使いたい関数なので、可能であれば何か対処する（特にLIMITは）
 		const result = { rows: [], count: 0 };
 		for (const model of this.shards()) {
-			const r = await model.findAndCount(options);
+			const r = await model.findAndCountAll(options);
 			result.count = result.count + r.count;
 			result.rows.push(...r.rows);
 		}
@@ -237,11 +243,11 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @returns 生成したインスタンス。
 	 * @throws Error シャードキーが存在しない場合。
 	 */
-	public static build<T, A>(this: NonAbstractTypeOfShardableModel<T>, record?: A, options?: IBuildOptions): T {
+	public static build(this: any, record?: object, options?: BuildOptions): any {
 		if (this.isShard()) {
 			return Model.build.apply(this, arguments);
 		}
-		return this.shard((this as any).getDistributionValueFromValues(record)).build(record, options);
+		return this.shard(this.getDistributionValueFromValues(record)).build(record, options) as any;
 	}
 
 	/**
@@ -251,11 +257,11 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @returns 生成したインスタンス。
 	 * @throws Error シャードキーが存在しない場合。
 	 */
-	public static create<T, A>(this: NonAbstractTypeOfShardableModel<T>, values?: A, options?: ICreateOptions): Bluebird<T> {
+	public static create<M extends ShardableModel>(this: any, values?: object, options?: CreateOptions): Bluebird<M> {
 		if (this.isShard()) {
 			return Model.create.apply(this, arguments);
 		}
-		return this.shard((this as any).getDistributionValueFromValues(values)).create(values, options);
+		return this.shard(this.getDistributionValueFromValues(values)).create(values, options) as any;
 	}
 
 	/**
@@ -264,15 +270,15 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @returns 検索／生成したインスタンス。
 	 * @throws Error シャードキーが存在しない場合。
 	 */
-	public static findOrBuild<T, A>(this: NonAbstractTypeOfShardableModel<T>, options: IFindOrInitializeOptions<A>): Bluebird<[T, boolean]> {
+	public static findOrBuild(this: any, options: FindOrCreateOptions): Bluebird<[any, boolean]> {
 		if (this.isShard()) {
 			return Model.findOrBuild.apply(this, arguments);
 		}
-		const distributionValue = (this as any).getDistributionValueFromFindOptions(options);
+		const distributionValue = this.getDistributionValueFromFindOptions(options);
 		if (distributionValue === null) {
 			throw new Error(`The distribution value '${this.distributionKey}' is not found.`);
 		}
-		return this.shard(distributionValue).findOrBuild(options);
+		return this.shard(distributionValue).findOrBuild(options) as any;
 	}
 
 	/**
@@ -281,15 +287,15 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @returns 検索／生成したインスタンス。
 	 * @throws Error シャードキーが存在しない場合。
 	 */
-	public static findOrCreate<T, A>(this: NonAbstractTypeOfShardableModel<T>, options: IFindOrInitializeOptions<A>): Bluebird<[T, boolean]> {
+	public static findOrCreate(this: any, options: FindOrCreateOptions): Bluebird<[any, boolean]> {
 		if (this.isShard()) {
 			return Model.findOrCreate.apply(this, arguments);
 		}
-		const distributionValue = (this as any).getDistributionValueFromFindOptions(options);
+		const distributionValue = this.getDistributionValueFromFindOptions(options);
 		if (distributionValue === null) {
 			throw new Error(`The distribution value '${this.distributionKey}' is not found.`);
 		}
-		return this.shard(distributionValue).findOrCreate(options);
+		return this.shard(distributionValue).findOrCreate(options) as any;
 	}
 
 	/**
@@ -298,11 +304,11 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @param options 更新オプション。※トランザクション等シャード単位でしか機能しません
 	 * @returns INSERTの場合true、それ以外はfalse。
 	 */
-	public static upsert<T, A>(this: NonAbstractTypeOfShardableModel<T>, values: A, options?: UpsertOptions): Bluebird<any> {
+	public static upsert<M extends ShardableModel>(this: (new () => M) & typeof ShardableModel, values: object, options?: UpsertOptions): Bluebird<any> {
 		if (this.isShard()) {
 			return Model.upsert.apply(this, arguments);
 		}
-		return this.shard((this as any).getDistributionValueFromValues(values)).upsert(values, options);
+		return this.shard(this.getDistributionValueFromValues(values)).upsert(values, options);
 	}
 
 	/**
@@ -310,7 +316,7 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @param options TRUNCATEオプション。
 	 * @returns 処理状態。
 	 */
-	public static truncate<T>(this: NonAbstractTypeOfShardableModel<T>, options?: TruncateOptions): Bluebird<void> {
+	public static truncate<M extends ShardableModel>(this: (new () => M) & typeof ShardableModel, options?: TruncateOptions): Bluebird<void> {
 		if (this.isShard()) {
 			return Model.truncate.apply(this, arguments);
 		}
@@ -323,19 +329,19 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @param options 加算オプション。
 	 * @returns 処理結果。
 	 */
-	public static increment<T>(
-		this: NonAbstractTypeOfShardableModel<T>,
-		fields: string | string[] | object,
-		options?: InstanceIncrementDecrementOptions & { silent?: boolean },
-	): Bluebird<[Array<T>, number]> | Bluebird<[number, void]> {
+	public static increment<M extends ShardableModel, K extends keyof M>(
+		this: (new () => M) & typeof ShardableModel,
+		fields: K | K[] | { [key in K]?: number },
+		options: IncrementDecrementOptionsWithBy,
+	): Bluebird<M> {
 		if (this.isShard()) {
 			return Model.increment.apply(this, arguments);
 		}
-		const distributionValue = (this as any).getDistributionValueFromFindOptions(options);
+		const distributionValue = this.getDistributionValueFromFindOptions(options);
 		if (distributionValue === null) {
 			throw new Error(`The distribution value '${this.distributionKey}' is not found.`);
 		}
-		return this.shard(distributionValue).increment(fields, options);
+		return this.shard(distributionValue).increment(fields as any, options) as any;
 	}
 
 	/**
@@ -343,14 +349,16 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @param options 検索オプション。※ORDER BY等シャード単位でしか機能しません
 	 * @returns レコードを返すイテレータ。
 	 */
-	public static async* iterateAll<T>(this: NonAbstractTypeOfShardableModel<T>, options?: IFindOptions<T>): AsyncIterableIterator<T> {
+	public static async* iterateAll<M extends ShardableModel>(
+		this: (new () => M) & typeof ShardableModel, options?: FindOptions): AsyncIterableIterator<M> {
+
 		// ※ findAllだと全シャードの結果を一度に返してメモリの無駄なの独自に定義。
 		//    本当は個別の検索もカーソル的なものにしたいが、良い方法がないのでfindAllで我慢。
 		if (this.isShard()) {
 			// 個別のシャード用の処理
 			const instances = await this.findAll(options);
 			for (const instance of instances) {
-				yield instance;
+				yield instance as any;
 			}
 		} else {
 			// シャードキーが指定されている場合そのシャードのみ、それ以外は全シャードを検索して返す
@@ -361,7 +369,7 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 			}
 			for (const model of models) {
 				for await (const instance of model.iterateAll(options)) {
-					yield instance;
+					yield instance as any;
 				}
 			}
 		}
@@ -386,7 +394,7 @@ export default abstract class ShardableModel<T extends Model<T>> extends Model<T
 	 * @param options 値の入ったオブジェクト。
 	 * @returns シャードキーの値。キーが存在しない場合null。
 	 */
-	protected static getDistributionValueFromFindOptions<T>(this: NonAbstractTypeOfShardableModel<T>, options: IFindOptions<T>): number | null {
+	protected static getDistributionValueFromFindOptions(options: FindOptions): number | null {
 		// ※ 現状、単純な=条件のみに対応。それ以外の使い方の場合は取れない
 		if (options && options.where && typeof options.where[this.distributionKey] === 'number') {
 			return options.where[this.distributionKey];

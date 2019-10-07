@@ -2,7 +2,8 @@
  * プレイヤーモデルモジュール。
  * @module ./game/shared/player.model
  */
-import { Column, DataType, AllowNull, Default, IsDate, DefaultScope, BeforeCreate, BeforeUpdate, ICreateOptions } from 'sequelize-typescript';
+import { Column, DataType, AllowNull, Default, IsDate, DefaultScope, BeforeCreate, BeforeUpdate } from 'sequelize-typescript';
+import { CreateOptions } from 'sequelize';
 import { ApiModelProperty } from '@nestjs/swagger';
 import * as crypto from 'crypto';
 import * as config from 'config';
@@ -115,8 +116,8 @@ export default class Player extends ShardableModel<Player> {
 	 * @param id プレイヤーID。
 	 * @returns プレイヤー。
 	 */
-	public static async findByIdForAuth(id: number): Promise<Player> {
-		return this.shard(id).scope('login').findById(id);
+	public static async findByPkForAuth(id: number): Promise<Player> {
+		return this.shard(id).scope('login').findByPk(id);
 	}
 
 	/**
@@ -126,7 +127,7 @@ export default class Player extends ShardableModel<Player> {
 	 * @returns 生成したインスタンス。
 	 */
 	// FIXME: 戻り値はPlayer型だが、何故か親クラスとの型不一致となるので一時的にanyに変更
-	public static create<A>(values?: A, options?: ICreateOptions): Bluebird<any> {
+	public static create(values?: object, options?: CreateOptions): Bluebird<any> {
 		// プレイヤーIDを非シャードのシーケンスから採番して、その値で生成する
 		values = values || {} as any;
 		let p = Bluebird.resolve(values['id']);
