@@ -8,17 +8,12 @@ import { ApiModelProperty } from '@nestjs/swagger';
 import * as Bluebird from 'bluebird';
 import * as config from 'config';
 import { NotFoundError } from '../../core/errors';
-// FIXME: coreからsharedを参照するのはルール違反なので直す
-import invokeContext from '../../shared/invoke-context';
 import { getCacheStore } from '../cache';
 
 /**
  * マスタモデル抽象クラス。
  *
  * 各マスタで汎用の仕組みやメソッドを定義する。
- * マスタはテーブルとモデルが一対一ではなく、バージョンごとに別々のテーブルに
- * インポートされて運用される。
- * （例）contestマスタの実際のテーブルは contests_v11 のようになる。）
  */
 @DefaultScope({
 	// デフォルトではIDでソートされる
@@ -56,30 +51,6 @@ export default abstract class MasterModel<T extends MasterModel<T> = any> extend
 
 	// ※ オーバーライド系メソッドなど、うまく型が取れない部分が多々ありanyで誤魔化している
 	//    このクラスは共通関数なので、使う側に影響がなければ許容する。
-
-	/**
-	 * モデルのテーブル名を取得する。
-	 * @returns テーブル名またはテーブル情報のオブジェクト。
-	 */
-	public static getTableName(): string | { tableName: string, schema: string, delimiter: string } {
-		// マスタバージョンに応じて動的にテーブル名を変えるためにsequelizeのModelのメソッドをオーバーライド
-		const version = invokeContext.getMasterVersion();
-		if (!version) {
-			throw new NotFoundError('There are no available master version');
-		}
-		const versionSuffix = '_v' + version;
-		const schema = (this as any).QueryGenerator.addSchema(this);
-		if (typeof schema === 'string') {
-			return schema + versionSuffix;
-		}
-		if (schema['tableName']) {
-			schema['tableName'] = schema['tableName'] + versionSuffix;
-		}
-		if (schema['table']) {
-			schema['table'] = schema['table'] + versionSuffix;
-		}
-		return schema;
-	}
 
 	/**
 	 * 全てのレコードを取得する。
@@ -177,7 +148,7 @@ export default abstract class MasterModel<T extends MasterModel<T> = any> extend
 			{
 				ttl: MasterModel.DEFAULT_TTL,
 				factory,
-				prefix: 'v' + invokeContext.getMasterVersion() + ':' + this.name + ':' + name,
+				prefix: this.name + ':' + name,
 			});
 	}
 }

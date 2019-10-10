@@ -13,6 +13,7 @@ import { MasterModel, Table } from '../../../core/db';
 	db: 'master',
 	tableName: 'appVersions',
 	comment: 'アプリバージョンマスタ',
+	timestamps: false,
 })
 export default class AppVersion extends MasterModel<AppVersion> {
 	/** 利用可能バージョン（これ未満のバージョンはバージョンアップ必須） */

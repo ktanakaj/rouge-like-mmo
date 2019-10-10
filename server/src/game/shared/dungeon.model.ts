@@ -12,6 +12,7 @@ import { MasterModel, Table } from '../../core/db';
 	db: 'master',
 	tableName: 'dungeons',
 	comment: 'ダンジョンマスタ',
+	timestamps: false,
 })
 export default class Dungeon extends MasterModel<Dungeon> {
 	/** ダンジョン名 */

@@ -12,6 +12,7 @@ import { MasterModel, Table } from '../core/db';
 	db: 'master',
 	tableName: 'errorCodes',
 	comment: 'エラーコードマスタ',
+	timestamps: false,
 })
 export default class ErrorCode extends MasterModel<ErrorCode> {
 	/** レスポンスコード */

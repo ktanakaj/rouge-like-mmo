@@ -15,9 +15,9 @@ describe('MasterViewerComponent', () => {
 	let element: DebugElement;
 
 	beforeEach(fakeAsync(() => {
-		const masterServiceSpy = jasmine.createSpyObj<MasterService>('MasterService', ['findLatestMasters', 'findLatestMaster']);
-		masterServiceSpy.findLatestMasters.and.returnValue(Promise.resolve(['ErrorCodes']));
-		masterServiceSpy.findLatestMaster.and.returnValue(Promise.resolve([]));
+		const masterServiceSpy = jasmine.createSpyObj<MasterService>('MasterService', ['findMasters', 'findMaster']);
+		masterServiceSpy.findMasters.and.returnValue(Promise.resolve(['ErrorCodes']));
+		masterServiceSpy.findMaster.and.returnValue(Promise.resolve([]));
 
 		testHelper.configureTestingModule({
 			declarations: [MasterViewerComponent],

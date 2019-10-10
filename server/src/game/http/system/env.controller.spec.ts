@@ -24,7 +24,6 @@ describe('http/EnvController', () => {
 			assert(result.serverTime >= 1540507841);
 			assert(/\d\.\d\.\d/.test(result.serverVersion));
 			assert(/\d\.\d\.\d/.test(result.minimumAppVersion));
-			assert(result.latestMasterVersion > 0);
 		});
 	});
 });

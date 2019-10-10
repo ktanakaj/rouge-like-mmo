@@ -39,21 +39,7 @@ describe('GM Tool Main Scenario', () => {
 	it('should display master page', async () => {
 		const page = new MasterPage();
 		await page.navigateByMenu();
-		expect(await page.getPageTitle()).toContain('マスタバージョン一覧');
-
-		// マスタバージョンは最低1件はあるので、データが表示されていることをチェック
-		expect(await page.getRows().count()).toBeGreaterThan(0);
-
-		// その他、各種ボタンを押してエラーにならないこと
-		await page.getChangeButton().click();
-		await page.dismissAlert();
-
-		await page.getAddCommentButton().click();
-		expect(await page.getModalTitle()).toContain('コメント付加');
-		await page.closeModal();
-
-		await page.getSearchButton().click();
-		expect(await page.getRows().count()).toBeGreaterThan(0);
+		expect(await page.getPageTitle()).toContain('マスタ閲覧');
 	});
 
 	it('should display administrator page', async () => {

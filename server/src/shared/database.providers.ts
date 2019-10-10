@@ -52,7 +52,6 @@ for (const dbname of Object.keys(MODELS)) {
 	// コンフィグにシャーディング用の設定がある場合、シャーディング用のクラスで初期化する
 	const options = Object.assign({
 		logging: debugLog,
-		operatorsAliases: false,
 	}, config['databases'][dbname]);
 
 	let dbclazz: any = Sequelize;

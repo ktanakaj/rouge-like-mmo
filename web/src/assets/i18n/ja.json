@@ -75,19 +75,6 @@
 		"TITLE": "ローグ風オンラインゲームGM Toolログイン",
 		"FAILED": "管理者名またはパスワードが確認できません。"
 	},
-	"MASTER_PAGE": {
-		"LINK": "マスタ管理"
-	},
-	"MASTER_VERSION_PAGE": {
-		"TITLE": "マスタバージョン一覧",
-		"LINK": "マスタバージョン情報",
-		"CHANGE_PUBLISHED": "公開する",
-		"CHANGE_PUBLISHED_BODY": "id={{id}} のマスタを公開します。よろしいですか？",
-		"CHANGE_READIED": "非公開にする",
-		"CHANGE_READIED_BODY": "id={{id}} のマスタを非公開にします。よろしいですか？",
-		"ATTENTION": "※ 公開中のマスタバージョンのうち最新のものが使用されます。マスタのバージョン間で互換性が無い場合はメンテナンスが必要です。",
-		"ADD_NOTE": "コメント付加"
-	},
 	"MASTER_VIEWER_PAGE": {
 		"TITLE": "マスタ一覧",
 		"LINK": "マスタ閲覧",

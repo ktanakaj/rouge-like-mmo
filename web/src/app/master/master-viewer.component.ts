@@ -45,11 +45,11 @@ export class MasterViewerComponent implements OnInit {
 			// マスタ名が指定されたらそのマスタを、それ以外の場合は一覧を開く
 			this.name = params['name'];
 			if (this.name) {
-				const rows = await this.masterService.findLatestMaster(this.name);
+				const rows = await this.masterService.findMaster(this.name);
 				this.columns = rows.length > 0 ? Object.keys(rows[0]) : [];
 				this.rows = rows;
 			} else if (!this.tables) {
-				this.tables = await this.masterService.findLatestMasters();
+				this.tables = await this.masterService.findMasters();
 			}
 		});
 	}

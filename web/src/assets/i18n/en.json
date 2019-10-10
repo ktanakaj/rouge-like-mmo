@@ -76,19 +76,6 @@
 		"TITLE": "Rouge-like MMO GM Tool Login",
 		"FAILED": "The user name or password is incorrect."
 	},
-	"MASTER_PAGE": {
-		"LINK": "Masters"
-	},
-	"MASTER_VERSION_PAGE": {
-		"TITLE": "Master Version List",
-		"LINK": "Master Versions",
-		"CHANGE_PUBLISHED": "Publish",
-		"CHANGE_PUBLISHED_BODY": "Are you sure you want to publish this? (id={{id}})",
-		"CHANGE_READIED": "Close",
-		"CHANGE_READIED_BODY": "Are you sure you want to close this? (id={{id}})",
-		"ATTENTION": "",
-		"ADD_NOTE": "Add note"
-	},
 	"MASTER_VIEWER_PAGE": {
 		"TITLE": "Master List",
 		"LINK": "Master Viewer",

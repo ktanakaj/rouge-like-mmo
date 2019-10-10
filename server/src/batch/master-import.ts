@@ -45,44 +45,17 @@ if (files.length === 0) {
 	process.exit(ExitCode.DataErr);
 }
 
-// インポート実施
+// マスタファイルをインポート
 import run from './core/runner';
-import invokeContext from '../shared/invoke-context';
-import MasterVersion from '../shared/master-version.model';
 import { MODELS } from '../shared/database.providers';
 
 run(async () => {
-	await importMasters(files, argv['publish']);
+	// ※ 現状ログの視認性などを鑑みて並列実行していない
+	for (const csvpath of files) {
+		await importMaster(csvpath);
+	}
 	process.exit(0);
 });
-
-/**
- * 指定されたCSVマスタファイル一式をインポートする。
- * @param csvpaths CSVパス配列。
- * @param publish インポート後に公開にする場合true。
- * @return 処理状態。
- */
-async function importMasters(csvpaths: string[], publish: boolean): Promise<void> {
-	// 新しいマスタバージョンを作成
-	const masterVersion = await MasterVersion.create();
-	logger.info(`Master version v${masterVersion.id} : importing...`);
-
-	// 作成したバージョンでマスタテーブルを作成し、インポート実行
-	invokeContext.setMasterVersion(masterVersion.id);
-	try {
-		await MasterVersion.sequelize.sync();
-		for (const csvpath of csvpaths) {
-			await importMaster(csvpath);
-		}
-		masterVersion.status = publish ? 'published' : 'readied';
-	} catch (err) {
-		masterVersion.status = 'failed';
-		throw err;
-	} finally {
-		logger.info(`Master version v${masterVersion.id} : ${masterVersion.status}.`);
-		await masterVersion.save();
-	}
-}
 
 /**
  * 指定されたCSVマスタファイルをインポートする。

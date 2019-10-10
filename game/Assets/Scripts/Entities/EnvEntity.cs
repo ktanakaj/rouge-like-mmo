@@ -39,12 +39,6 @@ namespace Honememo.RougeLikeMmo.Entities
         [SerializeField]
         private string minimumAppVersion;
 
-        /// <summary>
-        /// 最新マスタバージョン。
-        /// </summary>
-        [SerializeField]
-        private int latestMasterVersion;
-
         #endregion
 
         #region 公開プロパティ
@@ -63,11 +57,6 @@ namespace Honememo.RougeLikeMmo.Entities
         /// 最低アプリバージョン。
         /// </summary>
         public string MinimumAppVersion { get { return this.minimumAppVersion; } set { this.minimumAppVersion = value; } }
-
-        /// <summary>
-        /// 最新マスタバージョン。
-        /// </summary>
-        public int LatestMasterVersion { get { return this.latestMasterVersion; } set { this.latestMasterVersion = value; } }
 
         #endregion
     }

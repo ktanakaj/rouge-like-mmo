@@ -8,7 +8,6 @@ import * as _ from 'lodash';
 import { BadRequestError } from '../../../core/errors';
 import { ErrorResult } from '../../../shared/common.dto';
 import { MODELS } from '../../../shared/database.providers';
-import MasterVersion from '../../../shared/master-version.model';
 
 /**
  * マスタコントローラクラス。
@@ -20,10 +19,9 @@ export class MastersController {
 	@ApiOkResponse({ description: 'マスタ名一覧', type: String, isArray: true })
 	@ApiNotFoundResponse({ description: '有効なマスタバージョン無し', type: ErrorResult })
 	@Get()
-	async findLatestMasters(): Promise<string[]> {
-		// 最新のマスタのテーブル一覧を取得する
-		const version = await MasterVersion.findLatest();
-		return await version.findTables();
+	async findMasters(): Promise<string[]> {
+		// 最新のマスタのテーブル名一覧を取得する
+		return MODELS.master.map((m) => m.tableName);
 	}
 
 	@ApiOperation({ title: 'マスタ取得', description: '指定されたマスタを取得する。' })
@@ -31,7 +29,7 @@ export class MastersController {
 	@ApiOkResponse({ description: 'マスタ配列', type: Object, isArray: true })
 	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
 	@Get(':name')
-	async findLatestMaster(@Param('name') name: string): Promise<any> {
+	async findMaster(@Param('name') name: string): Promise<any> {
 		// 最新のマスタを取得する
 		const modelname = _.upperFirst(_.camelCase(name));
 		const model = MODELS.master.find((m) => m.name === modelname);

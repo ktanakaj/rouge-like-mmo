@@ -14,7 +14,6 @@ import { IfRoleDirective } from './app/shared/if-role.directive';
 import { LoadingComponent } from './app/shared/loading.component';
 import { ValidationErrorComponent } from './app/shared/validation-error.component';
 import { AdminRoleComponent } from './app/shared/admin-role.component';
-import { MasterStatusComponent } from './app/shared/master-status.component';
 
 /** JSONファイルを使用するローカライズファイルローダー */
 class JsonTranslationLoader implements TranslateLoader {
@@ -50,7 +49,6 @@ const commonModuleDef = {
 		LoadingComponent,
 		ValidationErrorComponent,
 		AdminRoleComponent,
-		MasterStatusComponent,
 	],
 };
 

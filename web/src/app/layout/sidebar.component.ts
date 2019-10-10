@@ -33,17 +33,8 @@ export class SidebarComponent implements OnInit {
 			path: '/players',
 		},
 		{
-			title: 'MASTER_PAGE.LINK',
-			items: [
-				{
-					title: 'MASTER_VERSION_PAGE.LINK',
-					path: '/masters',
-				},
-				{
-					title: 'MASTER_VIEWER_PAGE.LINK',
-					path: '/masters/latest',
-				},
-			],
+			title: 'MASTER_VIEWER_PAGE.LINK',
+			path: '/masters',
 		},
 		{
 			title: 'ADMINISTRATOR_PAGE.LINK',
@@ -75,7 +66,7 @@ export class SidebarComponent implements OnInit {
 	 */
 	activateNavi(path: string): void {
 		// ※ さらにIDなどが付くことがあるので前方一致で比較。
-		// TODO: マスタ系ページが正しく判定できないので要改善。
+		// TODO: パス構造によっては正しく判定できないので要改善。
 		for (const navi of this.navi) {
 			if (Array.isArray(navi['items'])) {
 				for (const subnavi of navi['items']) {

@@ -13,6 +13,7 @@ import { MasterModel, Table } from '../../core/db';
 	db: 'master',
 	tableName: 'items',
 	comment: 'アイテムマスタ',
+	timestamps: false,
 })
 export default class Item extends MasterModel<Item> {
 	/** アイテム種別定義 */

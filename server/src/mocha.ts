@@ -10,11 +10,9 @@ import * as config from 'config';
 import * as log4js from 'log4js';
 import { Sequelize } from 'sequelize-typescript';
 import { databaseProviders, IDatabaseProvider } from './shared/database.providers';
-import MasterVersion from './shared/master-version.model';
 import { fileUtils } from './core/utils';
 import { getClient } from './core/redis';
 import { ShardableSequelize } from './core/db';
-import invokeContext from './shared/invoke-context';
 
 // const execAsync = util.promisify(child_process.exec);
 
@@ -39,11 +37,6 @@ before('global initialization for all tests', async function () {
 	promises.push(getClient(config['redis']['cache']).flushdbAsync());
 
 	await Promise.all(promises);
-
-	// 最新マスタの探索
-	const version = await MasterVersion.findLatest();
-	assert(version, 'Master data is not imported. Please try to "npm run fulltest".');
-	invokeContext.setMasterVersion(version.id);
 });
 
 /**

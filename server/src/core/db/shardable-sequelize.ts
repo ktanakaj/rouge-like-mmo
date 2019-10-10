@@ -17,7 +17,6 @@ interface ShardableSequelizeConfig {
 	modelPaths?: string[];
 	logging?: boolean | Function;
 	benchmark?: boolean;
-	operatorsAliases?: boolean;
 }
 
 /**

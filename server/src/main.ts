@@ -21,7 +21,6 @@ import { AllExceptionsFilter } from './shared/all-exceptions.filter';
 import { DebugLoggerService } from './shared/debug-logger.service';
 import { RedisRpcServer, createClient, startMonitoring } from './core/redis';
 import { WebSocketRpcServer } from './core/ws';
-import { invokeContextWsRpcHandler, invokeContextRedisRpcHandler } from './shared/invoke-context.middleware';
 import { AppModule } from './app.module';
 const RedisStore = connectRedis(session);
 const errorLogger = log4js.getLogger('error');
@@ -69,14 +68,12 @@ async function bootstrap(): Promise<void> {
 		wsrpc.on('error', (err) => errorLogger.error(err));
 		// ※ コネクションのエラーは、wsLoggerの方でもログが出るのでここは無視
 		wsrpc.on('connection', (conn) => conn.on('error', () => { }));
-		wsrpc.use(invokeContextWsRpcHandler);
 		app.connectMicroservice({ strategy: wsrpc });
 
 		// Redisによるpub/sub待ち受けの初期化
 		const redisrpc = new RedisRpcServer(config['redis']['pubsub'], {
 			prefix: '/redis/', logger: (level, message) => redisLogger[level](message),
 		});
-		redisrpc.use(invokeContextRedisRpcHandler);
 		app.connectMicroservice({ strategy: redisrpc });
 
 		await app.startAllMicroservicesAsync();

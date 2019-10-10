@@ -15,6 +15,7 @@ import { NotFoundError } from '../core/errors';
 	db: 'global',
 	tableName: 'sequences',
 	comment: 'シーケンス',
+	timestamps: false,
 })
 export default class Sequence extends Model<Sequence> {
 	/** シーケンス名 */

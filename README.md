@@ -16,8 +16,8 @@ WebSocketを使ったオンラインゲームのネットワークやDB周りの
 * Redis 3.x
 * nginx 1.12.x
 * Nest 6.x
-    * Sequelize 4.x
-    * Sequelize-typescript 0.6.x
+    * Sequelize 5.x
+    * Sequelize-typescript 1.x
     * Node-config 2.x
     * Log4js 5.x
 * Angular 8.x

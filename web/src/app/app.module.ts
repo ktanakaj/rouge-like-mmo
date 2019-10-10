@@ -27,7 +27,6 @@ import { LogoutComponent } from './auth/logout.component';
 import { PasswordComponent } from './auth/password.component';
 import { AdministratorComponent } from './administrator/administrator.component';
 import { AdministratorEditBodyComponent } from './administrator/administrator-edit-body.component';
-import { MasterVersionComponent } from './master/master-version.component';
 import { MasterViewerComponent } from './master/master-viewer.component';
 import { PlayerComponent } from './player/player.component';
 
@@ -93,7 +92,6 @@ export class DefaultErrorHandler implements ErrorHandler {
 		TopComponent,
 		AdministratorComponent,
 		AdministratorEditBodyComponent,
-		MasterVersionComponent,
 		MasterViewerComponent,
 		PlayerComponent,
 	],

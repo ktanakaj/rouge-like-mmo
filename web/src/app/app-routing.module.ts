@@ -11,7 +11,6 @@ import { LoginComponent } from './auth/login.component';
 import { LogoutComponent } from './auth/logout.component';
 import { PasswordComponent } from './auth/password.component';
 import { AdministratorComponent } from './administrator/administrator.component';
-import { MasterVersionComponent } from './master/master-version.component';
 import { MasterViewerComponent } from './master/master-viewer.component';
 import { PlayerComponent } from './player/player.component';
 
@@ -22,9 +21,8 @@ const routes: Routes = [
 	{ path: 'logout', component: LogoutComponent },
 	{ path: 'password', component: PasswordComponent, canActivate: [AuthGuard] },
 	{ path: 'admin', component: AdministratorComponent, canActivate: [AuthGuard] },
-	{ path: 'masters', component: MasterVersionComponent, canActivate: [AuthGuard] },
-	{ path: 'masters/latest', component: MasterViewerComponent, canActivate: [AuthGuard] },
-	{ path: 'masters/latest/:name', component: MasterViewerComponent, canActivate: [AuthGuard] },
+	{ path: 'masters', component: MasterViewerComponent, canActivate: [AuthGuard] },
+	{ path: 'masters/:name', component: MasterViewerComponent, canActivate: [AuthGuard] },
 	{ path: 'players', component: PlayerComponent, canActivate: [AuthGuard] },
 	{ path: '**', redirectTo: '/' }
 ];

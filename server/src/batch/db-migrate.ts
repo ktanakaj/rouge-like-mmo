@@ -75,10 +75,6 @@ async function bootstrap() {
 			await new Promise((resolve, reject) => child_process.exec(command, { encoding: 'utf8' }, (error, stdout, stderr) => {
 				logger.info(stdout);
 				if (stderr) {
-					// DBをURLで指定するとoperatorsAliasesのwarningが消せないので、無理やり除去
-					stderr = stderr.replace(/^.*?sequelize deprecated String based operators are now deprecated.*$/m, '').trim();
-				}
-				if (stderr) {
 					logger.warn(stderr);
 				}
 				if (error) {

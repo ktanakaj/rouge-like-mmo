@@ -17,9 +17,9 @@ describe('http/MastersController', () => {
 		controller = module.get<MastersController>(MastersController);
 	});
 
-	describe('#findLatestMasters()', () => {
+	describe('#findMasters()', () => {
 		it('成功', async () => {
-			const results = await controller.findLatestMasters();
+			const results = await controller.findMasters();
 
 			// マスタ名が1件以上返ること
 			assert(Array.isArray(results));
@@ -27,9 +27,9 @@ describe('http/MastersController', () => {
 		});
 	});
 
-	describe('#findLatestMaster()', () => {
+	describe('#findMaster()', () => {
 		it('成功', async () => {
-			const results = await controller.findLatestMaster('error-code');
+			const results = await controller.findMaster('error-code');
 
 			// マスタが1件以上返ること
 			assert(Array.isArray(results));

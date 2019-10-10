@@ -13,7 +13,6 @@ import { IfRoleDirective } from './if-role.directive';
 import { LoadingComponent } from './loading.component';
 import { ValidationErrorComponent } from './validation-error.component';
 import { AdminRoleComponent } from './admin-role.component';
-import { MasterStatusComponent } from './master-status.component';
 
 /**
  * アプリの共有モジュールクラス。
@@ -24,7 +23,6 @@ import { MasterStatusComponent } from './master-status.component';
 		LoadingComponent,
 		ValidationErrorComponent,
 		AdminRoleComponent,
-		MasterStatusComponent,
 	],
 	providers: [
 		{ provide: AuthInfo, useValue: new AuthInfo() },
@@ -47,7 +45,6 @@ import { MasterStatusComponent } from './master-status.component';
 		LoadingComponent,
 		ValidationErrorComponent,
 		AdminRoleComponent,
-		MasterStatusComponent,
 	]
 })
 export class SharedModule { }

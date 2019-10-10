@@ -8,7 +8,6 @@ import { NestFactory } from '@nestjs/core';
 import { INestApplicationContext } from '@nestjs/common';
 import { DebugLoggerService } from '../../shared/debug-logger.service';
 import { AppModule } from '../../app.module';
-import invokeContext from '../../shared/invoke-context';
 
 /**
  * ゲームサーバーのアプリケーションを生成する。
@@ -17,8 +16,5 @@ import invokeContext from '../../shared/invoke-context';
 export default function (callback: (app?: INestApplicationContext) => any): void {
 	NestFactory.createApplicationContext(AppModule, {
 		logger: new DebugLoggerService(),
-	}).then((app) => {
-		return invokeContext.setLatestMasterVersion()
-			.then(() => callback(app));
-	});
+	}).then(callback);
 }

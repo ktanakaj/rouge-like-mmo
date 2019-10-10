@@ -3,9 +3,7 @@
  * @module app/master/master.service
  */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { PagingResult } from '../shared/common.model';
-import { MasterVersion } from './master-version.model';
+import { HttpClient } from '@angular/common/http';
 
 /**
  * マスタ関連サービスクラス。
@@ -22,7 +20,7 @@ export class MasterService {
 	 * マスタ一覧を取得する。
 	 * @returns マスタ情報。
 	 */
-	findLatestMasters(): Promise<string[]> {
+	findMasters(): Promise<string[]> {
 		return this.http.get<string[]>('/api/masters').toPromise();
 	}
 
@@ -31,40 +29,7 @@ export class MasterService {
 	 * @param name マスタ名。
 	 * @returns マスタ情報。
 	 */
-	findLatestMaster(name: string): Promise<object[]> {
+	findMaster(name: string): Promise<object[]> {
 		return this.http.get<object[]>(`/api/masters/${name}`).toPromise();
-	}
-
-	/**
-	 * マスタバージョン一覧を取得する。
-	 * @param page ページ番号（先頭ページが1）。
-	 * @param max 1ページ辺りの最大件数。
-	 * @returns マスタバージョン一覧。
-	 */
-	findAndCountVersions(page: number, max: number): Promise<PagingResult<MasterVersion>> {
-		const params = new HttpParams()
-			.set('page', String(page))
-			.set('max', String(max));
-		return this.http.get<PagingResult<MasterVersion>>('/api/admin/masters/', { params }).toPromise();
-	}
-
-	/**
-	 * マスタバージョンの状態を変更する。
-	 * @param id マスタバージョンID。
-	 * @param status 新しい状態。
-	 * @returns 更新したマスタバージョン。
-	 */
-	changeStatus(id: number, status: string): Promise<object> {
-		return this.http.put<object>(`/api/admin/masters/${id}`, { status }).toPromise();
-	}
-
-	/**
-	 * マスタバージョンに注記を登録する。
-	 * @param id マスタバージョンID。
-	 * @param note 注記。
-	 * @returns 更新したマスタバージョン。
-	 */
-	addNote(id: number, note: string): Promise<object> {
-		return this.http.put<object>(`/api/admin/masters/${id}`, { note }).toPromise();
 	}
 }
