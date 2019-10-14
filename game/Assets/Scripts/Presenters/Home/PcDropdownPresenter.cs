@@ -28,19 +28,19 @@ namespace Honememo.RougeLikeMmo.Presenters.Home
         /// グローバルデータ。
         /// </summary>
         [Inject]
-        private Global global;
+        private Global global = null;
 
         /// <summary>
         /// ホーム情報読み込みユースケース。
         /// </summary>
         [Inject]
-        private LoadHomeUseCase loadHomeUseCase;
+        private LoadHomeUseCase loadHomeUseCase = null;
 
         /// <summary>
         /// PC作成ユースケース。
         /// </summary>
         [Inject]
-        private CreatePcUseCase createPcUseCase;
+        private CreatePcUseCase createPcUseCase = null;
 
         #endregion
 

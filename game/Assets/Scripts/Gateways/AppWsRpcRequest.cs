@@ -33,7 +33,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// タスクランナー。
         /// </summary>
         [Inject]
-        private ObservableSerialRunner taskRunner;
+        private ObservableSerialRunner taskRunner = null;
 
         /// <summary>
         /// WebSocket接続。

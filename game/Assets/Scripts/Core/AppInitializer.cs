@@ -47,13 +47,13 @@ namespace Honememo.RougeLikeMmo.Core
         /// タスクランナー。
         /// </summary>
         [Inject]
-        private ObservableSerialRunner taskRunner;
+        private ObservableSerialRunner taskRunner = null;
 
         /// <summary>
         /// APIリクエストクライアント。
         /// </summary>
         [Inject]
-        private AppWebRequest webRequest;
+        private AppWebRequest webRequest = null;
 
         #endregion
 

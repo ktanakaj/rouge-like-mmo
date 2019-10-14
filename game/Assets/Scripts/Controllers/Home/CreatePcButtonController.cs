@@ -26,7 +26,7 @@ namespace Honememo.RougeLikeMmo.Controllers.Home
         /// PC作成ユースケース。
         /// </summary>
         [Inject]
-        private CreatePcUseCase useCase;
+        private CreatePcUseCase useCase = null;
 
         #endregion
 

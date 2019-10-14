@@ -25,7 +25,7 @@ namespace Honememo.RougeLikeMmo.Controllers.Home
         /// ホーム情報読み込みユースケース。
         /// </summary>
         [Inject]
-        private LoadHomeUseCase useCase;
+        private LoadHomeUseCase useCase = null;
 
         #endregion
 

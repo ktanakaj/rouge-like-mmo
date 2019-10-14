@@ -25,7 +25,7 @@ namespace Honememo.RougeLikeMmo.Controllers.Title
         /// 端末リセットユースケース。
         /// </summary>
         [Inject]
-        private ResetPlayerUseCase useCase;
+        private ResetPlayerUseCase useCase = null;
 
         #endregion
 

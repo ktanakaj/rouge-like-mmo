@@ -24,7 +24,7 @@ namespace Honememo.RougeLikeMmo.UseCases
         /// ローカルリポジトリ。
         /// </summary>
         [Inject]
-        private LocalRepository localRepository;
+        private LocalRepository localRepository = null;
 
         #endregion
 

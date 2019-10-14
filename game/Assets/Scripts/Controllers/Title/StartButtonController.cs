@@ -28,7 +28,7 @@ namespace Honememo.RougeLikeMmo.Controllers.Title
         /// 初期化ユースケース。
         /// </summary>
         [Inject]
-        private InitializeUseCase useCase;
+        private InitializeUseCase useCase = null;
 
         #endregion
 

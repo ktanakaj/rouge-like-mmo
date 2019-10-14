@@ -29,7 +29,7 @@ namespace Honememo.RougeLikeMmo.Controllers.Home
         /// ゲーム開始ユースケース。
         /// </summary>
         [Inject]
-        private StartGameUseCase useCase;
+        private StartGameUseCase useCase = null;
 
         #endregion
 

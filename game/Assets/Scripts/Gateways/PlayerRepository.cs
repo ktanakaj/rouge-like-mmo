@@ -30,7 +30,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// HTTP APIクライアント。
         /// </summary>
         [Inject]
-        private AppWebRequest request;
+        private AppWebRequest request = null;
 
         #endregion
 

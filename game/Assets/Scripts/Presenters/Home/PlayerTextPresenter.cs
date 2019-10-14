@@ -26,7 +26,7 @@ namespace Honememo.RougeLikeMmo.Presenters.Home
         /// グローバルデータ。
         /// </summary>
         [Inject]
-        private Global global;
+        private Global global = null;
 
         #endregion
 

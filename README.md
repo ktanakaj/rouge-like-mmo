@@ -30,7 +30,7 @@ WebSocketを使ったオンラインゲームのネットワークやDB周りの
     * Hyper-V (Windows 10 Pro) - 仮想環境
 * Visual Studio Code - アプリ開発用エディター
 * MySQL Workbench 6.x - DB管理・EL図作成用ツール
-* Unity 2018.3.0 - インゲーム部分開発用
+* Unity 2018.4.11f1 - インゲーム部分開発用
 
 ## フォルダ構成
 * VMルートフォルダ

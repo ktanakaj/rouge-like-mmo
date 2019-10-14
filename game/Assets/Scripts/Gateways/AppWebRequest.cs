@@ -39,7 +39,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// タスクランナー。
         /// </summary>
         [Inject]
-        private ObservableSerialRunner taskRunner;
+        private ObservableSerialRunner taskRunner = null;
 
         #endregion
 

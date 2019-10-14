@@ -28,13 +28,13 @@ namespace Honememo.RougeLikeMmo.Presenters.Game
         /// グローバルデータ。
         /// </summary>
         [Inject]
-        private Global global;
+        private Global global = null;
 
         /// <summary>
         /// ゲーム情報読み込みユースケース。
         /// </summary>
         [Inject]
-        private ConnectGameUseCase useCase;
+        private ConnectGameUseCase useCase = null;
 
         #endregion
 

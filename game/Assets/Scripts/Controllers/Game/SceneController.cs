@@ -25,7 +25,7 @@ namespace Honememo.RougeLikeMmo.Controllers.Game
         /// ゲーム情報読み込みユースケース。
         /// </summary>
         [Inject]
-        private ConnectGameUseCase useCase;
+        private ConnectGameUseCase useCase = null;
 
         #endregion
 

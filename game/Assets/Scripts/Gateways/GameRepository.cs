@@ -28,13 +28,13 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// HTTP APIクライアント。
         /// </summary>
         [Inject]
-        private AppWebRequest webRequest;
+        private AppWebRequest webRequest = null;
 
         /// <summary>
         /// WebSocket/JSON-RPC2 APIクライアント。
         /// </summary>
         [Inject]
-        private AppWsRpcRequest wsRequest;
+        private AppWsRpcRequest wsRequest = null;
 
         #endregion
 
