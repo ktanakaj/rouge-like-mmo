@@ -1,6 +1,6 @@
 ﻿/**
  * ユニットテストの初期化処理モジュール。
- * @module ./mocha
+ * @module ./test
  */
 import * as assert from 'power-assert';
 // import * as util from 'util';
