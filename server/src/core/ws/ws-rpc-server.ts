@@ -71,7 +71,9 @@ export class WebSocketRpcServer extends Server implements CustomTransportStrateg
 	 * 待ち受けをクローズする。
 	 */
 	public close(): void {
-		this.server && this.server.close();
+		if (this.server) {
+			this.server.close();
+		}
 		this.server = null;
 	}
 

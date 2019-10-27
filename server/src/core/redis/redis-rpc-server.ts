@@ -85,7 +85,9 @@ export class RedisRpcServer extends Server implements CustomTransportStrategy {
 	 * 待ち受けをクローズする。
 	 */
 	public close(): void {
-		this.connection && this.connection.unsubscribe();
+		if (this.connection) {
+			this.connection.unsubscribe();
+		}
 		this.connection = null;
 	}
 

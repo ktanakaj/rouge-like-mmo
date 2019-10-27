@@ -71,7 +71,7 @@ export default abstract class ShardableModel<T extends ShardableModel<T> = any> 
 	 * 全シャードのsequelizeモデルクラスを取得する。
 	 * @returns 対応するsequelizeモデルクラス配列。
 	 */
-	public static shards<M extends ShardableModel>(this: (new () => M) & typeof ShardableModel): ((new () => M) & typeof ShardableModel)[] {
+	public static shards<M extends ShardableModel>(this: (new () => M) & typeof ShardableModel): Array<(new () => M) & typeof ShardableModel> {
 		return this.sequelizes.map((s) => s.model(this.name) as any);
 	}
 

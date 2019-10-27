@@ -65,7 +65,9 @@ export class RedisRpcClient extends ClientProxy {
 	 * 接続をクローズする。
 	 */
 	close(): void {
-		this.connection && this.connection.unsubscribe();
+		if (this.connection) {
+			this.connection.unsubscribe();
+		}
 		this.connection = null;
 	}
 
@@ -90,7 +92,7 @@ export class RedisRpcClient extends ClientProxy {
 					callback({ isDisposed: true });
 				})
 				.catch((err) => callback({ err }));
-			return () => { };
+			return () => { return; };
 		} catch (err) {
 			callback({ err });
 			return null;

@@ -52,8 +52,10 @@ async function dbinit(databaseProvider) {
 
 	// ※ syncでも再生成できるが、実際の運用で使うのはスクリプトなので、テストでもそちらを使うようにする
 	// ※ 本当はexecAsyncでマイグレーションバッチを呼びたいが、時間がかかるため、自前で処理
-	// await execAsync(`NODE_ENV=${process.env.NODE_ENV} npm run db-migrate -- --db=${dbname} --undo --all`, { encoding: 'utf8' });
-	// await execAsync(`NODE_ENV=${process.env.NODE_ENV} npm run db-migrate -- --db=${dbname}`, { encoding: 'utf8' });
+	// await execAsync(
+	//   `NODE_ENV=${process.env.NODE_ENV} npm run db-migrate -- --db=${dbname} --undo --all`, { encoding: 'utf8' });
+	// await execAsync(
+	//	 `NODE_ENV=${process.env.NODE_ENV} npm run db-migrate -- --db=${dbname}`, { encoding: 'utf8' });
 	await sequelize.drop();
 	if (sequelize instanceof ShardableSequelize) {
 		await shardableDbMigrate(dbname, sequelize);

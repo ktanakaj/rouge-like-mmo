@@ -67,7 +67,7 @@ async function bootstrap(): Promise<void> {
 			{ prefix: '/ws/', logger: (level, message) => wsLogger[level](message) });
 		wsrpc.on('error', (err) => errorLogger.error(err));
 		// ※ コネクションのエラーは、wsLoggerの方でもログが出るのでここは無視
-		wsrpc.on('connection', (conn) => conn.on('error', () => { }));
+		wsrpc.on('connection', (conn) => conn.on('error', () => { return; }));
 		app.connectMicroservice({ strategy: wsrpc });
 
 		// Redisによるpub/sub待ち受けの初期化

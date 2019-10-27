@@ -12,7 +12,7 @@ import { DB_KEY } from '../core/db';
 import { ShardableSequelize } from '../core/db';
 
 /** モデル一覧 */
-export const MODELS: { master: typeof Model[] } = { master: [] };
+export const MODELS: { master: Array<typeof Model> } = { master: [] };
 
 // モデルは、拡張子が .model.ts のファイルを検索して付加されているデコレーターの情報を見て判別する
 // ※ .model.ts にはRedisなどの非DBモデルもあるので、DB情報があるもののみ処理
@@ -70,7 +70,7 @@ for (const dbname of Object.keys(MODELS)) {
 }
 
 /** 各モデルをリポジトリーとして扱うためのプロバイダー */
-export const modelProviders = _.flatMap(Object.values(MODELS), (models: typeof Model[]) => {
+export const modelProviders = _.flatMap(Object.values(MODELS), (models: Array<typeof Model>) => {
 	return models.map((model) => {
 		return {
 			provide: `${model.name}Repository`,

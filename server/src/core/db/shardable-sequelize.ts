@@ -67,15 +67,15 @@ export class ShardableSequelize {
 	 * モデルクラスをsequelizeに追加する。
 	 * @param modelsOrModelPaths モデルクラス配列orモデルクラスパス配列。
 	 */
-	public addModels(modelsOrModelPaths: (typeof ShardableModel)[] | string[]): void {
+	public addModels(modelsOrModelPaths: Array<typeof ShardableModel> | string[]): void {
 		// モデルクラスをディレクトリから読み込み
-		const models: (typeof ShardableModel)[] = [];
+		const models: Array<typeof ShardableModel> = [];
 		if (modelsOrModelPaths && typeof modelsOrModelPaths[0] === 'string') {
 			for (const modelPath of modelsOrModelPaths as string[]) {
 				models.push(...Object.values(fileUtils.requireDirectoriesRecursiveSync(modelPath)).map((m) => m['default'] || m));
 			}
 		} else {
-			models.push(...(modelsOrModelPaths as (typeof ShardableModel)[]));
+			models.push(...(modelsOrModelPaths as Array<typeof ShardableModel>));
 		}
 		// モデルクラスのデコレーターによる情報を展開
 		for (const m of models) {
@@ -88,7 +88,7 @@ export class ShardableSequelize {
 		for (const s of this.sequelizes) {
 			// ※ 元のクラスをそのまま渡してしまうと、static変数と特定のsequelizeインスタンスが紐づいてしまうので、
 			//    動的にサブクラスを生成してそれを渡す。
-			const subclasses: (typeof ShardableModel)[] = models.map((m) => this.createDynamicSubClass(m as any)) as any;
+			const subclasses: Array<typeof ShardableModel> = models.map((m) => this.createDynamicSubClass(m as any)) as any;
 			// そのままだとstaticプロパティが元クラスに連動してしまうので、初期化して上書きしておく
 			for (const m of subclasses) {
 				m.sequelizes = [];

@@ -2,7 +2,12 @@
   "defaultSeverity": "error",
   "extends": ["tslint:recommended"],
   "jsRules": {
-    "no-unused-expression": true
+    "no-unused-expression": true,
+    "quotemark": [true, "single", "avoid-escape"],
+    "indent": [true, "tabs"],
+    "no-string-literal": false,
+    "space-before-function-paren": false,
+    "forin": false
   },
   "rules": {
     "quotemark": [true, "single", "avoid-escape"],
@@ -15,7 +20,20 @@
     "object-literal-sort-keys": false,
     "indent": [true, "tabs"],
     "max-classes-per-file": false,
-    "no-string-literal": false
+    "no-string-literal": false,
+    "space-before-function-paren": false,
+    "forin": false,
+    "ban-types": [
+        true,
+        ["Object", "Avoid using the `Object` type. Did you mean `object`?"],
+        ["Boolean", "Avoid using the `Boolean` type. Did you mean `boolean`?"],
+        ["Number", "Avoid using the `Number` type. Did you mean `number`?"],
+        ["String", "Avoid using the `String` type. Did you mean `string`?"],
+        ["Symbol", "Avoid using the `Symbol` type. Did you mean `symbol`?"]
+    ],
+    "no-console": false,
+    "only-arrow-functions": false,
+    "no-var-requires": false
   },
   "rulesDirectory": []
 }

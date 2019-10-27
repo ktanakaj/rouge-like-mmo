@@ -28,7 +28,7 @@ export class WebSocketConnection extends EventEmitter {
 	/** 一意なコネクションID */
 	public readonly id: string = this.generateUniqueId();
 	/** 簡易セッション用オブジェクト */
-	public readonly session: Object = this.makeSessionObject();
+	public readonly session: object = this.makeSessionObject();
 	/** コネクションがクローズ済か？ */
 	private closed: boolean = false;
 
@@ -169,7 +169,7 @@ export class WebSocketConnection extends EventEmitter {
 	 * 簡易セッション用のオブジェクトを生成する。
 	 * @returns セッション用オブジェクト。
 	 */
-	protected makeSessionObject(): Object {
+	protected makeSessionObject(): object {
 		// 値が変更されたらイベントととして通知するオブジェクトを生成
 		const self = this;
 		return new Proxy({}, {
