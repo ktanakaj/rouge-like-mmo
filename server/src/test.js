@@ -2,26 +2,22 @@
  * ユニットテストの初期化処理モジュール。
  * @module ./test
  */
-import * as assert from 'power-assert';
-// import * as util from 'util';
-// import * as child_process from 'child_process';
-import * as fs from 'fs';
-import * as config from 'config';
-import * as log4js from 'log4js';
-import { Sequelize } from 'sequelize-typescript';
-import { databaseProviders, IDatabaseProvider } from './shared/database.providers';
-import { fileUtils } from './core/utils';
-import { getClient } from './core/redis';
-import { ShardableSequelize } from './core/db';
+require('ts-node/register');
+// const util = require('util');
+// const child_process = require('child_process');
+const fs = require('fs');
+const config = require('config');
+const log4js = require('log4js');
+const fileUtils = require('./core/utils').fileUtils;
+const getClient = require('./core/redis').getClient;
+const ShardableSequelize = require('./core/db').ShardableSequelize;
+const databaseProviders = require('./shared/database.providers').databaseProviders;
 
 // const execAsync = util.promisify(child_process.exec);
 
-// ここにフックを書くと全テストの前に自動実行される
-before('global initialization for all tests', async function () {
-	// ※ 初期化に時間がかかる場合は伸ばす
-	this.timeout(15000);
-
-	// 全テストの実行前に一度だけ必要な処理を実施
+// 全テストの前に一度だけ実行される前処理
+module.exports = async() => {
+	// テストの実行前に一度だけ必要な処理を実施
 	log4js.configure(config['log4js']);
 
 	// ※ 以下、時間がかかるものは可能な限り非同期で並列に流す
@@ -37,14 +33,14 @@ before('global initialization for all tests', async function () {
 	promises.push(getClient(config['redis']['cache']).flushdbAsync());
 
 	await Promise.all(promises);
-});
+};
 
 /**
  * Sequelizeをユニットテスト用に初期化する。
  * @param databaseProvider 処理対象のDBプロバイダー。
  * @returns 処理状態。
  */
-async function dbinit(databaseProvider: IDatabaseProvider): Promise<void> {
+async function dbinit(databaseProvider) {
 	const dbname = databaseProvider.provide.replace('SequelizeToken', '').toLowerCase();
 
 	// テーブル等を一度全て削除して、マイグレーションスクリプトで再生成する
@@ -72,13 +68,13 @@ async function dbinit(databaseProvider: IDatabaseProvider): Promise<void> {
  * @param sequelize Sequelizeコネクション。
  * @returns 処理状態。
  */
-function shardableDbMigrate(dbname: string, sequelize: ShardableSequelize): Promise<void> {
+function shardableDbMigrate(dbname, sequelize) {
 	// ※ 時間がかかるので非同期で並列に流す
 	const promises = [];
 	for (const s of sequelize.sequelizes) {
 		promises.push(dbMigrate(dbname, s));
 	}
-	return Promise.all(promises) as Promise<any>;
+	return Promise.all(promises);
 }
 
 /**
@@ -87,7 +83,7 @@ function shardableDbMigrate(dbname: string, sequelize: ShardableSequelize): Prom
  * @param sequelize Sequelizeコネクション。
  * @returns 処理状態。
  */
-async function dbMigrate(dbname: string, sequelize: Sequelize): Promise<void> {
+async function dbMigrate(dbname, sequelize) {
 	const scriptsDir = __dirname + '/batch/migrations/' + dbname + '/';
 	if (!fs.existsSync(scriptsDir)) {
 		return;

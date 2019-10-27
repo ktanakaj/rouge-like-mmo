@@ -1,7 +1,6 @@
 /**
  * @file players.controller.tsのテスト。
  */
-import * as assert from 'power-assert';
 import { TestingModule } from '@nestjs/testing';
 import testHelper from '../../../test-helper';
 import { BadRequestError } from '../../../core/errors';
@@ -13,7 +12,7 @@ describe('http/PlayersController', () => {
 	let controller: PlayersController;
 	const oldDate = new Date('2017-12-17T03:24:00');
 
-	before(async () => {
+	beforeAll(async () => {
 		await Player.create({ id: 105, token: 'UNITTEST_TOKEN105', lastLogin: oldDate });
 
 		module = await testHelper.createTestingModule({
@@ -26,13 +25,13 @@ describe('http/PlayersController', () => {
 		it('成功', async () => {
 			const session = {};
 			const player = await controller.create({ token: 'UNITTEST_NEW_TOKEN' }, session);
-			assert.strictEqual(typeof session['user']['id'], 'number');
-			assert.notEqual(session['user']['id'], 105);
-			assert(player.lastLogin.getTime() > oldDate.getTime());
+			expect(typeof session['user']['id']).toBe('number');
+			expect(session['user']['id']).not.toBe(105);
+			expect(player.lastLogin.getTime()).toBeGreaterThan(oldDate.getTime());
 
 			const dbplayer = await Player.findByPkForAuth(session['user']['id']);
-			assert.notEqual(dbplayer.token, 'UNITTEST_NEW_TOKEN');
-			assert(dbplayer.compareToken('UNITTEST_NEW_TOKEN'));
+			expect(dbplayer.token).not.toBe('UNITTEST_NEW_TOKEN');
+			expect(dbplayer.compareToken('UNITTEST_NEW_TOKEN')).toBeTruthy();
 		});
 	});
 
@@ -40,26 +39,16 @@ describe('http/PlayersController', () => {
 		it('認証成功', async () => {
 			const session = {};
 			const player = await controller.login({ id: 105, token: 'UNITTEST_TOKEN105' }, session);
-			assert.strictEqual(session['user']['id'], 105);
-			assert(player.lastLogin.getTime() > oldDate.getTime());
+			expect(session['user']['id']).toBe(105);
+			expect(player.lastLogin.getTime()).toBeGreaterThan(oldDate.getTime());
 		});
 
 		it('プレイヤーID不一致', async () => {
-			try {
-				await controller.login({ id: 9999, token: 'UNITTEST_TOKEN105' }, {});
-				assert.fail('Missing expected exception');
-			} catch (err) {
-				assert(err instanceof BadRequestError);
-			}
+			await expect(controller.login({ id: 9999, token: 'UNITTEST_TOKEN105' }, {})).rejects.toThrow(BadRequestError);
 		});
 
 		it('端末トークン不一致', async () => {
-			try {
-				await controller.login({ id: 105, token: 'INVALID_TOKEN' }, {});
-				assert.fail('Missing expected exception');
-			} catch (err) {
-				assert(err instanceof BadRequestError);
-			}
+			await expect(controller.login({ id: 105, token: 'INVALID_TOKEN' }, {})).rejects.toThrow(BadRequestError);
 		});
 	});
 });

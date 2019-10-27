@@ -1,7 +1,6 @@
 /**
  * @file game.controller.tsのテスト。
  */
-import * as assert from 'power-assert';
 import { TestingModule } from '@nestjs/testing';
 import testHelper from '../../../test-helper';
 import { BadRequestError } from '../../../core/errors';
@@ -12,7 +11,7 @@ describe('ws/GameController', () => {
 	let module: TestingModule;
 	let controller: GameController;
 
-	before(async () => {
+	beforeAll(async () => {
 		module = await testHelper.createTestingModule({
 			controllers: [GameController],
 			providers: [GameService],

@@ -1,7 +1,6 @@
 /**
  * @file masters.controller.tsのテスト。
  */
-import * as assert from 'power-assert';
 import { TestingModule } from '@nestjs/testing';
 import testHelper from '../../../test-helper';
 import { MastersController } from './masters.controller';
@@ -10,7 +9,7 @@ describe('http/MastersController', () => {
 	let module: TestingModule;
 	let controller: MastersController;
 
-	before(async () => {
+	beforeAll(async () => {
 		module = await testHelper.createTestingModule({
 			controllers: [MastersController],
 		}).compile();
@@ -22,8 +21,8 @@ describe('http/MastersController', () => {
 			const results = await controller.findMasters();
 
 			// マスタ名が1件以上返ること
-			assert(Array.isArray(results));
-			assert(results.length > 0);
+			expect(Array.isArray(results)).toBeTruthy();
+			expect(results.length).toBeGreaterThan(0);
 		});
 	});
 
@@ -32,8 +31,8 @@ describe('http/MastersController', () => {
 			const results = await controller.findMaster('error-code');
 
 			// マスタが1件以上返ること
-			assert(Array.isArray(results));
-			assert(results.length > 0);
+			expect(Array.isArray(results)).toBeTruthy();
+			expect(results.length).toBeGreaterThan(0);
 		});
 	});
 });

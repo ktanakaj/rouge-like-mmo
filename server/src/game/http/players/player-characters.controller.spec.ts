@@ -1,7 +1,6 @@
 /**
  * @file player-characters.controller.tsのテスト。
  */
-import * as assert from 'power-assert';
 import { TestingModule } from '@nestjs/testing';
 import testHelper from '../../../test-helper';
 import { NotFoundError } from '../../../core/errors';
@@ -16,7 +15,7 @@ describe('http/PlayerCharactersController', () => {
 	let testpc1: PlayerCharacter;
 	let testpc2: PlayerCharacter;
 
-	before(async () => {
+	beforeAll(async () => {
 		testplayer = await Player.create({ id: 130, token: 'UNITTEST_TOKEN130', lastLogin: new Date() });
 		testpc1 = await PlayerCharacter.create({ playerId: testplayer.id, name: 'PC130#1', hp: 100, items: {}, lastSelected: new Date() });
 		testpc2 = await PlayerCharacter.create({ playerId: testplayer.id, name: 'PC130#2', hp: 100, items: {} });
@@ -30,8 +29,8 @@ describe('http/PlayerCharactersController', () => {
 	describe('#findAll()', () => {
 		it('成功', async () => {
 			const playerCharacters = await controller.findAll(testplayer);
-			assert(playerCharacters.length >= 1);
-			assert.strictEqual(playerCharacters[0].id, testpc1.id);
+			expect(playerCharacters.length).toBeGreaterThanOrEqual(1);
+			expect(playerCharacters[0].id).toBe(testpc1.id);
 		});
 	});
 
@@ -40,9 +39,9 @@ describe('http/PlayerCharactersController', () => {
 			const pc = await controller.create({
 				name: 'test1',
 			}, testplayer);
-			assert(pc.id > 0);
-			assert.strictEqual(pc.playerId, testplayer.id);
-			assert.strictEqual(pc.name, 'test1');
+			expect(pc.id).toBeGreaterThan(0);
+			expect(pc.playerId).toBe(testplayer.id);
+			expect(pc.name).toBe('test1');
 		});
 	});
 
@@ -51,34 +50,22 @@ describe('http/PlayerCharactersController', () => {
 			const pc = await controller.update({ id: testpc1.id }, {
 				name: 'test2',
 			}, testplayer);
-			assert.strictEqual(pc.name, 'test2');
+			expect(pc.name).toBe('test2');
 		});
 
 		it('データ未存在', async () => {
-			try {
-				await controller.update({ id: testpc1.id }, {
-					name: 'test2',
-				}, { id: 9999 });
-				assert.fail('Missing expected exception');
-			} catch (err) {
-				assert(err instanceof NotFoundError);
-			}
+			await expect(controller.update({ id: testpc1.id }, { name: 'test2' }, { id: 9999 })).rejects.toThrow(NotFoundError);
 		});
 	});
 
 	describe('#delete()', () => {
 		it('成功', async () => {
 			const pc = await controller.delete({ id: testpc2.id }, testplayer);
-			assert.strictEqual(pc.id, testpc2.id);
+			expect(pc.id).toBe(testpc2.id);
 		});
 
 		it('データ未存在', async () => {
-			try {
-				await controller.delete({ id: testpc1.id }, { id: 9999 });
-				assert.fail('Missing expected exception');
-			} catch (err) {
-				assert(err instanceof NotFoundError);
-			}
+			await expect(controller.delete({ id: testpc1.id }, { id: 9999 })).rejects.toThrow(NotFoundError);
 		});
 	});
 });

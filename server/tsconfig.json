@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "declaration": true,
     "noImplicitAny": false,
     "removeComments": true,
     "noLib": false,
@@ -13,7 +12,8 @@
     "suppressImplicitAnyIndexErrors": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true
+    "incremental": true,
+    "allowJs": true
   },
   "exclude": ["node_modules", "dist"]
 }

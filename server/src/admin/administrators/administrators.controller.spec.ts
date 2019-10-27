@@ -1,7 +1,6 @@
 /**
  * @file administrators.controller.tsのテスト。
  */
-import * as assert from 'power-assert';
 import { TestingModule } from '@nestjs/testing';
 import testHelper from '../../test-helper';
 import { BadRequestError, NotFoundError } from '../../core/errors';
@@ -14,7 +13,7 @@ describe('admin/AdministratorsController', () => {
 	let testadmin1: Administrator;
 	let testadmin2: Administrator;
 
-	before(async () => {
+	beforeAll(async () => {
 		testadmin1 = await Administrator.create({ name: 'testadmin1', role: 'admin', password: 'admin01' });
 		testadmin2 = await Administrator.create({ name: 'testadmin2', role: 'admin', password: 'admin01' });
 
@@ -27,13 +26,13 @@ describe('admin/AdministratorsController', () => {
 	describe('#findAndCountAdministrators()', () => {
 		it('成功', async () => {
 			const result = await controller.findAndCountAdministrators({ page: 1, max: 1000 });
-			assert(result.count > 0);
-			assert(result.rows.length > 0);
+			expect(result.count).toBeGreaterThan(0);
+			expect(result.rows.length).toBeGreaterThan(0);
 
 			const administrator = result.rows[0];
-			assert(administrator.id > 0);
-			assert(administrator.name.length > 0);
-			assert.strictEqual(administrator.password, undefined);
+			expect(administrator.id).toBeGreaterThan(0);
+			expect(administrator.name.length).toBeGreaterThan(0);
+			expect(administrator.password).toBeUndefined();
 		});
 	});
 
@@ -44,10 +43,10 @@ describe('admin/AdministratorsController', () => {
 				role: 'admin',
 				note: 'from POST /admin/administrators',
 			});
-			assert(administrator.id > 0);
-			assert.strictEqual(administrator.name, 'test1');
-			assert(administrator.password.length > 0);
-			assert.strictEqual(administrator.note, 'from POST /admin/administrators');
+			expect(administrator.id).toBeGreaterThan(0);
+			expect(administrator.name).toBe('test1');
+			expect(administrator.password.length).toBeGreaterThan(0);
+			expect(administrator.note).toBe('from POST /admin/administrators');
 		});
 
 		it('name重複', async () => {
@@ -56,9 +55,9 @@ describe('admin/AdministratorsController', () => {
 					name: 'admin',
 					role: 'admin',
 				});
-				assert.fail('Missing expected exception');
+				fail('Missing expected exception');
 			} catch (err) {
-				assert.strictEqual(err.name, 'SequelizeUniqueConstraintError');
+				expect(err.name).toBe('SequelizeUniqueConstraintError');
 			}
 		});
 	});
@@ -68,19 +67,14 @@ describe('admin/AdministratorsController', () => {
 			const administrator = await controller.updateAdministrator({ id: testadmin1.id }, {
 				note: 'from POST /admin/administrators/:id',
 			});
-			assert.strictEqual(administrator.id, testadmin1.id);
-			assert.strictEqual(administrator.note, 'from POST /admin/administrators/:id');
+			expect(administrator.id).toBe(testadmin1.id);
+			expect(administrator.note).toBe('from POST /admin/administrators/:id');
 		});
 
 		it('データ未存在', async () => {
-			try {
-				await controller.updateAdministrator({ id: 99999 }, {
-					note: 'from POST /admin/administrators/:id',
-				});
-				assert.fail('Missing expected exception');
-			} catch (err) {
-				assert(err instanceof NotFoundError);
-			}
+			await expect(controller.updateAdministrator({ id: 99999 }, {
+				note: 'from POST /admin/administrators/:id',
+			})).rejects.toThrow(NotFoundError);
 		});
 
 		it('name重複', async () => {
@@ -88,9 +82,9 @@ describe('admin/AdministratorsController', () => {
 				await controller.updateAdministrator({ id: testadmin1.id }, {
 					name: 'admin',
 				});
-				assert.fail('Missing expected exception');
+				fail('Missing expected exception');
 			} catch (err) {
-				assert.strictEqual(err.name, 'SequelizeUniqueConstraintError');
+				expect(err.name).toBe('SequelizeUniqueConstraintError');
 			}
 		});
 	});
@@ -98,34 +92,24 @@ describe('admin/AdministratorsController', () => {
 	describe('#deleteAdministrator()', () => {
 		it('成功', async () => {
 			const administrator = await controller.deleteAdministrator({ id: testadmin2.id });
-			assert.strictEqual(administrator.id, testadmin2.id);
-			assert(administrator.deletedAt);
+			expect(administrator.id).toBe(testadmin2.id);
+			expect(administrator.deletedAt).toBeTruthy();
 		});
 
 		it('データ未存在', async () => {
-			try {
-				await controller.deleteAdministrator({ id: 99999 });
-				assert.fail('Missing expected exception');
-			} catch (err) {
-				assert(err instanceof NotFoundError);
-			}
+			await expect(controller.deleteAdministrator({ id: 99999 })).rejects.toThrow(NotFoundError);
 		});
 	});
 
 	describe('#resetPassword()', () => {
 		it('成功', async () => {
 			const administrator = await controller.resetPassword({ id: testadmin1.id });
-			assert.strictEqual(administrator.id, testadmin1.id);
-			assert.strictEqual(administrator.password.length, 12);
+			expect(administrator.id).toBe(testadmin1.id);
+			expect(administrator.password.length).toBe(12);
 		});
 
 		it('データ未存在', async () => {
-			try {
-				await controller.resetPassword({ id: 99999 });
-				assert.fail('Missing expected exception');
-			} catch (err) {
-				assert(err instanceof NotFoundError);
-			}
+			await expect(controller.resetPassword({ id: 99999 })).rejects.toThrow(NotFoundError);
 		});
 	});
 
@@ -135,33 +119,23 @@ describe('admin/AdministratorsController', () => {
 				username: 'admin',
 				password: 'admin01',
 			}, {});
-			assert(administrator.id > 0);
-			assert.strictEqual(administrator.name, 'admin');
-			assert.strictEqual(administrator.password, undefined);
+			expect(administrator.id).toBeGreaterThan(0);
+			expect(administrator.name).toBe('admin');
+			expect(administrator.password).toBeUndefined();
 		});
 
 		it('管理者名不一致', async () => {
-			try {
-				await controller.login({
-					username: 'invalid_name',
-					password: 'admin01',
-				}, {});
-				assert.fail('Missing expected exception');
-			} catch (err) {
-				assert(err instanceof BadRequestError);
-			}
+			await expect(controller.login({
+				username: 'invalid_name',
+				password: 'admin01',
+			}, {})).rejects.toThrow(BadRequestError);
 		});
 
 		it('パスワード不一致', async () => {
-			try {
-				await controller.login({
-					username: 'admin',
-					password: 'invalid_password',
-				}, {});
-				assert.fail('Missing expected exception');
-			} catch (err) {
-				assert(err instanceof BadRequestError);
-			}
+			await expect(controller.login({
+				username: 'admin',
+				password: 'invalid_password',
+			}, {})).rejects.toThrow(BadRequestError);
 		});
 	});
 
@@ -171,7 +145,7 @@ describe('admin/AdministratorsController', () => {
 				admin: { id: 1 },
 			};
 			await controller.logout(session);
-			assert.strictEqual(session.admin, undefined);
+			expect(session.admin).toBeUndefined();
 		});
 	});
 
@@ -179,7 +153,7 @@ describe('admin/AdministratorsController', () => {
 		it('成功', async () => {
 			const admin = testadmin1.toJSON();
 			const me = await controller.findMe(admin);
-			assert.deepStrictEqual(me, admin);
+			expect(me).toEqual(admin);
 		});
 	});
 
@@ -187,9 +161,9 @@ describe('admin/AdministratorsController', () => {
 		it('成功', async () => {
 			const admin = testadmin1.toJSON();
 			const administrator = await controller.updateMe({ password: 'UNITTEST' }, admin);
-			assert.strictEqual(administrator.id, testadmin1.id);
+			expect(administrator.id).toBe(testadmin1.id);
 			const adminWithNewPassword = await Administrator.scope('login').findByPk(testadmin1.id);
-			assert(adminWithNewPassword.comparePassword('UNITTEST'));
+			expect(adminWithNewPassword.comparePassword('UNITTEST')).toBeTruthy();
 		});
 	});
 });

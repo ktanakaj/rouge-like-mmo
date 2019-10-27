@@ -53,3 +53,9 @@ function createTestingModule(moduleDef: ModuleMetadata): TestingModuleBuilder {
 export default {
 	createTestingModule,
 };
+
+// 全テストの前に一度だけ実行される前処理
+// ※ 本当は test.js がそのつもりなのだが、test.jsでの初期化はbeforeAllとは扱いが違うようなので暫定的にここに定義
+beforeAll(async () => {
+	await Promise.all(databaseProviders.map(p => p.useFactory()));
+});
