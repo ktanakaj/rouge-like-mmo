@@ -43,7 +43,7 @@
   - name: Create the web application db tables
     shell: npm run db-migrate chdir={{ app_svr_dir }}
   - name: Import the test master data
-    shell: npm run master-import -- {{ app_svr_dir }}/test --publish chdir={{ app_svr_dir }}
+    shell: npm run master-import -- {{ app_svr_dir }}/test/masters chdir={{ app_svr_dir }}
   - name: Register the web application to pm2
     shell: npm start chdir={{ app_svr_dir }}
   - name: Save pm2 current processes

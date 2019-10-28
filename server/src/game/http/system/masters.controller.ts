@@ -20,8 +20,8 @@ export class MastersController {
 	@ApiNotFoundResponse({ description: '有効なマスタバージョン無し', type: ErrorResult })
 	@Get()
 	async findMasters(): Promise<string[]> {
-		// 最新のマスタのテーブル名一覧を取得する
-		return MODELS.master.map((m) => m.tableName);
+		// 最新のマスタ名一覧を取得する
+		return MODELS.master.map((m) => m.name);
 	}
 
 	@ApiOperation({ title: 'マスタ取得', description: '指定されたマスタを取得する。' })

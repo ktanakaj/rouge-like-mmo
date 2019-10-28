@@ -18,7 +18,7 @@ const logger = log4js.getLogger('batch');
 const argv = minimist(process.argv.slice(2), { boolean: true });
 let dir = argv._.shift();
 if (!dir) {
-	logger.warn('Usage: npm run master-import -- directory [--publish]');
+	logger.warn('Usage: npm run master-import -- directory');
 	process.exit(ExitCode.Usage);
 }
 if (!path.isAbsolute(dir)) {

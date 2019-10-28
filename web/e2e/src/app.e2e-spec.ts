@@ -39,7 +39,7 @@ describe('GM Tool Main Scenario', () => {
 	it('should display master page', async () => {
 		const page = new MasterPage();
 		await page.navigateByMenu();
-		expect(await page.getPageTitle()).toContain('マスタ閲覧');
+		expect(await page.getPageTitle()).toContain('マスタ一覧');
 	});
 
 	it('should display administrator page', async () => {

@@ -47,10 +47,10 @@ namespace Honememo.RougeLikeMmo.Gateways
         }
 
         /// <summary>
-        /// 最新マスタの一覧を取得する。
+        /// マスタの一覧を取得する。
         /// </summary>
         /// <returns>マスタ名一覧。</returns>
-        public async Task<IList<string>> FindLatestMasters()
+        public async Task<IList<string>> FindMasters()
         {
             var records = await this.request.Get<IList<object>>("api/masters");
             return records.Cast<string>().ToList();
@@ -62,7 +62,7 @@ namespace Honememo.RougeLikeMmo.Gateways
         /// <typeparam name="T">マスタ型。</typeparam>
         /// <param name="name">マスタ名。</param>
         /// <returns>マスタ一覧。</returns>
-        public async Task<IList<T>> FindLatestMaster<T>(string name)
+        public async Task<IList<T>> FindMaster<T>(string name)
         {
             var records = await this.request.Get<IList<object>>("api/masters/" + name);
             return records.Select((rec) => JsonUtility.FromJson<T>(Json.Serialize(rec))).ToList();

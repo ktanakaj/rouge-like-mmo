@@ -18,7 +18,7 @@
             </table>
         </div>
 
-        <footer><a routerLink="/masters/latest">{{ "BACK_TO_LIST" | translate }}</a></footer>
+        <footer><a routerLink="/masters">{{ "BACK_TO_LIST" | translate }}</a></footer>
     </div>
     <app-loading *ngIf="rows === null"></app-loading>
 </ng-template>
@@ -35,7 +35,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let table of tables">
-                        <td><a routerLink="/masters/latest/{{ table }}">{{ table }}</a></td>
+                        <td><a routerLink="/masters/{{ table }}">{{ table }}</a></td>
                     </tr>
                 </tbody>
             </table>

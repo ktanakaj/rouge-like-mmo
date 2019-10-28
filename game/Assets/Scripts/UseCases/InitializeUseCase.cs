@@ -111,9 +111,9 @@ namespace Honememo.RougeLikeMmo.UseCases
         {
             // マスタ追加時はどのみちアプリ改修も必須なのでべた書きしている。
             // もし多くなるようなら何か簡略化の方法も考える。
-            var errorCodes = await this.systemRepository.FindLatestMaster<ErrorCodeEntity>("ErrorCode");
+            var errorCodes = await this.systemRepository.FindMaster<ErrorCodeEntity>("ErrorCode");
             this.global.ErrorCodeEntities = errorCodes.ToDictionary((n) => n.Id, (n) => n);
-            var dungeons = await this.systemRepository.FindLatestMaster<DungeonEntity>("Dungeon");
+            var dungeons = await this.systemRepository.FindMaster<DungeonEntity>("Dungeon");
             this.global.DungeonEntities = dungeons.ToDictionary((n) => n.Id, (n) => n);
         }
 
