@@ -5,6 +5,8 @@
 import { Test, TestingModuleBuilder } from '@nestjs/testing';
 import { ModuleMetadata } from '@nestjs/common/interfaces/modules/module-metadata.interface';
 import { Observable } from 'rxjs';
+import * as config from 'config';
+import * as log4js from 'log4js';
 import { databaseProviders, modelProviders } from './shared/database.providers';
 import { RedisRpcClient } from './core/redis';
 
@@ -54,8 +56,13 @@ export default {
 	createTestingModule,
 };
 
-// 全テストの前に一度だけ実行される前処理
-// ※ 本当は test.js がそのつもりなのだが、test.jsでの初期化はbeforeAllとは扱いが違うようなので暫定的にここに定義
+// 各テストクラスごとに一度だけ実行される前処理
+// ※ 本当は test.js がそのつもりなのだが、test.jsでの初期化はbeforeAllとは扱いが違うようなので暫定的にここに定義。
+//    その仕組み上、各spec.tsがtest-helperをimportしていないと期待通り動かない可能性あり。
 beforeAll(async () => {
+	// ログの環境設定
+	log4js.configure(config['log4js']);
+
+	// Sequelizeモデルの読み込み
 	await Promise.all(databaseProviders.map(p => p.useFactory()));
 });
