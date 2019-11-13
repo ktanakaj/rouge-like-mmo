@@ -64,5 +64,10 @@ beforeAll(async () => {
 	log4js.configure(config['log4js']);
 
 	// Sequelizeモデルの読み込み
+	// ※ モデル読み込み時に、SQLITEでサポートされていないというワーニングが何度も出てしまうので、
+	//    一時的にワーニングを出ないようにする（ここで消してもtest.jsの分はでる）。
+	const warn = console.warn;
+	console.warn = () => { return; };
 	await Promise.all(databaseProviders.map(p => p.useFactory()));
+	console.warn = warn;
 });
