@@ -1,6 +1,6 @@
 /**
  * マスタインポート処理。
- * @module ./shared/master-importer
+ * @module ./core/db/master-importer
  */
 import * as path from 'path';
 import * as _ from 'lodash';

@@ -10,8 +10,8 @@ const config = require('config');
 const fileUtils = require('./core/utils').fileUtils;
 const getClient = require('./core/redis').getClient;
 const ShardableSequelize = require('./core/db').ShardableSequelize;
-const databaseProviders = require('./shared/database.providers').databaseProviders;
-const importMaster = require('./shared/master-importer').importMaster;
+const databaseProviders = require('./core/db').databaseProviders;
+const importMaster = require('./core/db').importMaster;
 
 // const execAsync = util.promisify(child_process.exec);
 

@@ -6,7 +6,7 @@ import { Controller, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common
 import { MessagePattern } from '@nestjs/microservices';
 import { IsInt } from 'class-validator';
 import { OnlyFirst, RedisRpcConnection } from '../../../core/redis';
-import { AllExceptionsFilter } from '../../../shared/all-exceptions.filter';
+import { AllExceptionsFilter } from '../../../core/filters/all-exceptions.filter';
 import Floor from '../../shared/floor.model';
 import { GameService } from '../../shared/game.service';
 

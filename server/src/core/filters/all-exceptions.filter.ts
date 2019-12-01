@@ -1,6 +1,6 @@
 /**
  * アプリ全体用の例外処理モジュール。
- * @module ./shared/all-exceptions.filter.ts
+ * @module ./core/filters/all-exceptions.filter.ts
  */
 import { Catch, ArgumentsHost, ExceptionFilter, RpcExceptionFilter, HttpException } from '@nestjs/common';
 import { Observable, from } from 'rxjs';
@@ -8,10 +8,10 @@ import * as express from 'express';
 import * as config from 'config';
 import * as log4js from 'log4js';
 import { JsonRpcError } from 'json-rpc2-implementer';
-import { isWebSocketRpc } from '../core/ws';
-import { isRedisRpc } from '../core/redis';
-import { AppError } from '../core/errors';
-import ErrorCode from '../shared/error-code.model';
+import { isWebSocketRpc } from '../ws';
+import { isRedisRpc } from '../redis';
+import { AppError } from '../errors';
+import { ErrorCode } from '../db';
 
 const errorLogger = log4js.getLogger('error');
 

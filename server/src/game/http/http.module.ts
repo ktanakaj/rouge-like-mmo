@@ -3,7 +3,7 @@
  * @module ./game/http/http.module
  */
 import { Module } from '@nestjs/common';
-import { redisRpcClientProvider } from '../../shared/redis-rpc-client.provider';
+import { redisRpcClientProvider } from '../../core/redis';
 import { GameService } from '../shared/game.service';
 import { MastersController } from './system/masters.controller';
 import { EnvController } from './system/env.controller';

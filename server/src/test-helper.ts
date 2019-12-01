@@ -7,7 +7,7 @@ import { ModuleMetadata } from '@nestjs/common/interfaces/modules/module-metadat
 import { Observable } from 'rxjs';
 import * as config from 'config';
 import * as log4js from 'log4js';
-import { databaseProviders, modelProviders } from './shared/database.providers';
+import { databaseProviders, modelProviders } from './core/db';
 import { RedisRpcClient } from './core/redis';
 
 /** アプリ共通のモジュール群 */

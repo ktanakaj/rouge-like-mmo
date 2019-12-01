@@ -10,7 +10,7 @@ import * as session from 'express-session';
 import * as connectRedis from 'connect-redis';
 const RedisStore = connectRedis(session);
 import { createClient } from './../src/core/redis';
-import { AllExceptionsFilter } from './../src/shared/all-exceptions.filter';
+import { AllExceptionsFilter } from './../src/core/filters/all-exceptions.filter';
 import { AppModule } from './../src/app.module';
 
 // ※ 個別APIの結果の確認はユニットテストで実施。ここでは全体的な動きを確認

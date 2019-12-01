@@ -1,6 +1,6 @@
 /**
  * アクセスログを出力するNestミドルウェア。
- * @module ./shared/access-logger.middleware
+ * @module ./core/middlewares/access-logger.middleware
  */
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import * as express from 'express';

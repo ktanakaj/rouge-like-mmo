@@ -5,7 +5,7 @@
 import { Controller, Get, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { ApiTags, ApiSecurity, ApiProperty, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
 import { IsInt } from 'class-validator';
-import { User } from '../../../shared/user.decorator';
+import { User } from '../../../core/auth';
 import { AuthGuard } from '../auth.guard';
 import Dungeon from '../../shared/dungeon.model';
 import PlayerCharacter from '../../shared/player-character.model';

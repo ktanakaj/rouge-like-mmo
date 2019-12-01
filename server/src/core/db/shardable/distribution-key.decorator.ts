@@ -1,6 +1,6 @@
 /**
  * シャーディングキー指定用デコレーターモジュール。
- * @module ./core/db/distribution-key.decorator
+ * @module ./core/db/shardable/distribution-key.decorator
  */
 import 'reflect-metadata';
 

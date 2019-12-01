@@ -1,6 +1,6 @@
 /**
  * レスポンスボディを参照用に保存するexpressミドルウェア。
- * @module ./shared/response-body-collector.middleware
+ * @module ./core/middlewares/response-body-collector.middleware
  */
 import * as express from 'express';
 

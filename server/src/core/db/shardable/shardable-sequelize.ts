@@ -1,11 +1,11 @@
 /**
  * sequelize-typescriptでシャーディングされたDBを扱うためのモジュール。
- * @module ./core/models/shardable-sequelize
+ * @module ./core/db/shardable/shardable-sequelize
  */
 import 'reflect-metadata';
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
 import { SyncOptions, DropOptions } from 'sequelize';
-import { fileUtils } from '../../core/utils';
+import { fileUtils } from '../../utils';
 import ShardableModel from './shardable-model';
 import { DISTRIBUTION_KEY } from './distribution-key.decorator';
 

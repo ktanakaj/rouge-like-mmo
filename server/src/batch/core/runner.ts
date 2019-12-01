@@ -6,7 +6,7 @@
  */
 import { NestFactory } from '@nestjs/core';
 import { INestApplicationContext } from '@nestjs/common';
-import { DebugLoggerService } from '../../shared/debug-logger.service';
+import { DebugLoggerService } from '../../core/services/debug-logger.service';
 import { AppModule } from '../../app.module';
 
 /**

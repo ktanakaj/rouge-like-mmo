@@ -7,7 +7,7 @@ import { MessagePattern } from '@nestjs/microservices';
 import { IsInt, MinLength } from 'class-validator';
 import { BadRequestError } from '../../../core/errors';
 import { WebSocketRpcConnection } from '../../../core/ws';
-import { AllExceptionsFilter } from '../../../shared/all-exceptions.filter';
+import { AllExceptionsFilter } from '../../../core/filters/all-exceptions.filter';
 import Player from '../../../game/shared/player.model';
 
 class LoginBody {

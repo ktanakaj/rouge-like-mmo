@@ -1,10 +1,10 @@
 /**
  * Redis pub/subクライアント定義モジュール。
- * @module ./shared/redis-rpc-client.provider
+ * @module ./core/redis/redis-rpc-client.provider
  */
 import * as config from 'config';
 import * as log4js from 'log4js';
-import { RedisRpcClient } from '../core/redis';
+import { RedisRpcClient } from './redis-rpc-client';
 const redisLogger = log4js.getLogger('redis');
 
 /** RedisRpcClientのプロバイダー */

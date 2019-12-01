@@ -6,7 +6,7 @@ import { Controller, UseFilters, UseGuards, UsePipes, ValidationPipe } from '@ne
 import { MessagePattern } from '@nestjs/microservices';
 import { IsInt, Min, Max } from 'class-validator';
 import { WebSocketRpcConnection } from '../../../core/ws';
-import { AllExceptionsFilter } from '../../../shared/all-exceptions.filter';
+import { AllExceptionsFilter } from '../../../core/filters/all-exceptions.filter';
 import { GameService } from '../../shared/game.service';
 import { AuthGuard } from '../auth.guard';
 

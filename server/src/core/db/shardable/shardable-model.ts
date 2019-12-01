@@ -1,6 +1,6 @@
 /**
  * sequelize-typescriptのモデルをシャーディング環境用に拡張したモデルモジュール。
- * @module ./core/models/shardable-model
+ * @module ./core/db/shardable/shardable-model
  */
 import { Sequelize, Model } from 'sequelize-typescript';
 import {

@@ -1,6 +1,6 @@
 /**
  * 拡張Tableデコレーターモジュール。
- * @module ./core/db/table.decorator
+ * @module ./core/db/shardable/table.decorator
  */
 import 'reflect-metadata';
 import { Table as SequelizeTable, TableOptions } from 'sequelize-typescript';

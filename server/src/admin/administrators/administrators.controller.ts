@@ -10,7 +10,7 @@ import {
 import { IsOptional, MinLength, IsIn } from 'class-validator';
 import { BadRequestError } from '../../core/errors';
 import { IdParam, PagingQuery, ErrorResult } from '../../shared/common.dto';
-import { User } from '../../shared/user.decorator';
+import { User } from '../../core/auth';
 import { AuthGuard } from '../auth.guard';
 import { Roles } from '../shared/roles.decorator';
 import Administrator from '../shared/administrator.model';

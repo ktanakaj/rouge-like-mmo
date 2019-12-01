@@ -45,7 +45,7 @@ if (files.length === 0) {
 
 // マスタファイルをインポート
 import run from './core/runner';
-import { importMaster } from '../shared/master-importer';
+import { importMaster } from '../core/db';
 
 run(async () => {
 	// ※ 現状ログの視認性などを鑑みて並列実行していない

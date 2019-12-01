@@ -1,6 +1,6 @@
 /**
  * デバッグログを出力するNestサービス。
- * @module ./shared/debug-logger.service
+ * @module ./core/services/debug-logger.service
  */
 import { LoggerService } from '@nestjs/common';
 import * as log4js from 'log4js';

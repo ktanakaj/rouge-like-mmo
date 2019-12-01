@@ -3,8 +3,8 @@
  * @module ./app.module
  */
 import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
-import { databaseProviders } from './shared/database.providers';
-import { AccessLoggerMiddleware } from './shared/access-logger.middleware';
+import { databaseProviders } from './core/db';
+import { AccessLoggerMiddleware } from './core/middlewares/access-logger.middleware';
 import { GameModule } from './game/game.module';
 import { AdminModule } from './admin/admin.module';
 

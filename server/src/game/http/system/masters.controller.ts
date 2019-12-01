@@ -7,7 +7,7 @@ import { ApiTags, ApiOperation, ApiParam, ApiOkResponse, ApiBadRequestResponse, 
 import * as _ from 'lodash';
 import { BadRequestError } from '../../../core/errors';
 import { ErrorResult } from '../../../shared/common.dto';
-import { MODELS } from '../../../shared/database.providers';
+import { MODELS } from '../../../core/db';
 
 /**
  * マスタコントローラクラス。

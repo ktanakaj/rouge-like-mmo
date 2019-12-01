@@ -1,22 +1,21 @@
 /**
  * DB接続定義モジュール。
- * @module ./shared/databases.providers
+ * @module ./core/db/databases.providers
  */
 import 'reflect-metadata';
 import * as config from 'config';
 import * as log4js from 'log4js';
 import * as _ from 'lodash';
 import { Sequelize, Model } from 'sequelize-typescript';
-import fileUtils from '../core/utils/file-utils';
-import { DB_KEY } from '../core/db';
-import { ShardableSequelize } from '../core/db';
+import fileUtils from '../utils/file-utils';
+import { ShardableSequelize, DB_KEY } from './shardable';
 
 /** モデル一覧 */
 export const MODELS: { master: Array<typeof Model> } = { master: [] };
 
 // モデルは、拡張子が .model.ts のファイルを検索して付加されているデコレーターの情報を見て判別する
 // ※ .model.ts にはRedisなどの非DBモデルもあるので、DB情報があるもののみ処理
-fileUtils.directoryWalkRecursiveSync(__dirname + '/../', (p) => {
+fileUtils.directoryWalkRecursiveSync(__dirname + '/../../', (p) => {
 	if (/\.model\.[jt]s$/.test(p)) {
 		const m = require(p);
 		const model = m['default'] || m;

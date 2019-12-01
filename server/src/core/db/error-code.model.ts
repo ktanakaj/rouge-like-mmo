@@ -1,9 +1,10 @@
 /**
  * エラーコードマスタモデルモジュール。
- * @module ./shared/error-code.model
+ * @module ./shared/db/error-code.model
  */
 import { Column, DataType, Unique, AllowNull, Default, Comment } from 'sequelize-typescript';
-import { MasterModel, Table } from '../core/db';
+import { Table } from './shardable';
+import MasterModel from './master-model';
 
 /**
  * エラーコードマスタモデルクラス。

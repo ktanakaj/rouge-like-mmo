@@ -9,7 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { IsOptional, MinLength } from 'class-validator';
 import { IdParam, ErrorResult } from '../../../shared/common.dto';
-import { User } from '../../../shared/user.decorator';
+import { User } from '../../../core/auth';
 import { AuthGuard } from '../auth.guard';
 import PlayerCharacter from '../../shared/player-character.model';
 

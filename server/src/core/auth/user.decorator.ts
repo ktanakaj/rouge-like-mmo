@@ -1,6 +1,6 @@
 /**
  * ユーザーデコレーターモジュール。
- * @module ./shared/user.decorator
+ * @module ./core/auth/user.decorator
  */
 import { createParamDecorator } from '@nestjs/common';
 
