@@ -19,7 +19,7 @@ WebSocketを使ったオンラインゲームのネットワークやDB周りの
     * Sequelize 5.x
     * Sequelize-typescript 1.x
     * Node-config 2.x
-    * Log4js 5.x
+    * Log4js 6.x
 * Angular 8.x
 
 ### 動作確認ブラウザ

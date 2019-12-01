@@ -3,7 +3,7 @@
  * @module ./game/http/games/game.controller
  */
 import { Controller, Get, Post, Body, UseGuards, Request } from '@nestjs/common';
-import { ApiUseTags, ApiModelProperty, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiTags, ApiSecurity, ApiProperty, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
 import { IsInt } from 'class-validator';
 import { User } from '../../../shared/user.decorator';
 import { AuthGuard } from '../auth.guard';
@@ -13,21 +13,21 @@ import { GameService } from '../../shared/game.service';
 
 class GetStatusResult {
 	// TODO: 項目はインゲーム実装に合わせて精査する
-	@ApiModelProperty({ description: 'プレイヤーLV', type: 'integer' })
+	@ApiProperty({ description: 'プレイヤーLV', type: 'integer' })
 	playerLevel: number;
-	@ApiModelProperty({ description: 'ダンジョンID（未プレイ時はnull）', type: 'integer' })
+	@ApiProperty({ description: 'ダンジョンID（未プレイ時はnull）', type: 'integer' })
 	dungeonId: number;
-	@ApiModelProperty({ description: 'フロア番号（〃）', type: 'integer' })
+	@ApiProperty({ description: 'フロア番号（〃）', type: 'integer' })
 	floorNo: number;
-	@ApiModelProperty({ description: 'フロアサーバーURL' })
+	@ApiProperty({ description: 'フロアサーバーURL' })
 	url: string;
 }
 
 class StartBody {
-	@ApiModelProperty({ description: 'プレイヤーキャラクターID', type: 'integer' })
+	@ApiProperty({ description: 'プレイヤーキャラクターID', type: 'integer' })
 	@IsInt()
 	pcId: number;
-	@ApiModelProperty({ description: 'ダンジョンID', type: 'integer' })
+	@ApiProperty({ description: 'ダンジョンID', type: 'integer' })
 	@IsInt()
 	dungeonId: number;
 }
@@ -35,13 +35,14 @@ class StartBody {
 /**
  * ゲームコントローラクラス。
  */
+@ApiTags('game')
+@ApiSecurity('SessionId')
 @UseGuards(AuthGuard)
-@ApiUseTags('game')
 @Controller('api/game')
 export class GameController {
 	constructor(private readonly gameService: GameService) { }
 
-	@ApiOperation({ title: 'ゲーム状態取得', description: '現在のゲーム状態を取得する。' })
+	@ApiOperation({ summary: 'ゲーム状態取得', description: '現在のゲーム状態を取得する。' })
 	@ApiCreatedResponse({ description: 'ゲーム状態', type: GetStatusResult })
 	@Get('/status')
 	async getStatus(@User() user, @Request() request): Promise<GetStatusResult> {
@@ -55,7 +56,7 @@ export class GameController {
 		};
 	}
 
-	@ApiOperation({ title: 'ゲーム開始', description: '新しいゲームを開始する。' })
+	@ApiOperation({ summary: 'ゲーム開始', description: '新しいゲームを開始する。' })
 	@ApiCreatedResponse({ description: 'フロアサーバーURL', type: String })
 	@Post('/start')
 	async start(@Body() body: StartBody, @User() user, @Request() request): Promise<string> {

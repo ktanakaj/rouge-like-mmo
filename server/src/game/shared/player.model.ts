@@ -4,7 +4,7 @@
  */
 import { Column, DataType, AllowNull, Default, IsDate, DefaultScope, BeforeCreate, BeforeUpdate } from 'sequelize-typescript';
 import { CreateOptions } from 'sequelize';
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import * as crypto from 'crypto';
 import * as config from 'config';
 import { Random } from 'random-js';
@@ -35,34 +35,34 @@ const random = new Random();
 })
 export default class Player extends ShardableModel<Player> {
 	/** 端末トークン（パスワードに準じた扱いをする） */
-	@ApiModelProperty({ description: '端末トークン' })
+	@ApiProperty({ description: '端末トークン' })
 	@AllowNull(false)
 	@Column
 	token: string;
 
 	/** プレイヤーレベル */
-	@ApiModelProperty({ description: 'プレイヤーレベル' })
+	@ApiProperty({ description: 'プレイヤーレベル' })
 	@AllowNull(false)
 	@Default(1)
 	@Column(DataType.INTEGER.UNSIGNED)
 	level: number;
 
 	/** プレイヤー累計経験値 */
-	@ApiModelProperty({ description: 'プレイヤー累計経験値' })
+	@ApiProperty({ description: 'プレイヤー累計経験値' })
 	@AllowNull(false)
 	@Default(0)
 	@Column(DataType.BIGINT.UNSIGNED)
 	exp: number;
 
 	/** プレイヤー所持金 */
-	@ApiModelProperty({ description: 'プレイヤー所持金' })
+	@ApiProperty({ description: 'プレイヤー所持金' })
 	@AllowNull(false)
 	@Default(0)
 	@Column(DataType.BIGINT.UNSIGNED)
 	gameCoins: number;
 
 	/** 最終ログイン日時 */
-	@ApiModelProperty({ description: '最終ログイン日時' })
+	@ApiProperty({ description: '最終ログイン日時' })
 	@AllowNull(false)
 	@IsDate
 	@Column

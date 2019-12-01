@@ -3,7 +3,7 @@
  * @module ./game/shared/player-item.model
  */
 import { Column, DataType, AllowNull, Default, ForeignKey, DefaultScope } from 'sequelize-typescript';
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { ShardableModel, Table, DistributionKey } from '../../core/db';
 import Player from './player.model';
 import Item from './item.model';
@@ -31,21 +31,21 @@ import Item from './item.model';
 export default class PlayerItem extends ShardableModel<PlayerItem> {
 	/** プレイヤーID */
 	@DistributionKey
-	@ApiModelProperty({ description: 'プレイヤーID' })
+	@ApiProperty({ description: 'プレイヤーID' })
 	@AllowNull(false)
 	@ForeignKey(() => Player)
 	@Column
 	playerId: number;
 
 	/** アイテムID */
-	@ApiModelProperty({ description: 'アイテムID' })
+	@ApiProperty({ description: 'アイテムID' })
 	@AllowNull(false)
 	@ForeignKey(() => Item)
 	@Column
 	itemId: number;
 
 	/** 所持数 */
-	@ApiModelProperty({ description: '所持数' })
+	@ApiProperty({ description: '所持数' })
 	@AllowNull(false)
 	@Default(1)
 	@Column(DataType.INTEGER.UNSIGNED)

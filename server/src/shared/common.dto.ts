@@ -2,7 +2,7 @@
  * アプリ内で共通的なDTO定義。
  * @module ./shared/common.dto
  */
-import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsInt, Min, Max } from 'class-validator';
 
@@ -20,7 +20,7 @@ export function toNumberIfIsNumber(n: any): any {
 export class IdParam {
 	@Transform(toNumberIfIsNumber)
 	@IsInt()
-	@ApiModelProperty({ description: 'ID', type: 'integer' })
+	@ApiProperty({ description: 'ID', type: 'integer' })
 	id: number;
 }
 
@@ -29,29 +29,29 @@ export class PagingQuery {
 	@Transform(toNumberIfIsNumber)
 	@IsInt()
 	@Min(1)
-	@ApiModelPropertyOptional({ description: 'ページ番号（先頭ページが1）', type: 'integer', format: 'int32' })
+	@ApiPropertyOptional({ description: 'ページ番号（先頭ページが1）', type: 'integer', format: 'int32' })
 	page?: number = 1;
 
 	@Transform(toNumberIfIsNumber)
 	@IsInt()
 	@Min(1)
 	@Max(1000)
-	@ApiModelPropertyOptional({ description: '1ページ辺りの最大件数', type: 'integer', format: 'int32' })
+	@ApiPropertyOptional({ description: '1ページ辺りの最大件数', type: 'integer', format: 'int32' })
 	max?: number = 100;
 }
 
 /** エラー時の戻り値のエラー情報。 */
 export class ErrorResultError {
-	@ApiModelProperty({ description: 'エラーID', type: 'integer' })
+	@ApiProperty({ description: 'エラーID', type: 'integer' })
 	code: number;
-	@ApiModelProperty({ description: 'エラーメッセージ' })
+	@ApiProperty({ description: 'エラーメッセージ' })
 	message: string;
-	@ApiModelPropertyOptional({ description: '追加情報' })
+	@ApiPropertyOptional({ description: '追加情報' })
 	data?: any;
 }
 
 /** エラー時の戻り値フォーマット。 */
 export class ErrorResult {
-	@ApiModelProperty({ description: 'エラー情報', type: ErrorResultError })
+	@ApiProperty({ description: 'エラー情報', type: ErrorResultError })
 	error: ErrorResultError;
 }

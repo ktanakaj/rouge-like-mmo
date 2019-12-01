@@ -4,7 +4,7 @@
  */
 import { Column, DataType, AllowNull, Default, IsDate, ForeignKey, DefaultScope } from 'sequelize-typescript';
 import { FindOptions } from 'sequelize';
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { ShardableModel, Table, DistributionKey } from '../../core/db';
 import { NotFoundError } from '../../core/errors';
 import Player from './player.model';
@@ -31,40 +31,40 @@ export default class PlayerCharacter extends ShardableModel<PlayerCharacter> {
 	// TODO: 最大HPや攻撃力をどう算出する？レベルから？それとも個別に持たせる？
 	/** プレイヤーID */
 	@DistributionKey
-	@ApiModelProperty({ description: 'プレイヤーID' })
+	@ApiProperty({ description: 'プレイヤーID' })
 	@AllowNull(false)
 	@ForeignKey(() => Player)
 	@Column
 	playerId: number;
 
 	/** キャラクター名 */
-	@ApiModelProperty({ description: 'キャラクター名' })
+	@ApiProperty({ description: 'キャラクター名' })
 	@AllowNull(false)
 	@Column
 	name: string;
 
 	/** レベル */
-	@ApiModelProperty({ description: 'キャラクターレベル' })
+	@ApiProperty({ description: 'キャラクターレベル' })
 	@AllowNull(false)
 	@Default(1)
 	@Column(DataType.INTEGER.UNSIGNED)
 	level: number;
 
 	/** キャラクター累計経験値 */
-	@ApiModelProperty({ description: 'キャラクター累計経験値' })
+	@ApiProperty({ description: 'キャラクター累計経験値' })
 	@AllowNull(false)
 	@Default(0)
 	@Column(DataType.BIGINT.UNSIGNED)
 	exp: number;
 
 	/** HP */
-	@ApiModelProperty({ description: 'HP' })
+	@ApiProperty({ description: 'HP' })
 	@AllowNull(false)
 	@Column(DataType.INTEGER.UNSIGNED)
 	hp: number;
 
 	/** 所持金 */
-	@ApiModelProperty({ description: '所持金' })
+	@ApiProperty({ description: '所持金' })
 	@AllowNull(false)
 	@Default(0)
 	@Column(DataType.BIGINT.UNSIGNED)
@@ -72,7 +72,7 @@ export default class PlayerCharacter extends ShardableModel<PlayerCharacter> {
 
 	// TODO: ちゃんと正規化する？
 	/** 所持品 */
-	@ApiModelProperty({ description: '所持品' })
+	@ApiProperty({ description: '所持品' })
 	@AllowNull(false)
 	@Column(DataType.JSON)
 	items: {};
@@ -80,14 +80,14 @@ export default class PlayerCharacter extends ShardableModel<PlayerCharacter> {
 	// TODO: 武器と防具のIDを持つ？所持品に含める？
 
 	/** カルマ */
-	@ApiModelProperty({ description: 'カルマ' })
+	@ApiProperty({ description: 'カルマ' })
 	@AllowNull(false)
 	@Default(0)
 	@Column(DataType.INTEGER.UNSIGNED)
 	karma: number;
 
 	/** 最終選択日時 */
-	@ApiModelProperty({ description: '最終選択日時' })
+	@ApiProperty({ description: '最終選択日時' })
 	@IsDate
 	@Column
 	lastSelected: Date;

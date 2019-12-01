@@ -155,21 +155,17 @@
     - \.datagz
     - \.memgz
   swagger:
-    swagger: "2.0"
     info:
       title: "Rouge-like MMO HTTP API"
       version: 0.0.1
       description: "ローグ風オンラインゲームHTTP API。"
-    consumes:
-      - "application/json"
-    produces:
-      - "application/json"
-    securityDefinitions:
-      SessionId:
-        type: apiKey
-        in: header
-        name: Cookie
-        description: セッションID
+    components:
+      securitySchemes:
+        SessionId:
+          type: apiKey
+          in: header
+          name: Cookie
+          description: セッションID
   floorserver: true # フロアを管理するWebSocketサーバーの場合true、HTTPサーバー専用の場合false
   debug:
     errorMessage: true # エラーメッセージを出力する場合true

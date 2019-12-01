@@ -3,7 +3,7 @@
  * @module ./game/http/system/masters.controller
  */
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiUseTags, ApiOperation, ApiImplicitParam, ApiOkResponse, ApiBadRequestResponse, ApiNotFoundResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiParam, ApiOkResponse, ApiBadRequestResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 import * as _ from 'lodash';
 import { BadRequestError } from '../../../core/errors';
 import { ErrorResult } from '../../../shared/common.dto';
@@ -12,10 +12,10 @@ import { MODELS } from '../../../shared/database.providers';
 /**
  * マスタコントローラクラス。
  */
-@ApiUseTags('masters')
+@ApiTags('masters')
 @Controller('api/masters')
 export class MastersController {
-	@ApiOperation({ title: 'マスタ一覧取得', description: '最新マスタの一覧を取得する。' })
+	@ApiOperation({ summary: 'マスタ一覧取得', description: '最新マスタの一覧を取得する。' })
 	@ApiOkResponse({ description: 'マスタ名一覧', type: String, isArray: true })
 	@ApiNotFoundResponse({ description: '有効なマスタバージョン無し', type: ErrorResult })
 	@Get()
@@ -24,8 +24,8 @@ export class MastersController {
 		return MODELS.master.map((m) => m.name);
 	}
 
-	@ApiOperation({ title: 'マスタ取得', description: '指定されたマスタを取得する。' })
-	@ApiImplicitParam({ name: 'name', description: 'マスタ名' })
+	@ApiOperation({ summary: 'マスタ取得', description: '指定されたマスタを取得する。' })
+	@ApiParam({ name: 'name', description: 'マスタ名' })
 	@ApiOkResponse({ description: 'マスタ配列', type: Object, isArray: true })
 	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
 	@Get(':name')

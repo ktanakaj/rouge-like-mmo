@@ -4,7 +4,7 @@
  */
 import { Controller, Get, Post, Put, Delete, Query, Param, Body, Session, UseGuards, HttpCode } from '@nestjs/common';
 import {
-	ApiUseTags, ApiOperation, ApiModelProperty, ApiModelPropertyOptional, ApiOkResponse, ApiCreatedResponse,
+	ApiTags, ApiSecurity, ApiOperation, ApiProperty, ApiPropertyOptional, ApiOkResponse, ApiCreatedResponse,
 	ApiBadRequestResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiConflictResponse,
 } from '@nestjs/swagger';
 import { IsOptional, MinLength, IsIn } from 'class-validator';
@@ -16,62 +16,63 @@ import { Roles } from '../shared/roles.decorator';
 import Administrator from '../shared/administrator.model';
 
 class FindAndCountAdministratorsResult {
-	@ApiModelProperty({ description: '総件数' })
+	@ApiProperty({ description: '総件数' })
 	count: number;
-	@ApiModelProperty({ description: '結果配列', type: Administrator, isArray: true })
+	@ApiProperty({ description: '結果配列', type: Administrator, isArray: true })
 	rows: Administrator[];
 }
 
 class CreateAdministratorBody {
 	@MinLength(1)
-	@ApiModelProperty({ description: '管理者名' })
+	@ApiProperty({ description: '管理者名' })
 	name: string;
 	@IsIn(Administrator.ROLES)
-	@ApiModelProperty({ description: 'ロール', enum: Administrator.ROLES })
+	@ApiProperty({ description: 'ロール', enum: Administrator.ROLES })
 	role: string;
 	@IsOptional()
-	@ApiModelPropertyOptional({ description: '注釈' })
+	@ApiPropertyOptional({ description: '注釈' })
 	note?: string;
 }
 
 class UpdateAdministratorBody {
 	@IsOptional()
 	@MinLength(1)
-	@ApiModelPropertyOptional({ description: '管理者名' })
+	@ApiPropertyOptional({ description: '管理者名' })
 	name?: string;
 	@IsOptional()
 	@IsIn(Administrator.ROLES)
-	@ApiModelPropertyOptional({ description: 'ロール', enum: Administrator.ROLES })
+	@ApiPropertyOptional({ description: 'ロール', enum: Administrator.ROLES })
 	role?: string;
 	@IsOptional()
-	@ApiModelPropertyOptional({ description: '注釈' })
+	@ApiPropertyOptional({ description: '注釈' })
 	note?: string;
 }
 
 class AdminLoginBody {
 	@MinLength(1)
-	@ApiModelProperty({ description: '管理者名' })
+	@ApiProperty({ description: '管理者名' })
 	username: string;
 	@MinLength(1)
-	@ApiModelProperty({ description: 'パスワード' })
+	@ApiProperty({ description: 'パスワード' })
 	password: string;
 }
 
 class UpdateMeBody {
 	@MinLength(1)
-	@ApiModelProperty({ description: 'パスワード' })
+	@ApiProperty({ description: 'パスワード' })
 	password: string;
 }
 
 /**
  * 管理者コントローラクラス。
  */
-@ApiUseTags('admin/administrators')
+@ApiTags('admin/administrators')
 @Controller('api/admin/administrators')
 export class AdministratorsController {
-	@ApiOperation({ title: '管理者一覧', description: '管理者の一覧を取得する。' })
+	@ApiOperation({ summary: '管理者一覧', description: '管理者の一覧を取得する。' })
 	@ApiOkResponse({ description: '管理者一覧', type: FindAndCountAdministratorsResult })
 	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
+	@ApiSecurity('SessionId')
 	@UseGuards(AuthGuard)
 	@Get()
 	async findAndCountAdministrators(@Query() query: PagingQuery): Promise<FindAndCountAdministratorsResult> {
@@ -79,11 +80,12 @@ export class AdministratorsController {
 		return await Administrator.findAndCountAll({ limit: query.max, offset: (query.page - 1) * query.max, paranoid: false });
 	}
 
-	@ApiOperation({ title: '管理者登録', description: '管理者を新規登録する。' })
+	@ApiOperation({ summary: '管理者登録', description: '管理者を新規登録する。' })
 	@ApiCreatedResponse({ description: '登録成功', type: Administrator })
 	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
 	@ApiForbiddenResponse({ description: '権限無し', type: ErrorResult })
 	@ApiConflictResponse({ description: 'name重複', type: ErrorResult })
+	@ApiSecurity('SessionId')
 	@UseGuards(AuthGuard)
 	@Roles('admin')
 	@Post()
@@ -95,12 +97,13 @@ export class AdministratorsController {
 		return Object.assign(admin.toJSON(), { password }) as Administrator;
 	}
 
-	@ApiOperation({ title: '管理者更新', description: '管理者を変更する。' })
+	@ApiOperation({ summary: '管理者更新', description: '管理者を変更する。' })
 	@ApiOkResponse({ description: '更新成功', type: Administrator })
 	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
 	@ApiForbiddenResponse({ description: '権限無し', type: ErrorResult })
 	@ApiNotFoundResponse({ description: 'データ無し', type: ErrorResult })
 	@ApiConflictResponse({ description: 'name重複', type: ErrorResult })
+	@ApiSecurity('SessionId')
 	@UseGuards(AuthGuard)
 	@Roles('admin')
 	@Put('/:id(\\d+)')
@@ -110,10 +113,11 @@ export class AdministratorsController {
 		return await admin.save();
 	}
 
-	@ApiOperation({ title: '管理者削除', description: '管理者を削除する。' })
+	@ApiOperation({ summary: '管理者削除', description: '管理者を削除する。' })
 	@ApiOkResponse({ description: '削除成功', type: Administrator })
 	@ApiForbiddenResponse({ description: '権限無し', type: ErrorResult })
 	@ApiNotFoundResponse({ description: 'データ無し', type: ErrorResult })
+	@ApiSecurity('SessionId')
 	@UseGuards(AuthGuard)
 	@Roles('admin')
 	@Delete('/:id(\\d+)')
@@ -123,10 +127,11 @@ export class AdministratorsController {
 		return admin;
 	}
 
-	@ApiOperation({ title: '管理者パスワードリセット', description: '管理者のパスワードをリセットする。' })
+	@ApiOperation({ summary: '管理者パスワードリセット', description: '管理者のパスワードをリセットする。' })
 	@ApiOkResponse({ description: 'リセット成功', type: Administrator })
 	@ApiForbiddenResponse({ description: '権限無し', type: ErrorResult })
 	@ApiNotFoundResponse({ description: 'データ無し', type: ErrorResult })
+	@ApiSecurity('SessionId')
 	@UseGuards(AuthGuard)
 	@Roles('admin')
 	@Post('/:id(\\d+)/reset')
@@ -141,7 +146,7 @@ export class AdministratorsController {
 		return Object.assign(admin.toJSON(), { password }) as Administrator;
 	}
 
-	@ApiOperation({ title: '管理者ログイン', description: '管理者名とパスワードで認証を行う。' })
+	@ApiOperation({ summary: '管理者ログイン', description: '管理者名とパスワードで認証を行う。' })
 	@ApiOkResponse({ description: 'ログイン成功', type: Administrator })
 	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
 	@Post('/login')
@@ -158,8 +163,9 @@ export class AdministratorsController {
 		return admin;
 	}
 
-	@ApiOperation({ title: '管理者ログアウト', description: 'ログアウトする。' })
+	@ApiOperation({ summary: '管理者ログアウト', description: 'ログアウトする。' })
 	@ApiOkResponse({ description: 'ログアウト成功' })
+	@ApiSecurity('SessionId')
 	@UseGuards(AuthGuard)
 	@Post('/logout')
 	@HttpCode(200)
@@ -167,17 +173,19 @@ export class AdministratorsController {
 		delete session['admin'];
 	}
 
-	@ApiOperation({ title: '自分の情報取得', description: 'ログインユーザー自身の情報を取得する。' })
+	@ApiOperation({ summary: '自分の情報取得', description: 'ログインユーザー自身の情報を取得する。' })
 	@ApiOkResponse({ description: '取得成功', type: Administrator })
+	@ApiSecurity('SessionId')
 	@UseGuards(AuthGuard)
 	@Get('/me')
 	findMe(@User() user): Administrator {
 		return user;
 	}
 
-	@ApiOperation({ title: '自分の情報更新', description: 'ログインユーザー自身の情報を変更する。' })
+	@ApiOperation({ summary: '自分の情報更新', description: 'ログインユーザー自身の情報を変更する。' })
 	@ApiOkResponse({ description: '更新成功', type: Administrator })
 	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
+	@ApiSecurity('SessionId')
 	@UseGuards(AuthGuard)
 	@Put('/me')
 	async updateMe(@Body() body: UpdateMeBody, @User() user): Promise<Administrator> {

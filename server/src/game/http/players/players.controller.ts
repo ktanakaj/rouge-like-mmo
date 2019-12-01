@@ -3,23 +3,23 @@
  * @module ./game/http/players/players.controller
  */
 import { Controller, Post, Body, Session, HttpCode } from '@nestjs/common';
-import { ApiUseTags, ApiModelProperty, ApiOperation, ApiOkResponse, ApiCreatedResponse, ApiBadRequestResponse } from '@nestjs/swagger';
+import { ApiTags, ApiProperty, ApiOperation, ApiOkResponse, ApiCreatedResponse, ApiBadRequestResponse } from '@nestjs/swagger';
 import { IsInt, MinLength } from 'class-validator';
 import { BadRequestError } from '../../../core/errors';
 import { ErrorResult } from '../../../shared/common.dto';
 import Player from '../../shared/player.model';
 
 class CreatePlayerBody {
-	@ApiModelProperty({ description: '端末トークン' })
+	@ApiProperty({ description: '端末トークン' })
 	@MinLength(1)
 	token: string;
 }
 
 class LoginBody {
-	@ApiModelProperty({ description: 'プレイヤーID' })
+	@ApiProperty({ description: 'プレイヤーID' })
 	@IsInt()
 	id: number;
-	@ApiModelProperty({ description: '端末トークン' })
+	@ApiProperty({ description: '端末トークン' })
 	@MinLength(1)
 	token: string;
 }
@@ -27,10 +27,10 @@ class LoginBody {
 /**
  * プレイヤーコントローラクラス。
  */
-@ApiUseTags('players')
+@ApiTags('players')
 @Controller('api/players')
 export class PlayersController {
-	@ApiOperation({ title: 'プレイヤー登録', description: 'プレイヤーを新規登録する。' })
+	@ApiOperation({ summary: 'プレイヤー登録', description: 'プレイヤーを新規登録する。' })
 	@ApiCreatedResponse({ description: '登録成功', type: Player })
 	@Post()
 	async create(@Body() body: CreatePlayerBody, @Session() session): Promise<Player> {
@@ -42,7 +42,7 @@ export class PlayersController {
 		return player;
 	}
 
-	@ApiOperation({ title: 'プレイヤー認証', description: 'プレイヤーを認証する。' })
+	@ApiOperation({ summary: 'プレイヤー認証', description: 'プレイヤーを認証する。' })
 	@ApiOkResponse({ description: 'ログイン成功', type: Player })
 	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
 	@Post('/login')

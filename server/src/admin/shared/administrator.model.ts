@@ -3,7 +3,7 @@
  * @module ./admin/shared/administrator.model
  */
 import { Column, DataType, Unique, AllowNull, Default, DefaultScope, BeforeCreate, BeforeUpdate } from 'sequelize-typescript';
-import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import * as crypto from 'crypto';
 import * as config from 'config';
 import { Random } from 'random-js';
@@ -37,20 +37,20 @@ export default class Administrator extends DataModel<Administrator> {
 	static readonly ROLES = ['admin', 'writable', 'readonly'];
 
 	/** 管理者名 */
-	@ApiModelProperty({ description: '管理者名' })
+	@ApiProperty({ description: '管理者名' })
 	@Unique
 	@AllowNull(false)
 	@Column
 	name: string;
 
 	/** パスワード */
-	@ApiModelPropertyOptional({ description: 'パスワード' })
+	@ApiPropertyOptional({ description: 'パスワード' })
 	@AllowNull(false)
 	@Column
 	password: string;
 
 	/** ロール */
-	@ApiModelProperty({ description: 'ロール' })
+	@ApiProperty({ description: 'ロール' })
 	@AllowNull(false)
 	@Column({
 		type: DataType.ENUM,
@@ -59,7 +59,7 @@ export default class Administrator extends DataModel<Administrator> {
 	role: string;
 
 	/** 備考 */
-	@ApiModelProperty({ description: '備考' })
+	@ApiProperty({ description: '備考' })
 	@AllowNull(false)
 	@Default('')
 	@Column

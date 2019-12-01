@@ -4,7 +4,7 @@
  */
 import { Column, Model, PrimaryKey, Comment, DefaultScope, BeforeValidate, getAttributes } from 'sequelize-typescript';
 import { FindOptions } from 'sequelize';
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import * as Bluebird from 'bluebird';
 import * as config from 'config';
 import { NotFoundError } from '../../core/errors';
@@ -26,7 +26,7 @@ export default abstract class MasterModel<T extends MasterModel<T> = any> extend
 	private static readonly DEFAULT_TTL = 86400;
 
 	/** マスタID。デフォルトだと自動採番のID列が作られてしまうため上書き。 */
-	@ApiModelProperty({ description: 'マスタID', type: 'integer' })
+	@ApiProperty({ description: 'マスタID', type: 'integer' })
 	@PrimaryKey
 	@Comment('マスタID')
 	@Column

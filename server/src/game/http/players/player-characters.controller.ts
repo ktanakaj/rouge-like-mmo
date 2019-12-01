@@ -4,7 +4,7 @@
  */
 import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
 import {
-	ApiUseTags, ApiOperation, ApiModelProperty, ApiModelPropertyOptional, ApiOkResponse, ApiCreatedResponse,
+	ApiTags, ApiSecurity, ApiOperation, ApiProperty, ApiPropertyOptional, ApiOkResponse, ApiCreatedResponse,
 	ApiBadRequestResponse, ApiNotFoundResponse,
 } from '@nestjs/swagger';
 import { IsOptional, MinLength } from 'class-validator';
@@ -15,32 +15,33 @@ import PlayerCharacter from '../../shared/player-character.model';
 
 class CreatePcBody {
 	@MinLength(1)
-	@ApiModelProperty({ description: 'キャラクター名' })
+	@ApiProperty({ description: 'キャラクター名' })
 	name: string;
 }
 
 class UpdatePcBody {
 	@IsOptional()
 	@MinLength(1)
-	@ApiModelPropertyOptional({ description: 'キャラクター名' })
+	@ApiPropertyOptional({ description: 'キャラクター名' })
 	name?: string;
 }
 
 /**
  * PC操作コントローラクラス。
  */
+@ApiTags('pc')
+@ApiSecurity('SessionId')
 @UseGuards(AuthGuard)
-@ApiUseTags('pc')
 @Controller('api/pc')
 export class PlayerCharactersController {
-	@ApiOperation({ title: 'PC一覧取得', description: 'プレイヤーのPC一覧を取得する。' })
+	@ApiOperation({ summary: 'PC一覧取得', description: 'プレイヤーのPC一覧を取得する。' })
 	@ApiOkResponse({ description: 'PC一覧', type: PlayerCharacter, isArray: true })
 	@Get()
 	async findAll(@User() user): Promise<PlayerCharacter[]> {
 		return await PlayerCharacter.findAllByPlayerId(user.id);
 	}
 
-	@ApiOperation({ title: 'PC新規登録', description: 'PCを新規登録する。' })
+	@ApiOperation({ summary: 'PC新規登録', description: 'PCを新規登録する。' })
 	@ApiCreatedResponse({ description: '登録成功', type: PlayerCharacter })
 	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
 	@Post()
@@ -49,7 +50,7 @@ export class PlayerCharactersController {
 		return await PlayerCharacter.create(Object.assign(body, { playerId: user.id, hp: 100, items: {} }));
 	}
 
-	@ApiOperation({ title: 'PC更新', description: 'PCを変更する。' })
+	@ApiOperation({ summary: 'PC更新', description: 'PCを変更する。' })
 	@ApiOkResponse({ description: '更新成功', type: PlayerCharacter })
 	@ApiBadRequestResponse({ description: 'パラメータ不正', type: ErrorResult })
 	@ApiNotFoundResponse({ description: 'データ無し', type: ErrorResult })
@@ -60,7 +61,7 @@ export class PlayerCharactersController {
 		return await pc.save();
 	}
 
-	@ApiOperation({ title: 'PC削除', description: 'PCを削除する。' })
+	@ApiOperation({ summary: 'PC削除', description: 'PCを削除する。' })
 	@ApiOkResponse({ description: '削除成功', type: PlayerCharacter })
 	@ApiNotFoundResponse({ description: 'データ無し', type: ErrorResult })
 	@Delete('/:id(\\d+)')
