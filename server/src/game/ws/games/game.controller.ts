@@ -9,12 +9,16 @@ import { WebSocketRpcConnection } from '../../../core/ws';
 import { AllExceptionsFilter } from '../../../core/filters/all-exceptions.filter';
 import { GameService } from '../../shared/game.service';
 import { AuthGuard } from '../auth.guard';
+import { floorManager } from '../../shared/floor-manager';
 
-class GetStatusResult {
+interface GetStatusResult {
 	floorId: number;
 }
 
-class GetFloorResult {
+interface GetFloorResult {
+	dungeonId: number;
+	no: number;
+	map: string;
 }
 
 /**
@@ -43,10 +47,17 @@ export class GameController {
 		return null;
 	}
 
+	/**
+	 * プレイヤーが現在居るフロアの情報を取得する。
+	 * @param params リクエスト情報。
+	 * @param conn 接続情報。
+	 */
 	@MessagePattern('/ws/getFloor')
 	async getFloor(params: object, conn: WebSocketRpcConnection): Promise<GetFloorResult> {
 		// TODO: 現在いるフロアの情報（全員が見えるもの）を取得する
-		return null;
+		// FIXME: エラー処理がない
+		const floorId = floorManager.floorIdByPlayerId.get(conn.session['id']);
+		return floorManager.floors.get(floorId);
 	}
 
 	@MessagePattern('/ws/move')

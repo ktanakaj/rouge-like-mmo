@@ -107,6 +107,7 @@ export class WebSocketRpcServer extends Server implements CustomTransportStrateg
 			throw new JsonRpcError(ErrorCode.MethodNotFound);
 		}
 
+		// FIXME: Nest.js 5→6への更新に伴い、このコードでは第二引数以降 (connection, id) が渡せなくなってしまった？要修正
 		const result = await handler(params, connection, id);
 		if (result instanceof Observable) {
 			return await result.toPromise();

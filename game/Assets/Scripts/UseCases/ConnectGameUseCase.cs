@@ -71,8 +71,10 @@ namespace Honememo.RougeLikeMmo.UseCases
                 this.global.AuthEntity.Id,
                 this.global.AuthEntity.Token);
 
-            // TODO: フロア情報読み込みは未実装
-            // this.global.FloorEntity = await this.gameRepository.
+            var floorResult = await this.gameRepository.GetFloor();
+            this.global.FloorEntity = new FloorEntity();
+            this.global.FloorEntity.SetMapFromString(floorResult.map);
+
             await this.gameRepository.Activate();
             this.outputPort.OnNext(Unit.Default);
         }

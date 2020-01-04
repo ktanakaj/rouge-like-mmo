@@ -22,6 +22,15 @@ namespace Honememo.RougeLikeMmo.Presenters.Game
     /// </summary>
     public class FloorPresenter : MonoBehaviour
     {
+        #region Inspector用変数
+
+        /// <summary>
+        /// フロアの壁のプレハブ。
+        /// </summary>
+        public GameObject WallPrefab;
+
+        #endregion
+
         #region 内部変数
 
         /// <summary>
@@ -47,9 +56,43 @@ namespace Honememo.RougeLikeMmo.Presenters.Game
         {
             // TODO: 未実装
             this.useCase.Subscribe(_ => {
+                // TODO: 座標と現在の表示をリセット
+                this.CreateFloor();
             });
         }
 
         #endregion
-   }
+
+        #region 内部メソッド
+
+        private void CreateFloor()
+        {
+            // フロアデータに従い、壁を配置
+            var map = this.global.FloorEntity.Map;
+            for (int y = 0; y < map.Length; y++)
+            {
+                for (int x = 0; x < map[y].Length; x++)
+                {
+                    switch (map[y][x])
+                    {
+                        case '.':
+                        case '#':
+                            // 部屋の床 or 廊下の床
+                            this.CreateWall(map, x, y);
+                            break;
+                        default:
+                            // 処理対象外
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void CreateWall(char[][] map, int x, int y)
+        {
+
+        }
+
+        #endregion
+    }
 }

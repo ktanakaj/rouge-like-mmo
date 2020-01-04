@@ -28,9 +28,16 @@ class CreateBody {
 export class GameController {
 	constructor(private readonly gameService: GameService) { }
 
+	/**
+	 * フロア要求を受けて、フロアを生成する。
+	 * @param params フロア要求。
+	 * @param conn Redis RPC接続。
+	 * @param id リクエストID。
+	 */
 	@MessagePattern('/redis/create')
 	@OnlyFirst
 	async create(params: CreateBody, conn: RedisRpcConnection, id: string): Promise<Floor> {
+		// フロアを作成し、そこにPCを入室させる。
 		const floor = await this.gameService.createFloor(params.dungeonId);
 		await this.gameService.joinFloor(floor, params.playerId, params.pcId);
 		return floor;

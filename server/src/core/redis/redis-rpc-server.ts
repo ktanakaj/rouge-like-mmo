@@ -121,6 +121,7 @@ export class RedisRpcServer extends Server implements CustomTransportStrategy {
 			throw new JsonRpcError(ErrorCode.MethodNotFound);
 		}
 
+		// FIXME: Nest.js 5→6への更新に伴い、このコードでは第二引数以降 (connection, id) が渡せなくなってしまった？要修正
 		const result = await handler(params, connection, id);
 		if (result instanceof Observable) {
 			return await result.toPromise();
@@ -167,7 +168,7 @@ export function isRedisRpc(host: ArgumentsHost): boolean {
  * @param timeout ロック有効期間。デフォルトはJSON-RPC2のデフォルトタイムアウト時間×2。
  * @returns ロックに成功した場合true。
  */
-export async function lockRequest(config: IRedisConfig, id: string, timeout: number = 120000): Promise<boolean> {
+export async function lockRequest(config: IRedisConfig, id: string, timeout: number = 120): Promise<boolean> {
 	// ※ @typesの型定義には無いが、RedisのsetコマンドとしてはNX,EX同時に渡せたので無理やり実行
 	const client = getClient(config);
 	const func = client.setAsync as Function;

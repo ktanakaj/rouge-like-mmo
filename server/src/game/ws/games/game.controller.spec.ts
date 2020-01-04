@@ -4,6 +4,8 @@
 import { TestingModule } from '@nestjs/testing';
 import testHelper from '../../../test-helper';
 import { BadRequestError } from '../../../core/errors';
+import Floor from '../../shared/floor.model';
+import { floorManager } from '../../shared/floor-manager';
 import { GameService } from '../../shared/game.service';
 import { GameController } from './game.controller';
 
@@ -39,7 +41,12 @@ describe('ws/GameController', () => {
 
 	describe('#getFloor()', () => {
 		it('成功', async () => {
-			await controller.getFloor({}, {} as any);
+			const floor = new Floor();
+			floor.id = 100;
+			floorManager.floors.set(floor.id, floor);
+			floorManager.floorIdByPlayerId.set(10, floor.id);
+			const result = await controller.getFloor({}, { session: { id: 10 } } as any);
+			expect(result['id']).toBe(floor.id);
 		});
 	});
 });

@@ -87,6 +87,15 @@ namespace Honememo.RougeLikeMmo.Gateways
             await this.wsRequest.Call("activate");
         }
 
+        /// <summary>
+        /// 現在いるフロアの情報を取得する。
+        /// </summary>
+        /// <returns>フロア情報。</returns>
+        public async Task<GetFloorResult> GetFloor()
+        {
+            return await this.wsRequest.Call<GetFloorResult>("getFloor");
+        }
+
         #endregion
 
         #region 内部クラス
@@ -101,6 +110,17 @@ namespace Honememo.RougeLikeMmo.Gateways
             public int dungeonId;
             public int floorNo;
             public string url;
+        }
+
+        /// <summary>
+        /// /ws/getFloor API戻り値パラメータ。
+        /// </summary>
+        [Serializable]
+        public class GetFloorResult
+        {
+            public int dungeonId;
+	        public int no;
+	        public string map;
         }
 
         #endregion

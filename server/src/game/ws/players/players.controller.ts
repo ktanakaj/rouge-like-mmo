@@ -24,6 +24,11 @@ class LoginBody {
 @UsePipes(ValidationPipe)
 @Controller()
 export class PlayersController {
+	/**
+	 * WebSocketセッション上にログインする。
+	 * @param params ログイン情報。
+	 * @param conn WebSocket接続。
+	 */
 	@MessagePattern('/ws/login')
 	async login(params: LoginBody, conn: WebSocketRpcConnection): Promise<Player> {
 		// プレイヤーIDと端末トークンでプレイヤー認証

@@ -9,6 +9,10 @@ import Dungeon from './dungeon.model';
 
 /**
  * ダンジョンフロアモデルクラス。
+ *
+ * このアプリでは、「フロア」は複数のプレイヤーが入ってゲームを遊ぶ、
+ * いわゆる「ルーム」としての機能も持つ。
+ * （「ルーム」モデルだとマップの部屋と紛らわしいのでフロアにしている。）
  */
 @Table({
 	db: 'global',
@@ -59,4 +63,9 @@ export default class Floor extends DataModel<Floor> {
 	@AllowNull(false)
 	@Column(DataType.TEXT)
 	map: string;
+
+	// 以下はメモリ上にのみ保持する情報
+
+	// TODO: PCの居る位置。
+	// TODO: モンスターの配置。
 }
